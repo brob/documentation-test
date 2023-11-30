@@ -1,0 +1,59 @@
+---
+title: 1.2 Design your content models
+meta_title: Lesson 1.2 on the Schema builder
+meta_description: You'll learn how to design your content models before you start building a schema.
+sidebar:
+  order: 1.2
+---
+
+import {Card} from "@astrojs/starlight/components"
+import Button from "@components/Button.astro"
+
+<Card theme="info" title="Lesson 1.2 - The Schema builder: Design content models">
+
+In this lesson you'll learn how to design the base content models that we'll develop during this tutorial.
+
+[Check out the complete lessons list for this tutorial here](/docs/getting-started/onboarding-overview#what-you-will-learn)
+
+</Card>
+
+## Overview
+
+After mapping out the content flow of our project, having a sketch of what our front end should look like is really helpful for figuring out the content structures we need to use.
+
+![Project structure](/images/docs/getting-started/hygraph-project-structure.png)
+
+To help us understand and plan our content model, let's take a moment to go over some basic ideas:
+
+- **Schema:** This is the backbone of your project, its content structure. You can define your schema by creating models, adding fields, reusable components, and sidebar widgets to those models, integrating information from remote sources, and relating models to each other.
+- **Models:** Models define your schema. You can think of them as containers for organizing fields, relationships, and items. The models you create will help you organize the structure of your project into parts, such as products, reviews, blog posts, etc.
+- **Fields:** Fields are where your content is stored in the models. An empty model contains no information. These fields can be of many different types, and in GraphQL we call those types “Scalars”. Hygraph provides many different scalar types for things like Strings, Integers, Dates, Booleans, and even Colors and Geo-coordinates.
+
+We want our e-commerce project to have the following:
+
+- A landing page showing the latest arrivals, blog articles on some of our products, and reviews of those products.
+- A page for each product we sell, which contains all the product information that a potential buyer may need, such as image, size, color, price, and description. We also want products to belong to specific categories that buyers can browse. Finally, we want each product page to display reviews for the product and related products that may interest potential buyers.
+- A space for our seller information.
+- A navigation where we can add our e-commerce section links.
+- A set of categories that products can be assigned to. We want to be able to assign many products to one category and many categories to one product.
+- A blog where we can write reviews of some of our products and where we can add references to those products.
+
+![Project models](/images/docs/getting-started/hygraph-project-models.png)
+
+Now that we know what our e-commerce front end should look like, we can quickly identify the need to create models for products, product categories, blog posts, landing page, navigation, and seller information.
+
+Our e-commerce project models will contain components and fetch data from remote sources. Some of the models we create will even connect to others through references, but let's go step-by-step. We'll start by creating the first basic outline for our models, and then we will add more things to them as we get deeper into schema creation.
+
+<Card theme="info" title="Next step">
+
+Once you've designed your content models, move on to our next lesson:
+
+<Button
+  href="/docs/getting-started/build-content-models"
+  size="md"
+  variant="outlined"
+  theme="primary"
+  iconRight="ArrowRight"
+>1.3 Building content models</Button>
+
+</Card>

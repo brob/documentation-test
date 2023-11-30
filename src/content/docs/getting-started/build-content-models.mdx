@@ -1,0 +1,267 @@
+---
+title: 1.3 Build your content models
+meta_title: Lesson 1.3 on the Schema builder
+meta_description: You'll learn how to build your base content models. You'll add complexity to them as you advance in this tutorial.
+sidebar:
+  order: 1.3
+---
+import {Card} from "@astrojs/starlight/components"
+import Button from "@components/Button.astro"
+import VideoEmbed from "@components/VideoEmbed.astro"
+import Video from "@components/Video.astro"
+
+
+<Card theme="info" title="Lesson 1.3 - The Schema builder: Build content models">
+
+In this lesson you'll learn how to create the base content models that we'll develop during this tutorial.
+
+[Check out the complete lessons list for this tutorial here](/docs/getting-started/onboarding-overview#what-you-will-learn)
+
+</Card>
+
+## Overview
+
+Before we dive into content model creation, let's differentiate between the models we create and system models.
+
+We can create regular models to determine the structure of our content. We can create, name, edit and delete them. We can add fields to them, which will house our content.
+
+Every Hygraph project comes with two system models: Asset & Query. The Asset model will contain our e-commerce images, and the Query model will include a remote source that we will use to fetch remote data into our project.
+
+Similarly to our schema containing system models, our models have system fields. However, while you cannot modify system fields, you can edit system models - by adding fields to them.
+
+Let's look into the Asset model before creating regular models in our project.
+
+## Asset Model
+
+Assets is a system model that is available in all Hygraph projects. It works out of the box, but we can edit it to contain metadata that our front end can use. We want our product images to have Alt Text and a caption, so let's add that to our model.
+
+<Video>
+  <source
+    src="https://media.graphassets.com/jsWZfktKScyjPnWuRUgr"
+    type="video/mp4"
+  />
+</Video>
+
+We'll open the Asset model in our schema by clicking on it on the sidebar, and we'll add a `Single line text` field to it using the following information:
+
+- **Display name:** Alt text
+- **API ID:** altText
+- **Description:** Add alternative text for the image here
+
+Select the Localize field checkbox, and then click `Add` to save.
+
+We'll repeat this process, again adding a `Single line text` field, this time for our caption:
+
+- **Display name:** Caption
+- **API ID:** caption
+- **Description:** Add image caption here
+
+Select the Localize field checkbox, and then click Add to save.
+
+Your Asset model should look like this:
+
+![Your Asset model](/images/docs/getting-started/asset-model.png)
+
+#### Would you like to know more?
+
+Here's a video on adding alt text data to a Hygraph Asset:
+
+<VideoEmbed videoId="PcmYIXZwCfE" />
+
+## Creating content models
+
+We sketched our content model in the previous lesson and now know what we want it to look like. It’s time to get to work and create those models.
+
+We will start by creating the basic content models and adding more complex things during the following lessons.
+
+### Product
+
+Our **Product** model will hold the information for product listings on our e-commerce. Let's create a model by clicking on `+Add` next to `Models` in our Schema and filling in this information:
+
+- **Display Name:** Product
+- **API ID:** Product
+- **Plural API ID:** Products
+- **Description:** Tutorial project Product model
+
+Then click on `Add Model` to save.
+
+We've just created our first model, but it's empty. Let's add some fields to it.
+
+<Video>
+  <source
+    src="https://media.graphassets.com/guE2faIRSFaUXdj2AflT"
+    type="video/mp4"
+  />
+</Video>
+
+We want our product listings to have a title, so we'll add a `Single line text` field by selecting it from the right sidebar. We'll add “Product name” as the `Display name`, which will autocomplete the `API ID` field, and we'll select the `Use as title field` checkbox because we want this to be our product title. We also want this field to be localized, so we'll check the `Localize field` checkbox.
+
+<Card theme="info" title="Pro Tip">
+
+Each `API ID` is a unique identifier for the models/fields/components/relations/remote sources/etc. So the system won't let us repeat them.
+
+This is different for display names, so when you work on your projects, make sure you name things in a way that makes your schema easy to navigate for your collaborators.
+
+</Card>
+
+Before saving this field and adding it to our model, we'll click on the `Validations` tab. All fields added to your content models provide ways to modify how we can later use them. You can set them to be localized, used in a list, marked as required, or unique, etc. We want all product listings to have a title, and we want these titles to be unique so the products are easy to identify later on. To do this, we'll select the `Make title required` and the Set `field as unique` checkboxes.
+
+We'll click `Add` to save our field, and we can see that it's now saved into our **Product** model with all the characteristics that we selected for it.
+
+Next, we'll add a `Slug` field, which you'll find in the **String** section of the right sidebar. We'll add “Product Slug” as its `Display name` and leave the `Lowercase` checkbox selected by default as is. When we click the `Validations` tab, we'll select the `Make field required` checkbox to ensure that all our product listings contain a slug, and we'll also select the `Set field as unique` checkbox.
+
+Finally, we will select the `Match a specific pattern` checkbox, we will select `Slug` from the dropdown, which will autofill the field next to it with a regular expression.
+
+Under `Custom error message`, we'll write "Input value does not match the expected format."
+
+We'll click `Add` to save the field.
+
+We want our product listings to contain images, so let's add an `Asset picker` field. We'll write “Product image” as the field's `Display name` and select `Allow multiple assets` because we want to be able to add more than one product image per listing. We'll click `Add` to save the field.
+
+We will also add a `Rich Text` field, which we can later use for product descriptions. You'll find it in the **Text** section of the right sidebar. We'll add “Product description” as the `Display name`, which will auto-complete the `API ID` field.
+
+We'll select the checkbox to `enable embedding` and use the dropdown to select the **Asset** and **Product** models. Doing this ensures we can use content from the three models in our embeds later.
+
+Same as our product names, our product descriptions should be localized, so let's go ahead and select the `Localize field` checkbox.
+
+We'll click `Add` to save the field in our model.
+
+Finally, we'll add a `Float` field for the product price. We'll add “Product price” as the `Display name`, which will auto-complete the `API ID` field, and click `Add` to save the field.
+
+The result should look like this:
+
+![Your Product model so far](/images/docs/getting-started/product-model-initial-fields.png)
+
+We still have some work to do on this model, but we must create other things first, so we'll come back to this later.
+
+### Product category
+
+We will create a **Product category** model so we can then relate our products to different categories later on. We'll repeat steps we followed for the **Product** model, using this information:
+
+![Product category model details](/images/docs/getting-started/product-category-model-details.png)
+
+- **Display Name:** Product category
+- **API ID:** ProductCategory
+- **Plural API ID:** ProductCategories
+- **Description:** Select a product category
+
+Now, it's time to add fields to this model.
+
+Let's start by adding a `Single line text` field. We'll write “Category name” as its `Display name` and select the `Use as title field` and `Localize field` checkboxes. We'll also make the field `required` and set it as `unique` in the `Validations` tab, then save.
+
+Next, we'll add a `Slug` field. We'll write “Slug” as the `Display name`, leave the `Lowercase` checkbox selected, and move on to the `Validations` tab.
+
+When we click the `Validations` tab, we'll select the `Make field required` checkbox, and we'll also select the `Set field as unique` checkbox.
+
+Finally, we will select the `Match a specific pattern` checkbox, we will select `Slug` from the dropdown, which will autofill the field next to it with a regular expression.
+
+Under `Custom error message`, we'll write "Input value does not match the expected format.", and then save the field.
+
+Let's also add a `Rich text` field. We'll use this one as our optional description field. Here, we only need to write “Description” as the `Display name`, select the `Localize` field checkbox, and then save.
+
+The result should look like this:
+
+![Your Product category model so far](/images/docs/getting-started/product-category-model-fields.png)
+
+There is one more thing we need to do here. Schema building is not necessarily a linear task, because schema elements are sometimes interconnected. We want to have our product descriptions to also allow embedding from this model, but since we created the **Product** model first, this model was not available to select. Now that we have a **Product category** model, we'll go into the Product model again, edit the `Rich text` field we added earlier as `Product description`, and select the **Product category** model from the dropdown. This will add it to the ones we initially selected.
+
+![Product category in Rich Text embeds](/images/docs/getting-started/product-category-rich-text.png)
+
+### Blog post
+
+We will create a **Blog Post** model so we can later create articles about products we want to promote. We'll use the following information to create the model:
+
+![Add model screen](/images/docs/getting-started/blog-post-model-details.png)
+
+- **Display Name:** Blog Post
+- **API ID:** BlogPost
+- **Plural API ID:** BlogPosts
+- **Description:** Articles to promote our products
+
+Our **Blog Post** model will contain a title, a slug, and a body.
+
+Let's start by adding a `Single line text` field. We'll write “Title” as its `Display name` and select the `Use as title field` and `Localize field` checkboxes. We'll also make the field required and set it as `unique` in the `Validations` tab, then save.
+
+Next, we'll add a `Slug` field. We'll write “Slug” as the `Display name`. We want our slug to be automatically generated from a template, so we'll check the `Generate slug from template` checkbox and fill in the `Slug template` field with `{title}`. We'll also leave the `Lowercase` checkbox selected.
+
+We'll also go to the `Validations` tab and select the `Set field as unique` checkbox.
+
+Still in the `Validations` tab, we will select the `Match a specific pattern` checkbox, we will select `Slug` from the dropdown, which will autofill the field next to it with a regular expression.
+
+Under `Custom error message`, we'll write "Input value does not match the expected format.", and then save the field.
+
+Let's also add a `Rich text` field for our blog posts body. We'll use this one as our optional description field. We'll write “Body” as the `Display name` and select the `Localize field` checkbox. We also want to enable embedding here, so we'll select the `Enable embedding` checkbox and use the dropdown menu to select the **Blog Post**, **Product**, and **Product category** models. We'll learn more about the Hygraph Rich Text editor and embeds later.
+
+The result should look like this:
+
+![Blog post model fields](/images/docs/getting-started/blog-post-model-fields.png)
+
+### Seller information
+
+We will create a **Seller Information** model, which we will later use to add our seller information to other models through relations. We'll use the following information to create the model:
+
+![Seller information model details](/images/docs/getting-started/seller-information-model-details.png)
+
+- **Display Name:** Seller information
+- **API ID:** SellerInformation
+- **Plural API ID:** SellerInformations
+
+Our **Seller information** model will contain a business name, a slug, a business logo, and a business description.
+
+Let's start by adding a `Single line text` field. We'll write “Business name” as its `Display name` and select the `Use as title field` and `Localize field` checkboxes. We'll also make the field `required` in the `Validations` tab, and then save.
+
+Next, we'll add a `Slug` field. We'll write “Slug” as the `Display name`, leave the `Lowercase` checkbox selected, and we'll go to the `Validations` tab.
+
+There, we will select the `Make field required` and `Set field as unique` checkboxes. We will also select the `Match a specific pattern` checkbox, we will select `Slug` from the dropdown, which will autofill the field next to it with a regular expression.
+
+Under `Custom error message`, we'll write "Input value does not match the expected format.", and then save the field.
+
+We want our seller information to display our business logo, so we'll add an `Asset picker` field. We'll write “Business logo” as the field's `Display name` and save it.
+
+Finally, we want to add some information about us here, so we will also add a `Rich Text` field. We'll add “Business description” as the `Display name`, which will auto-complete the `API ID` field, we'll select the `Localize field` checkbox, and then we'll save it.
+
+### Landing page
+
+The last model we'll add is our **Landing page**, which will contain a lot of information coming from other models. This model will allow us to create pages such as our homepage and others.
+
+Let's create the model using this information:
+
+- **Display Name:** Landing page
+- **API ID:** LandingPage
+- **Plural API ID:** LandingPages
+
+Now, we need to add fields to the model. We'll start by adding a `Single line text` field. We'll write “Landing page title” as its `Display name` and select the `Use as title field` and `Localize field` checkboxes.
+
+Next, we'll add a `Slug` field. We'll write “Link” as the `Display name`, which will auto-fill the `API ID` field. We want our slug to generate from a template, so we'll select the checkbox for that and write `{landingPageTitle}` in the `Slug template` field.
+
+We'll leave the `Lowercase` checkbox selected, and we'll go to the `Validations` tab. There, we will select the `Set field as unique` checkbox. We will also select the `Match a specific pattern` checkbox, we will select `Custom` from the dropdown, and we'll type in the following regex:
+
+```
+^[a-z0-9\/]+(?:[-\/][a-z0-9]+)*$
+```
+
+Under `Custom error message`, we'll write "Input value does not match the expected format.", and then save the field.
+
+This is all we can add to this model at this point. We'll revisit it in the **References** lesson.
+
+### Navigation
+
+Our project includes the **Navigation** model from the start. While we will only cover the navigation links creation in the tutorial, let's see the contents of this model at this point:
+
+- **Nav ID:** This is a slug field that will serve as our navigation identifier.
+
+As you can imagine, this model is unfinished, as it still needs to provide a way to add the navigation links. We will be modifying it to add this option in a later lesson.
+
+<Card theme="info" title="Next step">
+
+Once you've created you base content models, move on to our next lesson:
+
+<Button
+  href="/docs/getting-started/configure-reference-fields"
+  size="md"
+  variant="outlined"
+  theme="primary"
+  iconRight="ArrowRight"
+>2.1 References</Button>
+
+</Card>

@@ -1,0 +1,135 @@
+---
+title: 2.1 Configure reference fields
+meta_title: Lesson 2.1 on References & Enumerations
+meta_description: You'll learn how to configure different types of references and add them to your content models
+sidebar:
+  order: 2.1
+---
+
+import {Card} from "@astrojs/starlight/components"
+import Button from "@components/Button.astro"
+import Video from "@components/Video.astro"
+
+<Card theme="info" title="Lesson 2.1 - References & Enumerations: Configure reference fields">
+
+In this lesson you'll learn how to configure different types of references and add them to your content models.
+
+[Check out the complete lessons list for this tutorial here](/docs/getting-started/onboarding-overview#what-you-will-learn)
+
+</Card>
+
+## Overview
+
+This step of our Getting Started tutorial covers Reference type fields.
+
+References are relations between two or more content entries that exist in your project. With references, you can reuse content entries by connecting them to one another. For instance, in our project, a product content entry could be both a standalone product that a potential customer can browse, but also a reference linked to a different product content entry, as part of a related products section.
+
+![References](/images/docs/getting-started/references-graphic.png)
+
+References have a type, direction, and cardinality that define the relationship:
+
+- The **type** allows us to select if one or more models can be referenced and lets us select which models those will be.
+- The **direction** allows choosing between one-way references, which allow querying content only from one side, or two-way references, which add a reverse-field to query content from both sides.
+- The **cardinality** allows defining whether it will be possible to connect one or many entries to the parent entry, as well as the directions of that relation.
+
+The way you configure a reference will result in one of four possibilities:
+
+- **One-to-one reference:** It allows adding a reference to one content entry from one model configured as referenceable. For example, you could use this to link a blog post to an author.
+  ![One-to-one reference](/images/docs/getting-started/references-one-to-one.png)
+- **One-to-many reference:** It allows adding references to multiple content entries from one model configured as referenceable. For example, you could use this to link a blog post to its multiple authors.
+  ![One-to-many reference](/images/docs/getting-started/references-one-to-many.png)
+- **Many-to-many reference:** It allows adding references to multiple content entries from the different models configured as referenceable. For example, you could use this to link your products to the categories they belong to. In this case, a product can have multiple categories, and category can have multiple products.
+  ![Many-to-many reference](/images/docs/getting-started/references-many-to-many.png)
+- **Many-to-one reference:** It allows adding references to multiple content entries of the parent model to one model configured as referenceable. For example, you could use this to link an author to all their related blog posts.
+  ![Many-to-one reference](/images/docs/getting-started/references-many-to-one.png)
+
+We'll learn how to configure some of them in the context of our e-commerce project, so we can later use them in the content editor.
+
+To be able to establish relations in the content, we first need to configure the relations in our schema. Our project will use different types of references to connect models in different ways, but we won't be covering all possibilities in this tutorial. You can learn about all of them [here](/docs/guides/schema/references).
+
+## Products and categories
+
+In a previous step, we created models for **Product** & **Product category**. We want to be able to select categories our product belongs in every time we create a listing. We will create a reference that will make it possible for customers to browse categories besides looking for specific items.
+
+To link these two models, let's click on the **Product** model to open it and select the `Reference` field from the right sidebar. You'll find it under **Relation**.
+
+![Adding a reference field](/images/docs/getting-started/add_reference_field_to_model.gif)
+
+The first step is to define the relationship. We only want to be able to add product categories in this relation, so we'll select the `Allow only one model to be referenced` radio button and select `ProductCategory` under **Model to reference**.
+
+As for reference directions, we will select Two-way reference since we want to be able to query what category a product is, but also to query all the products within a category.
+
+We'll also select the `Allow multiple Products per ProductCategory` and `Allow multiple ProductCategories per Product` checkboxes. The graphic above our selection will show that the relationship between models is of type **many-to-many**. Let's click `Continue` to configure the reference.
+
+The **Configure reference** section has been pre-configured according to our selection. This is the field that will appear in our **Product** model. Let's leave everything as is. We'll click `Continue` to move on.
+
+Finally, we'll configure the reverse field. This section has - again - been pre-configured according to our selection. This is the field that will appear in our **Product categories** model as a result of creating this reference. We'll leave this one as is and save the reference field to add it to our model.
+
+We'll see that it's been added at the bottom. Let's use the six-dots handlebar to move it upwards, under the slug field.
+
+<Video>
+  <source
+    src="https://media.graphassets.com/X7EG0VaxSjelihFLwc45"
+    type="video/mp4"
+  />
+</Video>
+
+Now that we've added the product category reference, we'll be able to work on the content editor later on to both create our categories and reference those categories in our product listings.
+
+## Landing page sections
+
+We want our **Landing page** model to provide featured content through blog posts, allow users to browse our product categories, and also have a section where our business information can be displayed. We'll do this through relations.
+
+### Blog Post
+
+First, we are going to connect our **Blog Post** model. In the **Landing page** model in the Schema builder, we'll add the `Reference` field from the right sidebar.
+
+We only want to be able to add blog posts in this relation, so we'll select the `Allow only one model to be referenced` radio button and select `BlogPost` under **Model to reference**.
+
+Next, we will select `One-way reference` since we want to be able to add blog posts to the landing page without generating a reverse field in the **Blog Post** model.
+
+We'll also select the `Allow multiple BlogPosts per LandingPage checkbox` since we want to be able to feature more than one blog post, and then click `Continue` to configure the reference.
+
+The **Configure reference** section has been pre-configured according to our selection. This is the field that will appear in our **Landing Page** model. Let's leave everything as is, and add a description that says “Featured item”. We'll click `Add` to finish.
+
+### Product category
+
+Now, we are going to connect our **Product category** model. Let's add a `Reference` field from the right sidebar again.
+
+We only want to be able to add product categories in this relation, so we'll select the `Allow only one model to be referenced` radio button and select `ProductCategory` under **Model to reference**.
+
+Next, we will select `One-way reference` since we want to be able to add categories to the landing page without generating a reverse field in the **Product Category** model.
+
+We'll also select the `Allow multiple ProductCategories per LandingPage` checkbox since we want to be able to add more than one category, and then click `Continue` to configure the reference.
+
+The **Configure reference** section has been pre-configured according to our selection. This is the field that will appear in our **Landing Page** model. Let's leave everything as is, and add a description that says “Browse our categories”. We'll click `Add` to finish.
+
+### Seller information
+
+Last, we're going to connect our **Seller information** model. Let's see if you can add a reference by yourself now.
+
+This reference needs to have almost the same characteristics as the last two we added, with one exception:
+
+- We will only allow one model to be referenced, the **Seller Information** model.
+- The reference direction will be `one-way`.
+- We won't allow multiple `SellerInformations` per `LandingPage`, making the reference cardinality “to one”.
+
+Just like with our previous references, the **Configure reference** section has been pre-configured according to your selection. Please leave everything as is, write “Business information” in the `Description` field, and then click `Add` to finish.
+
+Your Landing page model should look like this:
+
+![Your Landing page model so far](/images/docs/getting-started/landing-page-model-with-references.png)
+
+<Card theme="info" title="Next step">
+
+Once you've added the reference fields to your content models, move on to our next lesson:
+
+<Button
+  href="/docs/getting-started/configure-enumerations"
+  size="md"
+  variant="outlined"
+  theme="primary"
+  iconRight="ArrowRight"
+>2.2 Enumerations</Button>
+
+</Card>

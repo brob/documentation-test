@@ -1,0 +1,372 @@
+---
+title: 5.1 Content Creation
+meta_title: Lesson 5.1 on Content Editor
+meta_description: You'll learn how to create and modify content in the content creator screen and in the Assets system model
+sidebar:
+  order: 5.1
+---
+
+import {Card} from "@astrojs/starlight/components"
+import Button from "@components/Button.astro"
+import Video from "@components/Video.astro"
+
+## Overview
+
+<Card theme="info" title="Lesson 5.1 - Content Editor: Content creation">
+
+In this lesson you'll learn how to create and modify content in the content creator screen and in the Assets system model.
+
+[Check out the complete lessons list for this tutorial here](/docs/getting-started/onboarding-overview#what-you-will-learn)
+
+</Card>
+
+## Assets
+
+During schema building, we modified our **Assets** system model so the images would have alternative text and a caption. If we go to the **Assets** tab of our Hygraph project, we'll notice that already contains images. We've provided these images from the get go so you would't have to upload them yourself. If you're interested in learning more about asset upload, check out [this document](/docs/guides/assets/upload-asset).
+
+Our assets table should look like this:
+
+![Assets table with images](/images/docs/getting-started/assets-table-with-images.png)
+
+We need to manually add the `Alt text` and `Caption` for each image. Let's do the first one together: We'll write “colorful socks” in the search filter to find the images we're looking for, and we'll click on the pencil icon of the first result on the list to access the edit mode.
+
+<Video>
+  <source
+    src="https://media.graphassets.com/9E8rOBuAQFujFeJbLMx3"
+    type="video/mp4"
+  />
+</Video>
+
+We'll fill in the following information:
+
+- **Alt text:** Colorful socks
+- **Caption:** A pair of red socks with a white pattern design
+
+We'll click on `Save & Publish`, and once it's saved, we'll go back to the assets table by clicking the arrow icon at the top left corner of the edit screen.
+
+You'll repeat this for the other two images that you get when you search for "colorful socks".
+
+After you're done with this set of three images, you can click on the `X` next to the “colorful socks” search reset it, and you'll be ready to repeat the process for the rest of the images.
+
+<Card theme="warning" title="Would you like some more practice?">
+
+[Here's the information you can use on the rest of the assets](/docs/getting-started/content-creation-additional-practice#assets)
+
+This will not affect your frontend connection.
+
+</Card>
+
+## Product categories
+
+In previous lessons, we created the **Product category** model and a reference that related it to the **Product** model. The idea behind it was that we want to be able to select categories our products belong in every time we create a listing and, at the same time, offer customers the possibility to browse items within a category.
+
+To be able to establish relations between content entries, we need to have content entries. At this point, however, our **Product Category** model has none. This is what the model we created looks like in the Content editor:
+
+![Product categories in the content editor](/images/docs/getting-started/product-category-table-empty.png)
+
+Each entry we create here will become a category we can then relate our products to. Because it's a `two-way reference` that connects `many-to-many`, this screen lets us add existing products.
+
+We're not going to do this right now because we haven't created any product entries yet, so there is nothing we can add. However, because of the type of reference we used to link categories and products, we'll be able to relate the categories when we create the product entries.
+
+Let's do the first one together. To create a new entry, navigate to the **Product category** model in the content editor, and click `+ Add entry` at the top right corner of the screen.
+
+Use the following information"
+
+- **Category name:** Clothes
+- **Slug:** clothes
+- **Description:** You will find clothes here
+
+Remeber to `Save & Publish` after you're done.
+
+We'll create one entry for each of the categories we want to have in our e-commerce. We'll use the following information:
+
+**For our shoes category**
+
+- **Category name:** Shoes
+- **Slug:** shoes
+- **Description:** You will find shoes here
+
+**For our sportswear category**
+
+- **Category name:** Sportswear
+- **Slug:** sportswear
+- **Description:** You will find sportswear here
+
+**For our urban category**
+
+- **Category name:** Urban
+- **Slug:** urban
+- **Description:** You will find urban-style items here
+
+**For our new arrival category**
+
+- **Category name:** New arrival
+- **Slug:** new-arrival
+- **Description:** You will find our latest arrivals here
+
+**For our decor category**
+
+- **Category name:** Decor
+- **Slug:** decor
+- **Description:** You will find decor items here
+
+**For our accessories category**
+
+- **Category name:** Acessories
+- **Slug:** accessories
+- **Description:** You will find accessories here
+
+We've purposely created some overlapping categories - i.e. a product can be both a new arrival and sportswear - since we created a reference type where one product can be related to more than one category.
+
+Now that we've created our categories, our **Product Categories** view in the Content editor should look like this:
+
+![Product categories in the content editor - with entries](/images/docs/getting-started/product-category-table-full.png)
+
+## Seller information
+
+Now let's create some content for our **Seller information** model. This model will contain information about our e-commerce business, so we'll create a single entry here.
+
+Please follow the same process as in the previous lesson to create your entry. Your entry should have the following information:
+
+- **Business name:** My business
+- **Slug:** my-business
+- **Business logo:** Click on `Add business logo` and select the Hygraph logo from your assets. Click on the relation icon - first column - to add it.
+- **Business description:** This is a description of my business
+
+Click on `Save & publish`
+
+Our **Seller information** view in the Content editor should look like this:
+
+![Seller information content editor view with entry](/images/docs/getting-started/seller-information-table.png)
+
+## Products
+
+Next, we're going to work on our product entries. These will be the product listings of our e-commerce. Because we currently have no entries for this model, we will work on this in two steps: first, we'll create a basic product listing, and then we'll add the related products by editing our initial entries.
+
+We'll navigate to the **Product** content model in the content editor and click on `+ Add entry`.
+
+![Add product content entry](/images/docs/getting-started/add-product-content-entry.png)
+
+We'll write “black leather shoes” under `Product name` and “black-leather-shoes” Under `Product slug`.
+
+In the **Product Category** section, we'll click on `Add existing Product categories`, and we'll select **Shoes**, **New arrival**.
+
+In the **Product image** section, we'll click on `Add Product images`, and we'll select the images called black leather shoes. To find them quickly, we can type “black leather shoes” in the search filter on top of the table, and we'll add them to the entry by clicking on `Add selected images`.
+
+In the **Product description** section, we'll write: “These black leather shoes seamlessly blend sophistication with durability, making them a versatile choice for both formal occasions and everyday wear. The sleek design and high-quality leather ensure a timeless appeal that complements any outfit”.
+
+The **Product variant** section is one of the components we created. We'll click on `Add component` to display our options, and then we'll select **Shoes**. We configured the **Shoes** component to have the size and color enumerations, so we'll select Size “Size_40” and color “Black”.
+
+In the **Product price** field, we'll write "170".
+
+At this point, because we have no other products published to relate, we'll just go ahead and click on `Save & publish` at the top right corner of the screen. We'll come back to our entries later to add relations.
+
+![Product content entry](/images/docs/getting-started/product-content-entry.png)
+
+Now it's time to practice. We'll create some additional content so we can query it later when we work with the API Playground. You'll create three more content entries, following the same process we just went through together, using the following information:
+
+**Blue running shoes**
+
+- **Product name:** Blue running shoes
+- **Product slug:** blue-running-shoes
+- **Product category:** Select **Sportswear**, and **Shoes**.
+- **Product image:** Select the images with the file name **blue running shoes**.
+- **Product description:** These blue running shoes offer both form and function, providing exceptional support and style for your active pursuits. The breathable material and cushioned sole ensure a comfortable experience mile after mile.
+- **Product variant:** Select the product type “Shoes”, and then Size “Size_42” and color “Blue”.
+- **Product price:** 130
+
+**Plaid shirt**
+
+- **Product name:** Plaid shirt
+- **Product slug:** plaid-shirt
+- **Product category:** Select **New arrival**, **Urban**, **Clothes**.
+- **Product image:** Select the images with the file name **blue plaid shirt**.
+- **Product description:** This plaid shirt exudes a timeless charm, perfect for a casual day out or a relaxed evening gathering. The classic checkered pattern and comfortable fit make it a wardrobe staple for effortless style.
+- **Product variant:** Select the product type “Clothing”, and then Size “XL” and color “Blue”.
+- **Product price:** 60
+
+**Necklace**
+
+- **Product name:** Necklace
+- **Product slug:** necklace
+- **Product category:** Select **Accessories**.
+- **Product image:** Select the images with the file name **necklace**.
+- **Product description:** This white necklace is crafted from parts of seashells, evoking a relaxed, beachy vibe. Perfect for those looking to add a touch of the sea to their daily style.
+- **Product variant:** Select the product type “Accessories”, and then Color “White”.
+- **Product price:** 12
+
+**Headband**
+
+- **Product name:** Headband
+- **Product slug:** headband
+- **Product category:** Select **Accessories**.
+- **Product image:** Select the images with the file name **headband**.
+- **Product description:** This white cotton headband provides an elegant and sophisticated touch to your hairstyle. Perfect for completing your look with a blend of fashion and comfort.
+- **Product variant:** Select the product type “Accessories”, and then Color “White”.
+- **Product price:** 9
+
+<Card theme="warning" title="Would you like some more practice?">
+
+[Here's the information you can use on the rest of the products](/docs/getting-started/content-creation-additional-practice#products)
+
+This will not affect your frontend connection.
+
+</Card>
+
+## Related products
+
+Now that we have all our basic content entries, we should add related products to each one.
+
+Just like before, we'll go over the first one together, and then you can work on the rest:
+
+We'll click on the pencil icon of the **Headband** product entry; this will take us to the edit view. We'll scroll down to where we have our **Related products** component, and we'll click on `+ Add Related products`.
+
+Remember that when we configured this component, we wanted the title section to be read-only to ensure it'd be the same throughout our e-commerce, so we can now see that the title “Related products” is grayed out and can't be edited.
+
+Next, we have the products section, which says “Add 4 related products here”. This is exactly what we'll do. We'll click on `Add existing products` and use the checkboxes to select the black leather shoes, necklace, blue running shoes, and plaid shirt. We'll click on `Add selected products`, and that's it. We can now see the 4 products that we related to our content entry listed in our component:
+
+![Component with related products](/images/docs/getting-started/related-products-component.png)
+
+We'll click `Save & Publish` at the top right corner of the screen to save the updated entry.
+
+Now, please follow the same steps for our other product entries. Here's a list of each product entry and the products you should relate them to:
+
+- The **Blue running shoes** product entry relates to: black leather shoes, necklace, headband, and plaid shirt.
+- The **Black leather shoes** product entry relates to: blue running shoes, necklace, headband, and plaid shirt.
+- The **Necklace** entry relates to: black leather shoes, black leather shoes, headband, and plaid shirt.
+- The **Plaid shirt** product entry relates to: black leather shoes, necklace, headband, and blue running shoes.
+
+<Card theme="warning" title="Would you like some more practice?">
+
+[Here's the information you can use on the rest of the products](/docs/getting-started/content-creation-additional-practice#related-products)
+
+This will not affect your frontend connection.
+
+</Card>
+
+## Blog post
+
+Let's also create a blog post entry that we can later display for promotion on our landing page.
+
+We'll open the **Blog post** model in the content editor and create a new entry.
+
+For the `Title`, we'll write “Our new leather shoes”. The `Slug` will autocomplete since we configured it to autogenerate from a template.
+
+In the `Body`, we'll write “Take a look at this awesome new arrival”. When we configured this `Rich Text` field, we decided to allow embeds, so let's use this to showcase the product we're talking about. We'll click on `Embed`, select `Block`, we'll use the dropdown to select the **Product** model, and then we'll click `Select model`.
+
+A screen will pop up, showing us all the product entries that we created previously. Let's click on the relation icon - first column - to select our **Black leather shoes** product entry.
+
+Our entry should look like this:
+
+![Blog post complete entry](/images/docs/getting-started/blog-post-entry.png)
+
+Let's click `Save & publish` to finish.
+
+## Landing page
+
+We'll create two landing pages for our e-commerce project: One that will be our homepage, and another one that will hold information for our summer campaign.
+
+### Homepage
+
+Let's create our homepage. We couldn't have created this page earlier, because we configured it to contain mostly related content, so we needed the rest of the content to be created before we could get into it.
+
+We'll open the **Landing page** model in the content editor and create a new entry with the following information:
+
+- **Landing page title:** Home
+- **Link:** Simply write `/` here.
+- **Blog posts:** We'll leave this empty for now.
+- **Product categories:** We'll leave this empty for now.
+- **Seller information:** We'll add the seller information we created before.
+- **Stripes:** Click on `+Add component` and add the following.
+  - **Call to action:**
+    - **Heading:** We'll write “Main Headline for the page”.
+    - **Body:** We'll write “We provide amazing products from outerwear, shoes, homegoods, and more! Be sure to check out all the amazing products”.
+    - **Image:** Add “Hygraph_Logo”.
+    - **Button:** Click on `+ Add Button` and write “Shop Now” in the `Text` field, and `https://google.com` in the `URL` field.
+  - **Product Grid:**
+    - **Headline:** We'll write “Picks of the month”.
+    - **Products:** We'll add relations to the following product entries: blue running shoes, black leather shoes, necklace, headband, plaid shirt.
+
+You would normally use a many more products here, but our e-commerce only has a few for now.
+Now that we're done, let's click `Save & publish`.
+
+Our entry should look like this:
+
+![Homepage complete entry](/images/docs/getting-started/full-homepage-entry.gif)
+
+### Summer campaign
+
+The landing page model we created allows us to create other pages as well. We want our e-commerce to have a dedicated section for the summer campaign, so we'll create it using this model.
+
+We'll follow the same steps as for the homepage, using the following information:
+
+- **Landing page title:** Summer Campaign
+- **Link:** summer-campaign
+- **Blog posts:** We'll leave this empty for now.
+- **Product categories:** We'll leave this empty for now.
+- **Seller information:** We'll add the seller information we created before.
+- **Stripes:** Click on `+Add component` and add the following.
+  - **Call to action:**
+    - **Heading:** We'll write “Get ready for Summer with these amazing deals”.
+    - **Body:** We'll write “The Summer Sale is in full swing! See the amazing summer deals we have listed below!”.
+    - **Image:** We'll leave this empty for now.
+    - **Button:** We'll leave this empty for now.
+  - **Product Grid:**
+    - **Headline:** We'll write “Summer wear”.
+    - **Products:** We'll add relations to the following product entries: blue running shoes, black leather shoes, necklace, headband, plaid shirt.
+
+## Navigation
+
+In a previous lesson, we added a **Link** component to our **Navigation** model. That model allows us to add links to a Navigation content entry, that can later be used by our frontend.
+
+We want our e-commerce to have a main navigation that displays some of our important categories - such as clothes, shoes, accessories, and decor - as well as the Summer Campaign page we created in the previous step.
+
+We'll open the **Navigation** model in the content editor and create a new entry with the following information:
+
+- **Nav ID:** main
+- **Nav Link:** This is the component we added in the lesson about adding component fields to a model. We will add one of these components for each link we want in our navigation. We'll click on `+ Add Link` to start and complete the fields inside the component with the following information:
+  - **Display Text:** Clothes
+  - **Page:** We'll leave this as is for now.
+  - **External URL:** `/category/clothes`
+
+Our first navigation link is ready, time to add the rest of the **Nav Link** components. We'll click on `+ Add another Link` to start and we'll repeat the process for each link with the following information:
+
+**Shoes link**
+
+- **Display Text:** Shoes
+- **Page:** We'll leave this as is for now.
+- **External URL:** `/category/shoes`
+
+**Accessories link**
+
+- **Display Text:** Accessories
+- **Page:** We'll leave this as is for now.
+- **External URL:** `/category/accessories`
+
+**Decor link**
+
+- **Display Text:** Decor
+- **Page:** We'll leave this as is for now.
+- **External URL:** `/category/decor`
+
+**Summer Campaign link**
+
+- **Display Text:** Summer Campaign
+- **Page:** We'll click on Add existing document and elect the Summer campaign landing page that we created in the last lesson.
+- **External URL:** We'll leave this as is for now.
+
+Now our Navigation content entry has all the links the frontend needs to show. We'll see them later on when we integrate our content with our frontend.
+
+<Card theme="info" title="Next step">
+
+Once you've created some content for your project, move on to our next lesson:
+
+<Button
+  href="/docs/getting-started/content-localization"
+  size="md"
+  variant="outlined"
+  theme="primary"
+  iconRight="ArrowRight"
+>5.2 Content localization</Button>
+
+</Card>

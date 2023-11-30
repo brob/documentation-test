@@ -1,0 +1,69 @@
+---
+title: 7.3 Preview URL
+meta_title: Lesson 7.3 on Frontend connection
+meta_description: This document contains information on how to configure the Preview URL feature. We'll use it to add a Preview button to the sidebar of our content creation screen
+sidebar:
+  order: 7.3
+---
+
+import {Card} from "@astrojs/starlight/components"
+import Button from "@components/Button.astro"
+
+
+<Card theme="info" title="Lesson 7.3 - Frontend connection: Preview URL">
+
+In this step of the tutorial you will learn how to configure the Preview URL feature. We'll use it to add a Preview button to the sidebar of our content creation screen.
+
+[Check out the complete lessons list for this tutorial here](/docs/getting-started/onboarding-overview#what-you-will-learn)
+
+</Card>
+
+## Overview
+
+In this step of the Getting Started tutorial, you'll learn how to configure the Preview URL feature.
+
+We'll use it to add a preview button to the sidebar of our content creation screen.
+
+We want to be able to preview our Product content entries before we publish them, and this will help us do exactly that. This feature makes it easy to catch errors in content and test how things will look before publishing.
+
+## Creating our preview URL
+
+We want to preview our product pages before we publish them. To achieve this, we'll go into the Schema builder and select the **Product** model.
+
+Inside the **Product** model, we'll click on the sidebar and select the `Preview sidebar` widget.
+
+Configuring a preview requires that you assign a name to it and type in a URL template, which will depend on your website's structure.
+
+For this tutorial, you will use the `localhost` domain. We also need to use handlebars notation to include a field that is unique to the content we want to preview, so in this case, we will use `{productSlug}`.
+
+Last, generate a secret key from a generate key tool of your choice. Copy your new secret key and add it to your `.env.local` file as `HYGRAPH_PREVIEW_SECRET`.
+
+```bash
+// .env.local
+
+HYGRAPH_PREVIEW_SECRET=<put_your_secret_token_HERE>
+```
+
+The `URL` added to the `Preview sidebar` widget should look like:
+
+```
+http://localhost:3000/api/draft?slug={productSlug}
+&model=products&secret=(<put_your_secret_token_HERE>)
+
+```
+
+Once we've configured this, we'll get the `Open in Preview` option on the **Product** model content creation sidebar.
+
+<Card theme="info" title="Next step">
+
+Once you've configured your preview URL, move on to our next lesson:
+
+<Button
+  href="/docs/getting-started/configure-webhooks"
+  size="md"
+  variant="outlined"
+  theme="primary"
+  iconRight="ArrowRight"
+>8.1 Configuring webhooks</Button>
+
+</Card>

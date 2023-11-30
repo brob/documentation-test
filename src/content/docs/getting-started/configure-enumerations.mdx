@@ -1,0 +1,97 @@
+---
+title: 2.2 Configure enumerations
+meta_title: Lesson 2.2 on References & Enumerations
+meta_description: You'll learn how to configure enumerations that we will later use as parts of component fields
+sidebar:
+  order: 2.2
+---
+
+import {Card} from "@astrojs/starlight/components"
+import Button from "@components/Button.astro"
+import Video from "@components/Video.astro"
+
+<Card theme="info" title="Lesson 2.2 - References & Enumerations: Configure enumerations">
+
+In this lesson you'll learn how to configure enumerations that we will later use as parts of component fields.
+
+[Check out the complete lessons list for this tutorial here](/docs/getting-started/onboarding-overview#what-you-will-learn)
+
+</Card>
+
+## Overview
+
+When we create product entries for our e-commerce, we want to be able to select values - such as product size or color - from a dropdown menu. This makes sense for our project because we want to be able to only publish products in certain colors & sizes. Making this a dropdown in our content creation screen ensures that only the values we predefine will be used for those product characteristics.
+
+In Hygraph, you do this by adding a dropdown menu to your model. This dropdown gets the list of values from an enumeration that you need to configure before you create the dropdown field.
+
+An enumeration is a predefined set of values that represents a list of possible options. We can use enumerations to group values within a type and then use them when we add a dropdown field.
+
+We will be using enumerations for the components that we are going to create in our next lesson. Let's configure them.
+
+## Configure enumerations
+
+Adding enumerations is very simple.
+
+![Adding enumerations](/images/docs/getting-started/add-enumeration-screen.png)
+
+We always add them in the same way:
+
+1. In the Schema editor, we click on `+Add` next to `Enumerations`.
+2. We then type in a `Display name`, which is the name that we will see in the Schema.
+3. We also add an `API ID`, which we can use later to access the enumeration through the API Playground.
+4. Next, we add enumeration values by typing them in the `Values` field and then clicking on `+Add to list`. We will need to do this for each value.
+5. To save our enumeration, we simply click `Add enumeration`.
+
+For this tutorial, we will add 4 enumerations: separate sizes for shoes and clothes, and separate colors for wearables and decor.
+
+Use the following information to add them:
+
+**Clothes size**
+
+- **Display name:** Clothes size
+- **API ID:** ClothesSize
+- **Enumeration values:** XS, S, M, L, XL
+
+![Clothes size enumeration](/images/docs/getting-started/enumeration-clothes-size.png)
+
+**Shoes size**
+
+- **Display name:** Shoes size
+- **API ID:** ShoesSize
+- **Enumeration values:** Size_35, Size_36, Size_37, Size_38, Size_39, Size_40, Size_41, Size_42, Size_43, Size_44
+
+![Shoes size enumeration](/images/docs/getting-started/enumeration-shoes-size.png)
+
+**Wearable items color**
+
+- **Display name:** Wearable items color
+- **API ID:** WearableItemsColor
+- **Enumeration values:** Red, Green, Blue, Black, White
+
+![Wearable items color enumeration](/images/docs/getting-started/enumeration-wearables-color.png)
+
+**Decor items color**
+
+- **Display name:** Decor items color
+- **API ID:** DecorColor
+- **Enumeration values:** Gold, Silver, Bronze, Cobalt
+
+![Decor items color enumeration](/images/docs/getting-started/enumeration-decor-color.png)
+
+After adding your **Enumerations** the left sidebar should look like this:
+
+![Your enumerations listed in the schema](/images/docs/getting-started/enumerations-listed.png)
+
+<Card theme="info" title="Next step">
+
+Once you've created all enumerations, move on to our next lesson:
+
+<Button
+  href="/docs/getting-started/build-components"
+  size="md"
+  variant="outlined"
+  theme="primary"
+  iconRight="ArrowRight"
+>3.1 Build components</Button>
+
+</Card>

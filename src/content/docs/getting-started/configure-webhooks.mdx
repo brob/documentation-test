@@ -1,0 +1,76 @@
+---
+title: 8.1 Webhooks
+meta_title: Lesson 8.1 on Webhooks
+meta_description: This document contains information on how to configure a webhook
+sidebar:
+  order: 8.1
+---
+
+import {Card} from "@astrojs/starlight/components"
+import Button from "@components/Button.astro"
+
+<Card theme="info" title="Lesson 7.3 - Frontend connection: Preview URL">
+
+In this step of the tutorial you will learn how to configure a webhook.
+
+[Check out the complete lessons list for this tutorial here](/docs/getting-started/onboarding-overview#what-you-will-learn)
+
+</Card>
+
+## Overview
+
+A webhook is a feature that sends a signal whenever a specific event occurs. Think of it as a notification that triggers actions. We are going to configure a webhook that will trigger published content displaying in our frontend.
+
+## Configure a webhook
+
+First, we're going to navigate to the **Webhooks** section of our project, and click on the `Add` button.
+
+A screen will pop up, let's complete it using the following information:
+
+- **Name:** This is the name of our webhook, we'll call it “Deploy to Storefront”
+- **Description:** This is the description for our webhook. We'll write “Trigger published”.
+- **Include payload:** This enabled switch means that data will be sent via the webhook. We'll leave it as it is.
+- **Method:** We'll use the dropdown to select the `POST` method.
+- **URL:** This is our webhook URL or build hook.
+
+  - **Netlify:** Build Hook, go to your site in Netlify and navigate to `Site configuration > Build & deploy > Continuous deployment > Build hooks` and click `Add a build hook`.
+
+  ![Build-hooks](/images/docs/getting-started/webhooks-build-hooks.png)
+
+  Give your hook the name by typing “Deploy from Hygraph” in the `Build hook name` field, and use the `Branch to build` dropdown to select `main` - if not already chosen.
+
+  Clicking `Save` generated the build hook. Copy the `URL` and paste it into the Hygraph Webhook modal in the `URL` field.
+
+- **Secret key:** Add an optional secret key to sign the payload of our webhook, to allow the other end to check that the source is genuine.
+- **Triggers:** This is where we select which Models, Stages, Actions and Sources should trigger your webhook. Since we want to be able to preview our product entry drafts, we'll use the `Content model` Dropdown to select the `Product` model, and the `Stage` dropdown to select `PUBLISHED`. We won't select anything under `Actions` and `Sources`, because we don't want to limit them.
+- **Headers:** Optionally configure headers by adding additional Key and Value data, we will leave this blank.
+
+Next, click `Add` at the top of the model to save your webhook.
+
+![Webhook details](/images/docs/getting-started/webhooks-hygraph-ui.png)
+
+Once saved, you should see your webhook on the main screen.
+
+![Webhook on the main screen](/images/docs/getting-started/webhooks-build-to-netlify.png)
+
+You can test your new webhook by adding a new product content entry and publishing. When you click `Publish`, the webhook will automatically trigger Netlify rebuild your storefront!
+
+To setup a deployment to Vercel, follow our step-by-step guide on how to [deploy to Vercel using Hygraph Webhooks](/docs/guides/webhooks/trigger-static-build).
+
+<Card theme="info" title="Quick Tip">
+
+You can also setup static deployments to Netlify using our [Hygraph-Netlify Intergration](/docs/integrations/connect-netlify): This integration allows you to install a button in the Hygraph sidebar of a content model for manual redeploys, alongside a visual indicator of deployment status.
+
+</Card>
+
+&nbsp;
+
+**You've reached the end of the tutorial! Let's look into our wrap-up lesson:**
+
+<Button
+  href="/docs/getting-started/getting-started-wrap-up"
+  size="md"
+  variant="solid"
+  theme="primary"
+  iconRight="ArrowRight"
+>Getting Started project wrap-up</Button>

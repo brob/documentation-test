@@ -1,0 +1,66 @@
+---
+title: 4.2 Remote Fields
+meta_title: Lesson 4.2 on Remote Sources
+meta_description: You'll learn how to add Remote Fields to your models
+sidebar:
+  order: 4.2
+---
+
+import {Card} from "@astrojs/starlight/components"
+import Button from "@components/Button.astro"
+import Video from "@components/Video.astro"
+
+<Card theme="info" title="Lesson 4.2 - Remote Sources: Remote Fields">
+
+In this lesson you'll learn how to add Remote Fields to your models.
+
+[Check out the complete lessons list for this tutorial here](/docs/getting-started/onboarding-overview#what-you-will-learn)
+
+</Card>
+
+## Overview
+
+This step of our **Getting Started** tutorial covers Remote Fields, one of our [Content Federation](/docs/getting-started/fundamentals/content-federation) features.
+
+We use **Remote Fields** for data enrichment. You can add them to a model in your schema to fetch data from a Remote Source. This type of field connects remote data to a specific entry in that model, and it's always related to a single remote source & custom type.
+
+To be able to add a Remote Field to a model in your Schema, you need to have configured a Remote Source first, so make sure [you have followed the previous step of our tutorial](/docs/getting-started/add-remote-source) before you start this one.
+
+## The use case
+
+A common use case is to use Remote Fields to facilitate e-commerce by consolidating product listings from multiple suppliers onto one platform. For the purposes of this tutorial, we will add a Remote Field to our **Product** model and use it to fetch review data from the `DEMO Hygraph API` that we connected in our remote sources lesson, so it can be displayed on our front end.
+
+## Adding a Remote Field
+
+We're going to use the Remote Source that we configured in the previous lesson to add a Remote Field to our **Product** Model.
+
+<Video>
+  <source
+    src="https://media.graphassets.com/mDIeXmgzQ0yis5Uv7drY"
+    type="video/mp4"
+  />
+</Video>
+
+Let's go to our Schema, select the model, and then click on the `REST` Remote Field option on the right sidebar.
+
+We'll write “Reviews” in the `Display name` field. This will autocomplete the `API ID` field, which we'll leave as is.
+
+We can see that “HyDemoAPI” is selected as our `Remote source` by default, which we'll also leave as is, along with the `Method`. However, since we want to fetch review data for your **Product** model, we'll change the `Return type` selection to “Reviews” using the dropdown. What we just did here is select one of the `custom type definitions` that we configured for our remote source in the last lesson.
+
+Finally, we'll write `/api/reviews/product/{{doc.productSlug}}` under `Path`. This path will be added to our remote source base path to get a resulting endpoint. `doc.productSlug` references the content entry, so we'll be able to fetch reviews for specific products.
+
+We'll click `Add` to save.
+
+<Card theme="info" title="Next step">
+
+Once you've added the Remote Field to the **Product** model, move on to our next lesson:
+
+<Button
+  href="/docs/getting-started/top-level-remote-fields"
+  size="md"
+  variant="outlined"
+  theme="primary"
+  iconRight="ArrowRight"
+>4.3 Top-level Remote Fields</Button>
+
+</Card>

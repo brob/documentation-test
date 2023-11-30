@@ -1,0 +1,149 @@
+---
+title: 4.1 Add a Remote Source
+meta_title: Lesson 4.1 on Remote Sources
+meta_description: You'll learn how to add a Remote Source to your project in order to fetch information from external third-party web services
+sidebar:
+  order: 4
+---
+import { Card, CardGrid, Tabs, TabItem} from '@astrojs/starlight/components';
+
+import VideoEmbed from '@components/VideoEmbed.astro'
+
+<Card theme="info" title="Lesson 4.1 - Remote Sources: Add a Remote Source">
+
+In this lesson you'll learn how to add a Remote Source to your project in order to fetch information from external third-party web services.
+
+[Check out the complete lessons list for this tutorial here](/docs/getting-started/onboarding-overview#what-you-will-learn)
+
+</Card>
+
+## Overview
+
+This step of our **Getting Started** tutorial covers Remote Sources, our [Content Federation](/docs/getting-started/fundamentals/content-federation) utility.
+
+A Remote Source is a custom resolver entry point for your schema that allows data to be sourced from an external third-party web service and accepts field values from other Hygraph fields as arguments.
+
+You'll be able to add content from other systems and sources to the **Hygraph API** without having to migrate the content itself.
+
+Remote content can take two shapes in your Hygraph project: a **Remote Field** or a **Top-level Remote Field**. We'll learn more about them in the following step of our tutorial.
+
+There are many use cases where moving content into the CMS isn't possible or desirable. In our e-commerce project, we're fetching remote data for product reviews.
+
+Let's get to it.
+
+## Configuring our remote source
+
+Since we want to use remote content in our project, the first step is to create a Remote Source in our project Schema. We'll connect a `REST API` using our `DEMO Hygraph API`.
+
+Let's configure our remote source:
+
+![Configuring our remote source](/images/docs/getting-started/add_remote_source_to_schema.gif)
+
+We'll navigate to the Schema Builder, find the **Remote Sources** section in the left sidebar, and then click `+Add`.
+
+Next, we'll add “HyDemoAPI” as our `Display name` and then select `REST` for our remote source `Type` using the radio button.
+
+Once we select a type, more fields display. Let's complete our `Base URL` field with `https://federate-this-astro.vercel.app`. This will be the base endpoint of our API, which Remote fields will use to send queries.
+
+Finally, we'll add our `Custom type definitions`, which will allow us to define the structure of our `REST API` using `GraphQL SDL`.
+
+We will be adding six custom type definitions. For each one, click on `+Add custom type definition` and paste the following snippets:
+
+<Tabs>
+  <TabItem label="Product">
+```GraphQL
+type Product {
+  id: Int
+  name: String
+  price: Int
+  description: String
+  image: String
+  category: String
+  rating: Float
+  numReviews: Int
+  countInStock: Int
+}
+```
+  </TabItem>
+</Tabs>
+&nbsp;
+<Tabs>
+  <TabItem label="Products">
+```GraphQL
+type Products {
+  data: [Product]
+}
+```
+  </TabItem>
+</Tabs>
+&nbsp;
+<Tabs>
+  <TabItem label="ProductMeta">
+```GraphQL
+type ProductMeta {
+  data: Product
+}
+```
+  </TabItem>
+</Tabs>
+&nbsp;
+<Tabs>
+  <TabItem label="Review">
+```GraphQL
+type Review {
+    id: Int
+    product: Int
+    productSlug: String
+    name: String
+    rating: Float
+    comment: String
+}
+```
+  </TabItem>
+</Tabs>
+&nbsp;
+<Tabs>
+  <TabItem label="Reviews">
+```GraphQL
+type Reviews {
+  data: [Review]
+}
+```
+  </TabItem>
+</Tabs>
+&nbsp;
+<Tabs>
+  <TabItem label="ReviewMeta">
+```GraphQL
+type ReviewMeta {
+  data: Review
+}
+```
+  </TabItem>
+</Tabs>
+
+Your finished remote source should look like this:
+
+![Finished remote source](/images/docs/getting-started/show_finished_remote_source.gif)
+
+#### Would you like to know more?
+
+Here's a video on configuring a REST remote source:
+
+<VideoEmbed videoId="NpHSqsol3xc" />
+
+## SDL & our custom type definitions
+
+A `Schema Definition Language` or `SDL` is a way to define the shape of data that can be queried in a `GraphQL API`. It describes the schema or types of data available, their relationships, and how the data can be queried. We need to tell Hygraph the shape of the data to expect and make available.
+
+While a `REST API` can use multiple endpoints to return fixed data structures, a `GraphQL API` - not being limited to returning fixed structures - will expose just one. The custom type definitions that we added above allow us to specify the shape of the response coming from the API, so we can query the `REST API` as if it were native `GraphQL`.
+
+Would you like to know more? [Check out this document on GraphQL core concepts](https://www.howtographql.com/basics/2-core-concepts/)
+
+<Card theme="info" title="Next step">
+
+Once you've configured a Remote Source, move on to our next lesson:
+
+
+
+</Card>

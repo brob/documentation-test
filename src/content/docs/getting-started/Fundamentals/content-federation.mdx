@@ -1,0 +1,76 @@
+---
+title: Content Federation
+meta_description: Learn the bHygraph's unique Content Federation capabilities.
+---
+
+import {Card} from "@astrojs/starlight/components"
+
+## Our Journey
+
+Traditional CMSs represented a **one-to-one** relationship with tightly coupled content management and website to present it.
+
+The emergence of the headless CMS led to content management becoming separated from the presentation layer. Content is managed in the CMS, and can then be served to any front end - like website, app, smart TVs, etc. - using APIs; essentially helping power a **one-to-many** relationship.
+
+Organizations today, however, find themselves in the need to connect content, which not only lives in the CMS but across disconnected sources such as legacy CMS, PIM, DAM, SaaS tools, and more. This raises the need for a **many-to-many** relationship, which is fulfilled by Content Federation.
+
+Content Federation represents the next generation of CMSs, allowing you to source content from multiple sources and deliver to any front-end of choice.
+
+## What is Content Federation?
+
+Content Federation refers to the process of combining data and content from multiple systems and making it available through one single GraphQL API endpoint without having to move content itself. It's a fast and cost-effective approach to unifying content, as opposed to traditional custom middleware development.
+
+For instance, if you are using Hygraph to build your e-commerce website, you might be storing your products and information on them in a commerce system such as Shopify, BigCommerce, commercetools, etc. At the same time, you might be using Hygraph for product descriptions, product blogs, and the like. It might be burdensome or even not desirable to move all product information - such as pricing, product category, images, etc. - from your commerce system into Hygraph, or vice-versa.
+
+This is where Content Federation can help. Content teams can simply reference product information from your commerce system in Hygraph through a product picker or by entering in an SKU. Additional information from your commerce system such as pricing, product category, images, etc. will be automatically displayed on the final page, without having to duplicate or move this content. Developers, on the other hand, can make one single API call from Hygraph to fetch all of this information.
+
+Other use cases include travel, and stock management systems. In travel, it can integrate flight, hotel, and rental car information from numerous providers. In stock management, it can provide real-time inventory data from various warehouses, enabling efficient tracking and management.
+
+## Advantages of Content Federation
+
+Content Federation allows teams to connect multiple best of breed services to provide rich, reusable content that is modeled for a single intended outcome. The best-of-breed approach ensures that teams are using the services which are the best fit for their needs and that they aren't weighed down by extra functionality teams do not use. Content Federation empowers teams to query the data from the various services from a single source, Hygraph, to have all fragmented content unified. Just some of the benefits of content federation include ridding projects of content silos, using the most reliable data for a project, and using existing content without the need to maintain copies.
+
+**Rids projects of content silos**
+
+Content silos can sometimes feel like an inevitable byproduct of a microservice architecture. Content Federation, however, eliminates content silos by sourcing data from existing services directly from a single API, in this case, Hygraph. This keeps teams from having to migrate data from old systems into their content platform and ensures that the frontend has the most current version of data.
+
+**Creates the ability to incorporate live/real-time data**
+
+With Content Federation, teams are able to access the most up-to-date information around a topic, and have that be reflected on their site. This is critical for data which changes often such as product offerings, inventory, availability, prices, and weather. With a more rigid approach, teams are not able to create workarounds with data that must be updated often or risk the data becoming stale. Content Federation removes this roadblock and ensures that data is accurate at all times.
+
+**Preserves data integrity**
+
+With Content Federation, there is a single source of truth for data. Instead of data being copied into multiple systems, which requires manual work and increases the likelihood of inaccuracy, content programmatically flows into a single flexible endpoint. With Content Federation, teams can determine how much control the other team members should have and what information they should have access to. This ensures that data is not accidentally mutated or that restricted content is not shared across the wider team.
+
+**Uses existing content that is modeled for a specific purpose**
+
+Teams are no longer weighed down by time-consuming data entry processes. The existing content which lives in other services but is not in an ideal format for an end-user is still valuable when it is sourced via Content Federation. Data from several services can be brought together to build data-rich content models. Reusing puts the power back in the hands of the team to decide how to build their tech stack and enables them to choose services with the functionality they need without the deadweight of features they don’t need.
+
+**Enables easier access to 3rd party APIs**
+
+Content Federation enables the seamless flow of data between multiple sources. This also includes 3rd Party APIs, such as public databases or weather reports. Instead of relying on manually migrating the data or using webhooks to fetch the data, Content Federation creates a flow of information that is accurate and more flexible than using webhooks. For example, Hygraph is able to federate content from multiple APIs, regardless of whether they’re GraphQL or RESTful, and “GraphQLify” them into a single endpoint.
+
+**Provides greater autonomy to content editors**
+
+Instead of having devs stitch together data on the frontend, Content Federation routes data through your CMS, providing your Editors with greater autonomy to choose what gets displayed on the final pages.
+
+**Promotes more efficient workflows**
+
+Teams no longer have to rely on time consuming migrations or manual updates. Instead of spending time updating changes in product offerings or creating custom scripts to do this job, teams can spend more time creating new campaigns or building more ways for users to interact with the data, since the content is being programmatically sourced from remote APIs using API Extensions.
+
+**Unlocks broader set of use cases**
+
+Using Content Federation, teams now have the ability to tackle more data-rich use cases that require multiple sources of content and incorporate live data. In the context of content hubs, teams can provide a more engaging experience by ensuring that the information is up-to-date and that more data can be used in a single content hub, without becoming cumbersome to the development or content teams.
+
+## Get started!
+
+To start using Content Federation, you need to configure a remote source in your project.
+
+**Remote Sources** is our Content Federation utility, which allows adding content from other systems and sources to the Hygraph API without having to migrate the content itself.
+
+For configuration instructions, follow the steps in our documentation on [Remote Sources](/docs/guides/schema/remote-sources).
+
+<Card theme="success">
+
+You can also try out [this tutorial](https://hygraph.com/blog/federate-remote-data-sources-into-graphql-apis#building-a-restaurant-blog-with-hygraph-and-yelp-api) on how to build a restaurant blog with Hygraph and Yelp API. It can complement your reading of our Remote Sources documentation by walking you through the process of creating one while applying it to a real case.
+
+</Card>

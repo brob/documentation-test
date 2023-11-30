@@ -1,0 +1,251 @@
+---
+title: Migrating to Hygraph
+meta_title: Learn about migrating to Hygraph
+meta_description: Learn more about the process of migrating to Hygraph.
+---
+import {Card} from "@astrojs/starlight/components"
+
+Migrating from any platform to another isn't a straightforward process, the same goes for a Headless CMS. Hygraph provides the SDK, APIs, and UI to make the process easier to create, and manage your schema and content.
+
+The Hygraph schema and Content API are completely designed by you. This means any content types, and fields you add will immediately be available via the API. There are a few system content types, and [system fields](/docs/api-reference/schema/system-fields) you get out of the box, but you can use as much, or as little as you need.
+
+Before you begin creating any schema, or content, take a look at what content, and content types (referred to as "models" at Hygraph) you already have, and what they may look like in Hygraph.
+
+Hygraph supports over a dozen [field types](/docs/api-reference/schema/field-types), everything from regular strings, booleans, dates, polymorphic relations (Union Types) to remote field level resolvers that let you fetch content from other APIs.
+
+You'll want to begin by deciding on the models, and fields you need.
+
+Some users migrating prefer to take the time now to normalize their schema in a way that could not be done before, but this can often lead to manual intervention when importing content.
+
+If you don't normalize this now, you can always use String, and JSON fields to represent as much of your data without any modification, however you'll lose some benefits with filtering that data at an API later if fields aren't set to their best field types.
+
+## 1. Explore your current data and relations
+
+Look at your existing data, and export it to a format such as JSON, or CSV. You can use this export to inspect your existing content types, and field names, as well as any relations between data.
+
+For the purposes of this article, we'll use a very basic CSV of authors:
+
+```
+firstName;lastName
+Jamie;Barton
+Michael;Lukaszczyk
+Daniel;Winter
+Jonas;Faber
+Bruno;Scheufler
+Aien;Saidi
+Pablo;Fernandez Busch
+Marcos;Pasqualino
+```
+
+## 2. Create your new schema
+
+You can use the Hygraph schema editor UI to manage your schema, or use the [Management SDK](https://github.com/hygraph/management-sdk) to create your models, fields, enums, relations programmatically.
+
+In the example below, we'll import the `@graphcms/management` dependency, and create a model, and add some fields.
+
+```js
+// migration.js
+const { newMigration, FieldType } = require('@graphcms/management');
+
+const migration = newMigration({ endpoint: '...', authToken: '...' });
+
+const author = migration.createModel({
+  apiId: 'Author',
+  apiIdPlural: 'Authors',
+  displayName: 'Author',
+});
+
+author.addSimpleField({
+  apiId: 'firstName',
+  displayName: 'First Name',
+  type: FieldType.String,
+});
+author.addSimpleField({
+  apiId: 'lastName',
+  displayName: 'Last Name',
+  type: FieldType.String,
+});
+
+migration.run();
+```
+
+<Card theme="info">
+
+You'll need your Hygraph endpoint, and a Permanent Auth Token with Management API access granted.
+
+</Card>
+
+Next, you'll need to run this with node. If you'd like to see the result or any errors of the migration, you can opt to run this migration in the foreground by passing `true` as the first argument to `run()`.
+
+```js
+const result = migration.run(foreground);
+
+if (result.errors) {
+  console.log(result.errors);
+} else {
+  console.log(result.name);
+}
+```
+
+Depending on what filename you gave the migration, you can run `node migration.js` from the command line.
+
+<Card theme="info">
+
+If you [introspect](https://graphql.org/learn/introspection/) your Hygraph endpoint, or visit the [schema editor UI](https://app.hygraph.com/), you'll notice the model "Author" with the fields "First Name", and "Last Name".
+
+</Card>
+
+There are many other options available using the Management SDK, so it's recommended you read through the [documentation](https://github.com/hygraph/management-sdk), and understand everything that is available before using it.
+
+Now we've some schema, it's time to import content!
+
+## 3. Import your existing content
+
+Before you can begin creating any content within Hygraph, you'll want to inspect the [auto-generated GraphQL mutations](/docs/api-reference/content-api/mutations#auto-generated-mutations) for your models.
+
+Let's take a look at mutations that are added to the Hygraph GraphQL schema for the new "Author" model:
+
+```graphql
+createAuthor(data: AuthorCreateInput!): Author
+updateAuthor(where: AuthorWhereUniqueInput!, data: AuthorUpdateInput!): Author
+deleteAuthor(where: AuthorWhereUniqueInput!): Author
+upsertAuthor(
+  where: AuthorWhereUniqueInput!
+  upsert: AuthorUpsertInput!
+): Author
+publishAuthor(
+  where: AuthorWhereUniqueInput!
+  to: [Stage!]! = [PUBLISHED]
+): Author
+unpublishAuthor(
+  where: AuthorWhereUniqueInput!
+  from: [Stage!]! = [PUBLISHED]
+): Author
+updateManyAuthorsConnection(
+  where: AuthorManyWhereInput
+  data: AuthorUpdateManyInput!
+  skip: Int
+  first: Int
+  last: Int
+  before: ID
+  after: ID
+): AuthorConnection!
+deleteManyAuthorsConnection(
+  where: AuthorManyWhereInput
+  skip: Int
+  first: Int
+  last: Int
+  before: ID
+  after: ID
+): AuthorConnection!
+publishManyAuthorsConnection(
+  where: AuthorManyWhereInput
+  from: Stage = DRAFT
+  to: [Stage!]! = [PUBLISHED]
+  skip: Int
+  first: Int
+  last: Int
+  before: ID
+  after: ID
+): AuthorConnection!
+unpublishManyAuthorsConnection(
+  where: AuthorManyWhereInput
+  stage: Stage = DRAFT
+  from: [Stage!]! = [PUBLISHED]
+  skip: Int
+  first: Int
+  last: Int
+  before: ID
+  after: ID
+): AuthorConnection!
+```
+
+You'll want to inspect the types referenced above, but if we take the `AuthorCreateInput` which we'll need when importing content, you can see we provide some values:
+
+```graphql
+input AuthorCreateInput {
+  createdAt: DateTime
+  updatedAt: DateTime
+  firstName: String
+  lastName: String
+}
+```
+
+Creating an author will return the following `Author` type:
+
+```graphql
+interface Node {
+  id: ID!
+  stage: Stage!
+}
+
+type Author implements Node {
+  stage: Stage!
+  documentInStages(
+    stages: [Stage!]! = [PUBLISHED, DRAFT, QA]
+    includeCurrent: Boolean! = false
+    inheritLocale: Boolean! = false
+  ): [Author!]!
+  id: ID!
+  createdAt: DateTime!
+  createdBy(locales: [Locale!]): User
+  updatedAt: DateTime!
+  updatedBy(locales: [Locale!]): User
+  publishedAt: DateTime
+  publishedBy(locales: [Locale!]): User
+  firstName: String
+  lastName: String
+  history(limit: Int! = 10, skip: Int! = 0, stageOverride: Stage): [Version!]!
+}
+```
+
+Since your data is mostly of a different shape, and structure than it was before, it's quite difficult to create a 1:1 mapping, and import from your existing database to Hygraph. Because of this, you will want to consider tweaking your current dataset to match your new input types.
+
+Now you're ready to import, you should manage the imports in a queue.
+
+```js
+const run = async () => {
+  const data = csvToJson.getJsonFromCsv('./data.csv');
+
+  const queue = new Queue('Hygraph Import');
+
+  await Promise.all(
+    data.map(async (row) => {
+      const job = await queue.createJob(row).backoff('fixed', 5000).save();
+
+      return job;
+    })
+  );
+
+  queue.on('job succeeded', (jobId) => console.log(`[SUCCESS]: ${jobId}`));
+  queue.on('job failed', (jobId, err) =>
+    console.log(`[FAILED]: ${jobId} (${err})`)
+  );
+
+  await queue.process(async (job) => await createContentEntry(job.data));
+};
+
+run();
+```
+
+When each job is processed, it executes the `createContentEntry` function. This function is what will make a request to Hygraph to perform a GraphQL mutation, specifically `createAuthor`.
+
+```js
+const createContentEntry = async (variables) => {
+  const client = new GraphQLClient(process.env.HYGRAPH_ENDPOINT, {
+    headers: {
+      Authorization: `Bearer ${process.env.HYGRAPH_TOKEN}`,
+    },
+  });
+
+  const query = gql`
+    mutation createAuthor($firstName: String, $lastName: String) {
+      createAuthor(data: { firstName: $firstName, lastName: $lastName }) {
+        id
+      }
+    }
+  `;
+
+  return client.request(query, variables);
+};
+```

@@ -1,0 +1,85 @@
+---
+title: 7.1 Creating a frontend using Next
+meta_title: Lesson 7.1 on Frontend connection
+meta_description: This document contains information on how to create your frontend for the getting started project using Next
+sidebar:
+  order: 7.1
+---
+
+import {Card} from "@astrojs/starlight/components"
+import Button from "@components/Button.astro"
+
+<Card theme="info" title="Lesson 7.1 - Frontend connection: Creating a frontend using Next">
+
+In this step of the tutorial you will learn how to create your frontend for the getting started project using Next.
+
+[Check out the complete lessons list for this tutorial here](/docs/getting-started/onboarding-overview#what-you-will-learn)
+
+</Card>
+
+## Overview
+
+In this lesson, you'll learn how to create a Next app and connect it to Hygraph. Let's quickly go over how to set up a new Next project from scratch. Then, we will clone the e-commerce Hygraph starter that will be used for the rest of the tutorial.
+
+## Quick overview: Creating a new Next app
+
+To start, we need to initialize a new `Next.js 13` project. Open up your terminal and navigate to where you want your project, then run the following command:
+
+```
+npx create-next-app hygraph-boutique
+```
+
+The interactive setup will ask you questions to configure your project. Initialize with the following answers:
+
+- Typescript: No
+- ESLint: Yes
+- Tailwind CSS: Yes
+- src/ directory: No
+- App Router: Yes
+- Import alias: No
+
+After choosing the options, the CLI will install all the necessary pieces to run your `Next.js` site.
+
+Once the installation completes, open the new Next project in a code editor of your choice. We need to adjust the default Tailwind styling that Next.js gives us from the installation.
+
+Remove the global CSS rules in app/globals.css except following Tailwind imports:
+
+```js
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+## Clone the Hygraph E-commerce starter
+
+<Card theme="info" title="Starter Recap">
+
+All Hygraph starters are located on the main dashboard after to login. Scroll past the “My Projects” section to the “Start a new Project” section and choose the E-commerce shop starter. This will create a new hygraph project as well as the frontend template for a website.
+
+</Card>
+
+Since, we already have a Hygraph project, let's clone the starter without creating a new Hygraph project. [Here's the link to the repository](https://github.com/hygraph/hygraph-next-commerce-starter).
+
+Type the following command into your terminal to clone the starter:
+
+```
+git clone https://github.com/hygraph/hygraph-next-commerce-starter.git
+```
+
+Navigate to the project directory and type `npm install` to install the package dependencies.
+
+In the next lesson, we will connect our e-commerce storefront to our existing Hygraph project.
+
+<Card theme="info" title="Next step">
+
+Once you've created your frontend using Next, move on to our next lesson:
+
+<Button
+  href="/docs/getting-started/connect-storefront"
+  size="md"
+  variant="outlined"
+  theme="primary"
+  iconRight="ArrowRight"
+>7.2 Connecting our storefront</Button>
+
+</Card>

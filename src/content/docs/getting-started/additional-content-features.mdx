@@ -1,0 +1,79 @@
+---
+title: 5.3 Additional content features
+meta_title: Lesson 5.3 on Content Editor
+meta_description: You'll learn how to work with content stages, content duplication, and content publishing
+sidebar:
+  order: 5.3
+---
+import {Card} from "@astrojs/starlight/components"
+import Button from "@components/Button.astro"
+
+<Card theme="info" title="Lesson 5.3 - Content Editor: Additional content features">
+
+In this lesson you'll learn how to work with content stages, content duplication, and content publishing.
+
+[Check out the complete lessons list for this tutorial here](/docs/getting-started/onboarding-overview#what-you-will-learn)
+
+</Card>
+
+## Overview
+
+Besides what we've already seen, other important aspects of creating content in Hygraph are content stages, content publishing, and content duplication
+
+## Content stages
+
+Hygraph comes with two system content stages, `DRAFT` and `PUBLISHED`.
+
+`DRAFT` allows people to add and edit content without affecting published content, and then when the content is ready to be consumed by others, it is promoted to the `PUBLISHED` stage.
+
+Hygraph content always exists in the `DRAFT` stage. When we promote it to `PUBLISHED`, then it is in `PUBLISHED` and `DRAFT`.
+
+When we edit a content entry and save it without publishing, it becomes outdated. This means that the `DRAFT` stage contains changes that have not yet been promoted to `PUBLISHED`.
+
+![Table showing content in stages DRAFT, PUBLISHED, & outdated](/images/docs/getting-started/content-stages-comparison.png)
+
+If you're interested in learning more about content stages and custom content stages, take a look at our [content stages documentation](/docs/guides/content/content-stages).
+
+## Content publishing
+
+As we mentioned in the previous lesson, published content is ready to be consumed by others. In our project, for example, published product entries can be seen by potential buyers because they are live in our online shop.
+
+If you want to create or make changes to a content entry, but you haven't published it yet, you will click on `Save` rather than `Save & Publish`.
+
+![Save and Save & publish buttons](/images/docs/getting-started/save-publish-options.png)
+
+This is useful in workflows where content needs to be reviewed before publishing.
+
+Want to learn more about publishing content? Check out our [documentation](/docs/guides/content/publishing-content).
+
+## Content duplication
+
+Hygraph lets us duplicate content to save time. If our e-commerce had, for instance, many similar product entries, we could create duplicates to work on.
+
+![Content duplication steps](/images/docs/getting-started/duplicate_content.gif)
+
+To duplicate an entry, you first need to access the edit view by clicking on the pencil icon. Then, you need to click on the duplication icon at the top of the screen. This will load the duplicated entry, which will look the same as our original entry, except that this one will have the word `(copy)` at the end of the title line.
+
+All you need to do now is make the necessary changes and `Save`, or `Save & Publish`, as needed.
+
+<Card theme="warning">
+
+You will find the word `(copy)` at the end of the line corresponding to the field you selected the `Use as title field` checkbox for in the schema builder.
+
+If the content entry contains reference fields, some of the relations will be duplicated, and others won't. The system will notify you if this is the case. Check out [our document on content duplication](/docs/guides/content/duplicating-content) to learn more.
+
+</Card>
+
+<Card theme="info" title="Next step">
+
+Once you've read this information about additional content features, move on to our next lesson:
+
+<Button
+  href="/docs/getting-started/api-playground-queries"
+  size="md"
+  variant="outlined"
+  theme="primary"
+  iconRight="ArrowRight"
+>6.1 API Playground: Queries practice</Button>
+
+</Card>

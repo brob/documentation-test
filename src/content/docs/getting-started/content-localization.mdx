@@ -1,0 +1,114 @@
+---
+title: 5.2 Content localization
+meta_title: Lesson 5.2 on Content Editor
+meta_description: You'll learn how to add a locale to your project and localize field in your content entries
+sidebar:
+  order: 5.2
+---
+
+import {Card} from "@astrojs/starlight/components"
+import Button from "@components/Button.astro"
+import Video from "@components/Video.astro"
+
+<Card theme="info" title="Lesson 5.2 - Content Editor: Content localization">
+
+In this lesson you'll learn how to add a locale to your project and localize field in your content entries.
+
+[Check out the complete lessons list for this tutorial here](/docs/getting-started/onboarding-overview#what-you-will-learn)
+
+</Card>
+
+## Overview
+
+Hygraph allows having different locales for your content. We want part of the content of our e-commerce to be in two languages: English & Spanish. This is why we selected the `Localize field` checkbox for some of our fields during schema creation.
+
+The reason why we've placed this into a separate section is that before we can actually write the localized content, we need to add a new locale to our project.
+
+We'll use this lesson to add our new locale and to write the localized content.
+
+## Add a locale
+
+<Video>
+  <source
+    src="https://media.graphassets.com/uUmIbCVsS8GOrwRY8PXj"
+    type="video/mp4"
+  />
+</Video>
+
+Adding a locale in Hygraph is really easy. First we need to navigate to `Project settings > General > Locales`. There, we'll see our default locale, which is English.
+
+In this case we want to add Spanish, so we'll then use the dropdown menu to select Spanish from the list. We can also start typing the word to start filtering values. Selecting Spanish will autocomplete the `API ID` field.
+
+Finally, we'll click `Add`, and the new locale will be added to our project.
+
+## Localized content
+
+Now that a new locale has been added to our project, we are ready to start adding localized content to our content entries.
+
+### Summer campaign
+
+<Video>
+  <source
+    src="https://media.graphassets.com/U9vVIrn0QDS8qy9nPbRT"
+    type="video/mp4"
+  />
+</Video>
+
+Our **Summer campaign** landing page has a localized title and also contains components that have localized fields. We'll add the Spanish localization with the following localized information:
+
+- **Landing page title:** Campaña de verano
+- **Stripes**
+  - **Call to Action**
+    - **Heading:** Prepárate para el verano con estas increíbles ofertas
+    - **Body:** ¡Las rebajas de verano están en pleno apogeo! ¡Vea las increíbles ofertas de verano que enumeramos a continuación!
+  - **Product Grid**
+    - **Headline:** Ropa de verano
+
+<Card theme="warning">
+
+We're going to set up our frontend to show localized content for this page. During schema building, we set up many fields as localized wherever it made sense. This means you will able to repeat this process for all of those fields to contain translations.
+
+</Card>
+
+### Products
+
+Let's repeat the process for some of our products. We'll go into each of these product entries in the contend editor, add the Spanish locale, and type in the following translations:
+
+**Blue running shoes**
+
+- **Product name:** Zapatillas para correr azules
+- **Product description:** Estas zapatillas de running azules ofrecen tanto forma como función, brindando un apoyo excepcional y estilo para tus actividades deportivas. El material transpirable y la suela acolchada garantizan una experiencia cómoda kilómetro tras kilómetro.
+
+**Plaid shirt**
+
+- **Product name:** Camisa a cuadros
+- **Product description:** Esta camisa a cuadros emana un encanto atemporal, ideal para un día casual fuera o una reunión relajada por la tarde. El patrón clásico a cuadros y el ajuste cómodo la convierten en una prenda básica para un estilo sin esfuerzo.
+
+**Black leather shoes**
+
+- **Product name:** Zapatos de cuero negro
+- **Product description:** Estos zapatos de cuero negro combinan de manera impecable la sofisticación con la durabilidad, convirtiéndolos en una elección versátil tanto para ocasiones formales como para uso diario. El diseño elegante y el cuero de alta calidad garantizan un atractivo atemporal que complementa cualquier conjunto.
+
+**Necklace**
+
+- **Product name:** Collar
+- **Product description:** Este collar blanco está elaborado con partes de caracoles de mar, evocando la esencia relajada y playera. Perfecto para quienes buscan un toque marino en su estilo diario.
+
+**Headband**
+
+- **Product name:** Vincha
+- **Product description:** Esta vincha de algodon blanco brinda un toque elegante y sofisticado a tu peinado. Ideal para completar tu look con un toque de moda y comodidad.
+
+<Card theme="info" title="Next step">
+
+Once you've localized the **Summer Campaign** landing page, move on to our next lesson:
+
+<Button
+  href="/docs/getting-started/additional-content-features"
+  size="md"
+  variant="outlined"
+  theme="primary"
+  iconRight="ArrowRight"
+>5.3 Additional content features</Button>
+
+</Card>

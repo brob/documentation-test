@@ -1,0 +1,175 @@
+---
+title: 4.3 Top-level Remote Fields
+meta_title: Lesson 4.3 on Remote Sources
+meta_description: You'll learn how to add Top-level Remote Fields to the Query system model
+sidebar:
+  order: 4.3
+---
+
+import {Card, Tabs, TabItem} from "@astrojs/starlight/components"
+import Button from "@components/Button.astro"
+import Video from "@components/Video.astro"
+import VideoEmbed from "@components/VideoEmbed.astro"
+
+<Card theme="info" title="Lesson 4.3 - Remote Sources: Top-level Remote Fields">
+
+In this lesson you'll learn how to add Top-level Remote Fields to the Query system model.
+
+[Check out the complete lessons list for this tutorial here](/docs/getting-started/onboarding-overview#what-you-will-learn)
+
+</Card>
+
+## Overview
+
+This step of our **Getting Started** tutorial covers Top-level Remote Fields, one of our [Content Federation](/docs/getting-started/fundamentals/content-federation) utilities, which eliminates the need to make separate API requests for data inside & outside of Hygraph.
+
+In the previous step of our tutorial, we talked about Remote Fields, which we can add to a specific model and only fetch data related to it. Top-level Remote Fields can fetch remote data outside the context of a regular model, which is then sent to the front end alongside your Hygraph data.
+
+You can add Top-level Remote Fields fields to the **Query** system model in your project Schema, use them to fetch data that is unrelated to Hygraph and pass it through in the same API call as the data that is related to Hygraph content. Your front end will receive this data as if coming from Hygraph despite coming from diverse sources.
+
+## Our schema
+
+Just like Remote Fields, Top-level Remote Fields are also dependent on our project having a Remote Source already configured. We add them to the **Query** system model in the same way that we add a Remote Field to a regular model.
+
+We'll use a Top-level Remote Field to fetch review data for a product in our catalog.
+
+![Complete Top-level Remote Field](/images/docs/getting-started/top-level-remote-field.png)
+
+We'll select the **Query** system model in our schema, then click on the `REST` Remote Field option on the right sidebar.
+
+Next, we'll write “Reviews” in the `Display name` field. This will autocomplete the `API ID` field, which we'll leave as is.
+
+We can see that “HyDemoAPI” is selected as our `Remote source` by default, which we'll also leave as is, along with the `Method`. We'll change the `Return type` selection to “ReviewMeta”, which is one of the `custom type definitions` we configured for our remote source earlier.
+
+Under `Input arguments`, we'll select Int as the `Input type`, and our `API ID` will be “ProductId”. We'll make this input argument `required` by selecting the checkbox.
+
+Finally, we'll write `/api/reviews/product/{{args.productId}}` under `Path`. This path will be added to our remote source base path to get a resulting endpoint.
+
+We'll click `Add` to save.
+
+#### Would you like to know more?
+
+Here's an in-depth video tutorial on Top-level Remote Fields:
+
+<VideoEmbed videoId="08vg5eYdsDc" />
+
+## Testing our Top-level Remote Field
+
+As it's not connected to a content model or a content entry, we can test our Top-level Remote Field right away to make sure it works correctly.
+
+Let's go over to the API Playground and make a query to fetch all the existing reviews:
+
+Here's a query that you can copy and paste it in the API Playground. We've included the response as well:
+
+<Tabs panelHeight={300}>
+  <TabItem label="Query">
+
+```graphql
+query MyQuery {
+  reviews(productId: 1) {
+     data {
+      comment
+      id
+      name
+      product
+      rating
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```graphql
+{
+  "data": {
+    "reviews": {
+      "data": [
+        {
+          "comment": "These shoes are both the mostly comfortable and the most stylish I have ever owned.",
+          "id": 1,
+          "name": "Person Personson",
+          "product": 1,
+          "rating": 4.5
+        },
+        {
+          "comment": "These would be better if they were red. I suppose they aren't bad, but they aren't good either.",
+          "id": 4,
+          "name": "Second Person",
+          "product": 1,
+          "rating": 2.5
+        },
+        {
+          "comment": "I've worn these for 3 years and they are still in great shape. I'm going to buy another pair. I think everyone should have a pair of these shoes in their closet.",
+          "id": 5,
+          "name": "Another Great Person",
+          "product": 1,
+          "rating": 4.5
+        },
+        {
+          "comment": "This is the absolute best hoodie I've ever had",
+          "id": 2,
+          "name": "Green Fan",
+          "product": 2,
+          "rating": 5
+        },
+        {
+          "comment": "After wearing this shirt for 2 days, I realized that it was made of cottom. I am allergic to cotton. I am very disappointed.",
+          "id": 3,
+          "name": "Oregan Person",
+          "product": 3,
+          "rating": 1.5
+        },
+        {
+          "comment": "This shirt is okay. It lost a button, but I sewed it back on.",
+          "id": 6,
+          "name": "Another Person",
+          "product": 3,
+          "rating": 3.5
+        },
+        {
+          "comment": "I love this shirt. I wear it all the time.",
+          "id": 7,
+          "name": "Third Person",
+          "product": 3,
+          "rating": 4.5
+        },
+        {
+          "comment": "These shoes are great. I've run 100 miles in them and they are still in great shape.",
+          "id": 8,
+          "name": "Runner in Rochester",
+          "product": 4,
+          "rating": 5
+        },
+        {
+          "comment": "These socks are great. They are very colorful and they keep my feet warm.",
+          "id": 9,
+          "name": "Sock Lover",
+          "product": 5,
+          "rating": 4.5
+        }
+      ]
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+As you can see, this simple query fetches all the reviews we have available.
+
+<Card theme="info" title="Next step">
+
+Once you've added the the Top-level Remote Field to the **Query** model and tested it, move on to our next lesson:
+
+<Button
+  href="/docs/getting-started/content-creation"
+  size="md"
+  variant="outlined"
+  theme="primary"
+  iconRight="ArrowRight"
+>5.1 Content creation</Button>
+
+</Card>

@@ -1,0 +1,857 @@
+---
+title: 6.1 Exercises - Queries
+meta_title: Lesson 6.1 on API Playground
+meta_description: This document contains exercises to provide queries practice in our API Playground
+sidebar:
+  order: 6.1
+---
+import {Card, Tabs, TabItem} from "@astrojs/starlight/components"
+import Button from "@components/Button.astro"
+
+<Card theme="info" title="Lesson 6.1 - API Playground: Exercises - Queries">
+
+This document contains exercises to provide queries practice in our API Playground.
+
+[Check out the complete lessons list for this tutorial here](/docs/getting-started/onboarding-overview#what-you-will-learn)
+
+</Card>
+
+## Overview
+
+Hygraph automatically generates queries for fetching single and multiple entries for each defined content type belonging to your project.
+
+When a new model is added to your project, there are two generated **GraphQL** queries added to your schema. The queries are named after the **API ID** and **Plural API ID**. The **API ID** will be used to fetch a single entry, and the **Plural API ID** to fetch multiple entries.
+
+<Card theme="info" title="Pro Tip">
+
+Would you like to learn more about GraphQL? Take a look at our [Learn GraphQL](https://hygraph.com/learn/graphql) article. You can also [check out this external resource](https://www.howtographql.com/).
+
+</Card>
+
+Let's use our **Product category** model as an example here. If you look at the API Playground, you'll find `productCategory` - the model's `API ID` - and `productCategories` - the model's `Plural API ID` - in the tree. If you display `productCategories`, you'll find items for the system fields but also for all the fields we added to this model. We have `categoryName`, `slug`, `description`, and `products`.
+
+![API Playground with displayed tree](/images/docs/getting-started/api-playground-tree-displayed.png)
+
+You can write your queries using the tree - by selecting items - or you can type them manually.
+
+## GraphQL 1
+
+This simple query fetches information about all our product categories. Remember that we are using the `Plural API ID` to fetch multiple entries. You can copy it and try it in your API Playground:
+
+<Tabs panelHeight={240}>
+  <TabItem label="Query">
+
+```graphql
+query MyQuery {
+  productCategories {
+    categoryName
+    description {
+      text
+    }
+    slug
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```graphql
+{
+  "data": {
+    "productCategories": [
+      {
+        "categoryName": "Clothes",
+        "description": {
+          "text": "This is where the description goes"
+        },
+        "slug": "clothes"
+      },
+      {
+        "categoryName": "Shoes",
+        "description": {
+          "text": "You will find shoes here"
+        },
+        "slug": "shoes"
+      },
+      {
+        "categoryName": "Sportswear",
+        "description": {
+          "text": "You will find sportswear here"
+        },
+        "slug": "sportswear"
+      },
+      {
+        "categoryName": "Urban",
+        "description": {
+          "text": "You will find urban-style items here"
+        },
+        "slug": "urban"
+      },
+      {
+        "categoryName": "New arrival",
+        "description": {
+          "text": "You will find our latest arrivals here"
+        },
+        "slug": "new-arrival"
+      },
+      {
+        "categoryName": "Decor",
+        "description": {
+          "text": "You will find decor items here"
+        },
+        "slug": "decor"
+      },
+      {
+        "categoryName": "Accessories",
+        "description": {
+          "text": "You will find accessories here"
+        },
+        "slug": "accessories"
+      }
+    ]
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## GraphQL 2
+
+Now let's try to fetch all the products in the **New Arrival** category. We will be using the `slug` with a `where` filter as our entry identifier for this:
+
+<Tabs panelHeight={200}>
+  <TabItem label="Query">
+
+```graphql
+query MyQuery {
+  productCategory(where: { slug: "new-arrival" }) {
+    products {
+      productName
+      productSlug
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```graphql
+{
+  "data": {
+    "productCategory": {
+      "products": [
+        {
+          "productName": "Colorful socksa",
+          "productSlug": "colorful-socks"
+        },
+        {
+          "productName": "Green Hoodie",
+          "productSlug": "green-hoodie"
+        },
+        {
+          "productName": "Plaid shirt",
+          "productSlug": "plaid-shirt"
+        },
+        {
+          "productName": "Black leather shoes",
+          "productSlug": "black-leather-shoes"
+        }
+      ]
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## GraphQL 3
+
+**Now try this by yourself:** Find out the `productName` and `productSlug` of all the products inside the `urban` category
+
+## References 1
+
+Let's try a query that fetches the related products connected to a product content entry.
+
+We'll include a where condition with our entry `slug` and request the `title` of the related products component, as well as the `productName` and `productSlug` of the related products. It should look something like this:
+
+<Tabs panelHeight={280}>
+  <TabItem label="Query">
+
+```graphql
+query MyQuery {
+  product(where: { productSlug: "plaid-shirt" }) {
+    relatedProducts {
+      title
+      products {
+        productName
+        productSlug
+      }
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```graphql
+{
+  "data": {
+    "product": {
+      "relatedProducts": {
+        "title": "Related products",
+        "products": [
+          {
+            "productName": "Black leather shoes",
+            "productSlug": "black-leather-shoes"
+          },
+          {
+            "productName": "Blue running shoes",
+            "productSlug": "blue-running-shoes"
+          },
+          {
+            "productName": "Headband",
+            "productSlug": "headband"
+          },
+          {
+            "productName": "Necklace",
+            "productSlug": "necklace"
+          }
+        ]
+      }
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+The response shows us the 4 related entries, including the information we requested.
+
+## References 2
+
+Let's try another one. We want to find out which products have been assigned to the `Sportswear` category. To achieve this, we will query the products reference inside the `productCategory` model. We want to find out the `productName`, `productSlug`, and `productDescription` of those products. Since the product description was added with an `RTE` field, we need to select an output format; we'll select `HTML`.
+
+You can try the following query yourself:
+
+<Tabs panelHeight={280}>
+  <TabItem label="Query">
+
+```graphql
+query MyQuery {
+  productCategory(where: { slug: "sportswear" }) {
+    products {
+      productName
+      productSlug
+      productDescription {
+        html
+      }
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```graphql
+{
+  "data": {
+    "productCategory": {
+      "products": [
+        {
+          "productName": "Green Hoodie",
+          "productSlug": "green-hoodie",
+          "productDescription": {
+            "html": "<p>This green hoodie combines comfort and style seamlessly, making it your go-to choice for a casual yet trendy look. Its soft fabric and versatile shade of green make it a wardrobe essential for all seasons.</p>"
+          }
+        },
+        {
+          "productName": "Blue running shoes",
+          "productSlug": "blue-running-shoes",
+          "productDescription": {
+            "html": "<p>These blue running shoes offer both form and function, providing exceptional support and style for your active pursuits. The breathable material and cushioned sole ensure a comfortable experience mile after mile.</p>"
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+If you followed our tutorial to create the additional content entries, your response should look like the one shown above. Remember that if you did not create the related content entries then they can't be fetched.
+
+The response shows us that there are only two products assigned to this category: the green hoodie and the blue running shoes.
+
+If we go to the **Product category** model in the content editor and access the edit view of the **Sportswear** category by clicking on the pencil icon, we'll see that these same two products are listed in the Products reference.
+
+![Items in the sportswear category](/images/docs/getting-started/product-category-contents-example.png)
+
+## References 3
+
+**Now try this by yourself:** Query the `sellerInformation` reference in the Landing page entry we created using the entry `ID` to find out the `businessName` and `businessDescription`.
+
+## Components 1
+
+Let's query the **Product variant** component that we created for our **Product** model earlier.
+
+In a previous step in the Content editor, we created a sample entry that used this component for a headband. If you go into the Content editor, select the **Product** model, and access the edit view of that entry by clicking on the pencil icon, you'll see that the entry `slug` is "headband".
+
+The following query looks into the **Product** model for an entry with the `slug` we provided and fetches the `productName` & `productDescription`, along with the `productVariant` component with the `productType` component field nested in it, containing the color for this item of type Accessory.
+
+You can try this in your project's API Playground:
+
+<Tabs panelHeight={420}>
+  <TabItem label="Query">
+
+```graphql
+query MyQuery {
+  product(where: { productSlug: "headband" }) {
+    productName
+    productDescription {
+      html
+    }
+    productVariant {
+      productType {
+        ... on Accessory {
+          color
+        }
+      }
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```graphql
+{
+  "data": {
+    "product": {
+      "productName": "Headband",
+      "productDescription": {
+        "html": "<p>This white cotton headband provides an elegant and sophisticated touch to your hairstyle. Perfect for completing your look with a blend of fashion and comfort.</p>"
+      },
+      "productVariant": {
+        "productType": {
+          "color": "White"
+        }
+      }
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Components 2
+
+Let's also query the **Related products** component for our content entry whose `slug` is "blue-running-shoes". Remember, we are using the `slug` to identify it. We'll go ahead and replace the `productVariant` component with the `relatedProducts` one, and we'll request the `productDescription` in `HTML`, which we created using the `RTE` in the content editor.
+
+Here's our sample query:
+
+<Tabs panelHeight={390}>
+  <TabItem label="Query">
+
+```graphql
+query MyQuery {
+  product(where: { productSlug: "blue-running-shoes" }) {
+    productName
+    productDescription {
+      html
+    }
+    relatedProducts {
+      products {
+        productDescription {
+          html
+        }
+      }
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```graphql
+{
+  "data": {
+    "product": {
+      "productName": "Blue running shoes",
+      "productDescription": {
+        "html": "<p>These blue running shoes offer both form and function, providing exceptional support and style for your active pursuits. The breathable material and cushioned sole ensure a comfortable experience mile after mile.</p>"
+      },
+      "relatedProducts": {
+        "products": [
+          {
+            "productDescription": {
+              "html": "<p>These black leather shoes seamlessly blend sophistication with durability, making them a versatile choice for both formal occasions and everyday wear. The sleek design and high-quality leather ensure a timeless appeal that complements any outfit.</p>"
+            }
+          },
+          {
+            "productDescription": {
+              "html": "<p>This white necklace is crafted from parts of seashells, evoking a relaxed, beachy vibe. Perfect for those looking to add a touch of the sea to their daily style.</p>"
+            }
+          },
+          {
+            "productDescription": {
+              "html": "<p>This white cotton headband provides an elegant and sophisticated touch to your hairstyle. Perfect for completing your look with a blend of fashion and comfort.</p>"
+            }
+          },
+          {
+            "productDescription": {
+              "html": "<p>This plaid shirt exudes a timeless charm, perfect for a casual day out or a relaxed evening gathering. The classic checkered pattern and comfortable fit make it a wardrobe staple for effortless style.</p>"
+            }
+          }
+        ]
+      }
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+The response you get may contain less content than what we show here, depending on whether you followed the provided practice or not.
+
+## Components 3
+
+Now imagine we want to find out the `productName`, `productSlug`, and `productDescription` of all the products with the `accessories` product type, where the color `white` was selected in the `productVariant` component.
+
+Let's try this query:
+
+<Tabs panelHeight={290}>
+  <TabItem label="Query">
+
+```graphql
+query MyQuery {
+  products(
+    where: { productVariant: { productType: { Accessory: { color: White } } } }
+  ) {
+    productName
+    productSlug
+    productDescription {
+      html
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```graphql
+{
+  "data": {
+    "products": [
+      {
+        "productName": "Necklace",
+        "productSlug": "necklace",
+        "productDescription": {
+          "html": "<p>This white necklace is crafted from parts of seashells, evoking a relaxed, beachy vibe. Perfect for those looking to add a touch of the sea to their daily style.</p>"
+        }
+      },
+      {
+        "productName": "Headband",
+        "productSlug": "headband",
+        "productDescription": {
+          "html": "<p>This white cotton headband provides an elegant and sophisticated touch to your hairstyle. Perfect for completing your look with a blend of fashion and comfort.</p>"
+        }
+      }
+    ]
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+The response you get may contain less content than what we show here, depending on whether you followed the provided practice or not.
+
+## Components 4
+
+**Now try this by yourself:** Query the `productGrid` component in the landing page entry we created earlier using the entry `ID`. Find out the `productName` and `productSlug` of all the products that were added there.
+
+## Remote Fields 1
+
+You can use the API to query Remote Fields as soon as you add them to the Schema. Bear in mind that a Remote Field will be related to a specific model and only fetch data related to it.
+
+The **Product** model that we created contains data that lives in Hygraph - such as business `productName` and `productDescription` - as well as a Remote Field that fetches `reviews` from an external API.
+
+Try using the following query in your API Playground:
+
+<Tabs panelHeight={290}>
+  <TabItem label="Query">
+
+```graphql
+query MyQuery {
+  products {
+    reviews {
+      data {
+        name
+        comment
+        rating
+      }
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```graphql
+{
+  "data": {
+    "products": [
+      {
+        "reviews": {
+          "data": [
+            {
+              "name": "Sock Lover",
+              "comment": "These socks are great. They are very colorful and they keep my feet warm.",
+              "rating": 4.5
+            }
+          ]
+        }
+      },
+      {
+        "reviews": {
+          "data": [
+            {
+              "name": "Green Fan",
+              "comment": "This is the absolute best hoodie I've ever had",
+              "rating": 5
+            }
+          ]
+        }
+      },
+      {
+        "reviews": {
+          "data": [
+            {
+              "name": "Runner in Rochester",
+              "comment": "These shoes are great. I've run 100 miles in them and they are still in great shape.",
+              "rating": 5
+            }
+          ]
+        }
+      },
+      {
+        "reviews": {
+          "data": []
+        }
+      },
+      {
+        "reviews": {
+          "data": [
+            {
+              "name": "Oregan Person",
+              "comment": "After wearing this shirt for 2 days, I realized that it was made of cottom. I am allergic to cotton. I am very disappointed.",
+              "rating": 1.5
+            },
+            {
+              "name": "Another Person",
+              "comment": "This shirt is okay. It lost a button, but I sewed it back on.",
+              "rating": 3.5
+            },
+            {
+              "name": "Third Person",
+              "comment": "I love this shirt. I wear it all the time.",
+              "rating": 4.5
+            }
+          ]
+        }
+      },
+      {
+        "reviews": {
+          "data": [
+            {
+              "name": "Person Personson",
+              "comment": "These shoes are both the mostly comfortable and the most stylish I have ever owned.",
+              "rating": 4.5
+            },
+            {
+              "name": "Second Person",
+              "comment": "These would be better if they were red. I suppose they aren't bad, but they aren't good either.",
+              "rating": 2.5
+            },
+            {
+              "name": "Another Great Person",
+              "comment": "I've worn these for 3 years and they are still in great shape. I'm going to buy another pair. I think everyone should have a pair of these shoes in their closet.",
+              "rating": 4.5
+            }
+          ]
+        }
+      },
+      {
+        "reviews": {
+          "data": []
+        }
+      },
+      {
+        "reviews": {
+          "data": []
+        }
+      },
+      {
+        "reviews": {
+          "data": []
+        }
+      },
+      {
+        "reviews": {
+          "data": []
+        }
+      }
+    ]
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+Our front end can use this information to enrich our product listings with these reviews. We'll be able to show our products, along with all the reviews we have received from the people who purchased our them, to encourage new customers.
+
+## Remote Fields 2
+
+Let's take a look at another example where it's even more noticeable how this information is connected to the model the Remote Field is a part of. We'll query the Remote Field inside the **Product** model while also using a where filter with the "colorful-socks" `slug`, so we can fetch all reviews that are about one of our products.
+
+Copy it and paste it into your API Playground:
+
+<Tabs panelHeight={350}>
+  <TabItem label="Query">
+
+```graphql
+query MyQuery {
+  product(where: { productSlug: "plaid-shirt" }) {
+    reviews {
+      data {
+        id
+        name
+        product
+        productSlug
+        comment
+        rating
+      }
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```graphql
+{
+  "data": {
+    "product": {
+      "reviews": {
+        "data": [
+          {
+            "id": 3,
+            "name": "Oregan Person",
+            "product": 3,
+            "productSlug": "plaid-shirt",
+            "comment": "After wearing this shirt for 2 days, I realized that it was made of cottom. I am allergic to cotton. I am very disappointed.",
+            "rating": 1.5
+          },
+          {
+            "id": 6,
+            "name": "Another Person",
+            "product": 3,
+            "productSlug": "plaid-shirt",
+            "comment": "This shirt is okay. It lost a button, but I sewed it back on.",
+            "rating": 3.5
+          },
+          {
+            "id": 7,
+            "name": "Third Person",
+            "product": 3,
+            "productSlug": "plaid-shirt",
+            "comment": "I love this shirt. I wear it all the time.",
+            "rating": 4.5
+          }
+        ]
+      }
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+As you can see, the response only contains one review this time, and it's about our “plaid shirt” product.
+
+## Remote Fields 3
+
+**Now try this by yourself:** Query the `reviews` Remote Field inside the **Products** model to find out the rating values of all the reviews we've received.
+
+## Top-level Remote Fields 1
+
+Let's test the Top-level Remote Field that we added to the **Query** system model.
+
+In the example where we tested our Top-level Remote field earlier, we used an example query that fetched all our reviews. Now let's try something a bit different; we'll query our landing page, and also the reviews, all in the same API call.
+
+Copy it and paste it into your API Playground:
+
+<Tabs panelHeight={420}>
+  <TabItem label="Query">
+
+```graphql
+query MyQuery {
+  landingPage(where: { link: "e-commerce" }) {
+    landingPageTitle
+    link
+    sellerInformation {
+      businessName
+      slug
+      businessDescription
+    }
+  }
+  reviews {
+    data {
+      id
+      name
+      product
+      productSlug
+      comment
+      rating
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```graphql
+{
+  "data": {
+    "landingPage": {
+      "landingPageTitle": "E-commerce",
+      "link": "e-commerce",
+      "sellerInformation": {
+        "businessName": "My business",
+        "slug": "my-business",
+        "businessDescription": "This is a description of my business"
+      }
+    },
+    "reviews": {
+      "data": [
+        {
+          "id": 1,
+          "name": "Person Personson",
+          "product": 1,
+          "productSlug": "black-leather-shoes",
+          "comment": "These shoes are both the mostly comfortable and the most stylish I have ever owned.",
+          "rating": 4.5
+        },
+        {
+          "id": 4,
+          "name": "Second Person",
+          "product": 1,
+          "productSlug": "black-leather-shoes",
+          "comment": "These would be better if they were red. I suppose they aren't bad, but they aren't good either.",
+          "rating": 2.5
+        },
+        {
+          "id": 5,
+          "name": "Another Great Person",
+          "product": 1,
+          "productSlug": "black-leather-shoes",
+          "comment": "I've worn these for 3 years and they are still in great shape. I'm going to buy another pair. I think everyone should have a pair of these shoes in their closet.",
+          "rating": 4.5
+        },
+        {
+          "id": 2,
+          "name": "Green Fan",
+          "product": 2,
+          "productSlug": "green-hoodie",
+          "comment": "This is the absolute best hoodie I've ever had",
+          "rating": 5
+        },
+        {
+          "id": 3,
+          "name": "Oregan Person",
+          "product": 3,
+          "productSlug": "plaid-shirt",
+          "comment": "After wearing this shirt for 2 days, I realized that it was made of cottom. I am allergic to cotton. I am very disappointed.",
+          "rating": 1.5
+        },
+        {
+          "id": 6,
+          "name": "Another Person",
+          "product": 3,
+          "productSlug": "plaid-shirt",
+          "comment": "This shirt is okay. It lost a button, but I sewed it back on.",
+          "rating": 3.5
+        },
+        {
+          "id": 7,
+          "name": "Third Person",
+          "product": 3,
+          "productSlug": "plaid-shirt",
+          "comment": "I love this shirt. I wear it all the time.",
+          "rating": 4.5
+        },
+        {
+          "id": 8,
+          "name": "Runner in Rochester",
+          "product": 4,
+          "productSlug": "blue-running-shoes",
+          "comment": "These shoes are great. I've run 100 miles in them and they are still in great shape.",
+          "rating": 5
+        },
+        {
+          "id": 9,
+          "name": "Sock Lover",
+          "product": 5,
+          "productSlug": "colorful-socks",
+          "comment": "These socks are great. They are very colorful and they keep my feet warm.",
+          "rating": 4.5
+        }
+      ]
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+As you can see in the query above, `landingPage` and `reviews` are at the same level in our query, but we never built a **Reviews** model in our Schema. Here, you can clearly see how we're querying a Top-level Remote Field outside the context of a project model.
+
+When we built our schema, we did not include a Remote Field to fetch reviews into the landing page. However, we did create a Top-level Remote Field in the Query system model. This example shows how we fetch some information from the landing page, and in the same call, we fetch our reviews through that Top-level Remote Field.
+
+## Top-level Remote Fields 2
+
+**Now try this by yourself:** Query the `reviews` Top-level Remote field but this time we only want to fetch the `productSlug` and the `rating`.
+
+<Card theme="info" title="Next step">
+
+Once you're done with the queries practice, move on to our next lesson:
+
+<Button
+  href="/docs/getting-started/api-playground-mutations"
+  size="md"
+  variant="outlined"
+  theme="primary"
+  iconRight="ArrowRight"
+>6.2 API Playground: Mutations practice</Button>
+
+</Card>

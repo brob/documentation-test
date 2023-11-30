@@ -1,0 +1,42 @@
+---
+const {
+  loop = true,
+  autoPlay = true,
+  playsInline,
+  disablePictureInPicture,
+  muted,
+  preload,
+  controls,
+  children,
+  downloadLink,
+  ...rest
+} = Astro.props;
+---
+
+<video
+  loop={loop}
+  autoPlay={autoPlay}
+  playsInline={playsInline}
+  disablePictureInPicture={disablePictureInPicture}
+  muted={muted}
+  preload={preload}
+  controls={controls}
+  {...rest}
+>
+  <slot />
+
+  <span>
+    Your browser doesn&apos;t support HTML5 video.{" "}
+    {
+      downloadLink && (
+        <span>
+          Here is a
+          <Link href={downloadLink} isExternal>
+            link to the video
+          </Link>{" "}
+          instead
+        </span>
+      )
+    }
+  </span>
+</video>

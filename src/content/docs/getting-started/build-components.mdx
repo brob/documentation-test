@@ -1,0 +1,328 @@
+---
+title: 3.1 Build components
+meta_title: Lesson 3.1 on Components
+meta_description: You'll learn how to build components that you will later add to your models as part of basic and modular component fields
+sidebar:
+  order: 3.1
+---
+import {Card} from "@astrojs/starlight/components"
+import Button from "@components/Button.astro"
+import Video from "@components/Video.astro"
+
+<Card theme="info" title="Lesson 3.1 - Components: Build components">
+
+In this lesson you'll learn how to build components that you will later add to your models as part of basic and modular component fields.
+
+[Check out the complete lessons list for this tutorial here](/docs/getting-started/onboarding-overview#what-you-will-learn)
+
+</Card>
+
+## Overview
+
+In this step of our Getting Started tutorial, you'll learn about components, what they can be used for, and how to configure & use them.
+
+![Components](/images/docs/getting-started/hygraph-components.png)
+
+A component is a pre-defined set of fields that can be reused across models and content entries. Think of a component as a flexible, reusable template where you define the fields once, then fill them with different content every time you use it in a content entry.
+
+Using components as templates in your schema saves time and declutters the content creation screen.
+
+They are created at the schema builder level and are then available to be added as basic or modular component fields to your models. Basic component fields will contain a single component, while modular component fields may contain more than one. Both can allow multiple values.
+
+You add fields to them in the same way that you would to a model, and then that entire set of fields can be added to a model through a single component field.
+
+For instance, our e-commerce project could use a basic component field to add a section in the content editor where users listing products for sale may add related products. The component field would contain a “Related products” title and a number of references where the user can select other product entries to be shown as related.
+
+It could also have a “product type” modular field component that allows users to get a different set of fields to complete depending on the product sold. For instance, you need size & color options for clothes, but not necessarily for food.
+
+This makes it possible to have a single product model that can accommodate many different product types while keeping the completion of specific fields as required. This also means that the number of fields shown on the content creation screen is reduced, as certain fields will only display if needed, making it easier to create content entries.
+
+Let's build our components.
+
+## Building our components
+
+We are going to build six different components:
+
+- A related products component that we can later add as a basic component field to our Product model, which will enable us to add related products to a Product page through references.
+- Four more, for clothing, shoes, accessories, and decor, which we can later use as part of a modular component for product variants.
+- A product variants component that will allow us to select which information we will add to an entry according to product type.
+- A Call to Action so that customers can leave comments.
+- A button that we'll use as part of our CTA.
+- A product grid component to display our goods.
+
+### Related products
+
+We want our product pages to showcase related products. An easy way to build this is by creating a component containing a reference field that will allow us to relate multiple products.
+
+<Video>
+  <source
+    src="https://media.graphassets.com/ixrjl62AQu9OVv2kOaHB"
+    type="video/mp4"
+  />
+</Video>
+
+In the Schema builder, let's click on the `+Add` button by **Components** on the left sidebar to open the **Add component** page. Add the following information, then click on `Add Component`:
+
+- **Display Name:** Related Products
+- **API ID:** RelatedProduct
+- **Plural API ID:** RelatedProducts
+
+Our component has been created, but it's empty. Let's add a `Single line text` field to it. Under settings, we'll write “Title” in the `Display name` field and check the `Use as title field` checkbox.
+
+We want this title to be added to the component every time the component is used, so we'll select the `Make field required` checkbox in the `Validations` tab.
+
+We want this component to display in a uniform way throughout our e-commerce, with the title “Related products” every time. To achieve this, we'll go to the `Advanced` tab, select the `Set initial value` checkbox, and add “Related products” to the `Initial value` text field. We'll also set the `Field visibility` to `Read only` using the dropdown below to ensure that this initial value cannot be edited.
+
+Finally, we'll click `Add` to save this field inside your component.
+
+Now we should add a way for the related products to be linked. To do this, we'll revisit the topic of references like we mentioned we would a couple of lessons back. We will relate our products through a `Reference` field, which we'll add from the right sidebar.
+
+First, we need to define the relationship. For the **Reference type**, we will select `Allow only one model to be referenced` because we only want to be able to add other products here. Because of this, we will also select **Product** as the **Model to reference** below.
+
+For the **Reference directions**, we will select `One-way reference`, and we will select the `Allow multiple Products per RelatedProduct` checkbox. This creates a **one-to-many reference**, which will then allow us to add multiple related products to a product entry.
+
+Now, we'll move on to the **Configure reference** section of the screen, where we will add the following information:
+
+- **Display name:** Products
+- **API ID:** products
+- **Description:** Add 4 related products here
+- **Field visibility:** Read / Write
+
+This is the information that we will see in the field card once we add it to our component.
+
+Finally, click `Add` to save this field into the component.
+
+Your component should look something like this:
+
+![Your finished component](/images/docs/getting-started/related-products.png)
+
+### Product type
+
+To publish effective product listings on our e-commerce, we need to ensure certain fields are required to avoid incomplete information that could confuse potential customers.
+
+Since our online shop sells different product types, not all products will share the same characteristics. For instance, shoes & clothes don't use the same sizes. If we make both size dropdowns required, then we won't be able to save that entry without providing a size for clothing and shoes for the same product, which does not make much sense.
+
+However, if we don't make this information required, we might end up with incomplete product listings being published.
+
+A simple way to sort this out is by creating separate components for our **product types**, each with its own set of required fields. These will be four components - **Shoes**, **Clothing**, **Accessories**, and **Decor** - and they will not be added to the **Product** model directly but as part of a modular component field nested into a component called **Product variant** later on.
+
+This will allow us to create product entries where we can select a product type with a pre-defined set of required fields. For this, we will be using some of the enumerations that we created in the previous lesson.
+
+Let's start working on our components. We'll add them in the same way that we added the **Related products** component before. Let's do the first one together. We'll click on `+Add` next to **Components** and fill in the following information:
+
+**Clothing component**
+
+- **Display Name:** Clothing
+- **API ID:** Clothing
+- **Plural API ID:** ClothingItems
+
+Now that we have our first component, let's add fields to it:
+
+We'll find the `Dropdown` field on the right sidebar and click on it to add it. We'll type in “Size” as the `Display name`, which will also auto-complete the `API ID` field, and we'll select `Clothes size` from the `Enumeration` dropdown.
+
+In the `Validations` tab, let's select the checkbox to make this field `required`.
+
+Finally, we'll click `Add` to save the field into our component.
+
+We will also add a `Dropdown` field from the right sidebar for item color selection. We'll write “Color” as the `Display name` and then select `Wearable items color` from the `Enumeration` dropdown. Finally, we'll save this field too.
+
+Our clothing component should look like this:
+
+![Clothing component](/images/docs/getting-started/clothing-component.png)
+
+You'll do the same for shoes, wearables and decor, using the following information:
+
+**Shoes component**
+
+- **Display Name:** Shoes
+- **API ID:** Shoe
+- **Plural API ID:** Shoes
+
+Just like with the previous component, add a `Dropdown` field from the right sidebar. Write “Size” as the `Display name` and then select `Shoes size` from the `Enumeration` dropdown.
+
+We will make this field `required` in the `Validations` tab, then click `Add` to save.
+
+We'll add another `Dropdown` field for item color selection. Write “Color” as the `Display name` and then select `Wearable items color` from the `Enumeration` dropdown.
+
+We will make this field `required` in the `Validations` tab too, and then click `Add` to save.
+
+Our shoes component should look like this:
+
+![Shoes component](/images/docs/getting-started/shoes-component.png)
+
+**Accessories component**
+
+- **Display Name:** Accessories
+- **API ID:** Accessory
+- **Plural API ID:** Accessories
+
+Here, we'll also add a `Dropdown` field from the right sidebar. We'll write “Color” as the `Display name` and then select `Wearable items color` from the `Enumeration` dropdown.
+
+We will make this field `required` in the `Validations` tab, then click `Add` to save.
+
+The component should look like this:
+
+![Accessories component](/images/docs/getting-started/accessories-component.png)
+
+**Decor component**
+
+- **Display Name:** Decor
+- **API ID:** Decor
+- **Plural API ID:** DecorItems
+
+For decor, we'll add a `Dropdown` field from the right sidebar, write “Color” as the `Display name` and then select `Decor items color` from the `Enumeration` dropdown.
+
+We will make this field `required` in the `Validations` tab, then click `Add` to save.
+
+The component should look like this:
+
+![Decor component](/images/docs/getting-started/decor-component.png)
+
+### Product Variant
+
+Now that our wearables and decor components have been created, let's create the **Product Variant** component. This is the component that will let us select a **product type**, which will reveal all fields that must be completed for our product selection when we work on an entry.
+
+Click `+Add` next to `Components` once again, and fill in the following information:
+
+- **Display Name:** Product Variant
+- **API ID:** ProductVariant
+- **Plural API ID:** ProductVariants
+
+After clicking `Add`, it's time to add fields to our component.
+
+In this case, we want our content entry to offer us the possibility to select a product type. To achieve this, we'll add a `Modular component` field nested inside this component, which will contain the four product type components that we created earlier.
+
+Select the `Modular component` field from the right sidebar, and complete it with the following information:
+
+- **Display name:** Product type
+- **API ID:** productType
+- **Description:** Select the product type to reveal fields
+- **Select allowed components:** Select `Clothing`, `Shoes`, `Accessories`, and `Decor` from the dropdown.
+
+Click `Add` to save your component.
+
+This is what your **Product variant** component should look like:
+
+![Product variant component](/images/docs/getting-started/product-variant-component.png)
+
+### Button
+
+Let's also create a component for a simple button. Click `+Add` next to `Components` once again, and fill in the following information:
+
+- **Display Name:** Button
+- **API ID:** Button
+- **Plural API ID:** Buttons
+
+After saving the component, we need to add text and a URL to our button. To do this, we'll add a `Single line text` field to it, setting the `Display name` to “Text”, and we'll make it `localized` by selecting the checkbox. We'll save this field, then add a `Slug` field from the right sidebar.
+
+We'll set the slug field `Display name` as “URL” and move on to the `Validations` tab, where we will select the `Match a specific patten` checkbox, select `URL` from the dropdown, which will autofill the field next to it with a regular expression.
+
+Under `Custom error message` we will write "Input value does not match the expected format.", and then we'll save the field.
+
+Your **Button** component should look like this:
+
+![Button component](/images/docs/getting-started/button-component.png)
+
+We will add this button to our **Call to Action** component in the next step.
+
+## CTA
+
+To create our **Call to Action** component, click `+Add` next to `Components` once again, and fill in the following information:
+
+- **Display Name:** Call to Action
+- **API ID:** CallToAction
+- **Plural API ID:** CallToActions
+
+After saving the component, we can start adding the fields once again.
+
+We'll start by adding a heading. To do this, well select the `Single line text` field from the right sidebar, setting the `Display name` to “Heading”, and we'll make it `localized` by selecting the checkbox.
+
+For the body of our CTA, we want to add a `Rich Text` editor so we can add a description. In order to do this, we'll select the `Rich Text` field from the right sidebar, write “Body” as its `Display name`, make it `localized`, and save.
+
+Next, we want our CTA to have an image, so we'll add an `Asset picker` field from the right sidebar. We'll set “Image” as its `Display name` and save it.
+
+Finally, we'll add the button component that we created in the previous step. Since we will be adding a single component to this field, we'll select a `Basic component` field from the right sidebar. We'll write “Button” in the `Display name` field, select the `Button` component we created in the `Select component` dropdown, and save.
+
+Your **CTA** component should look like this:
+
+![CTA component](/images/docs/getting-started/cta-component.png)
+
+### Product Grid
+
+Our final component is a product grid. We want it to have a headline, a description, and to reference the **Product** model.
+
+For the headline, we'll add a `Single line text` field. We'll set the `Display name` to “Headline”, make it `localized`, and save it.
+
+For the description, we'll add a `Rich Text` field. Here we'll simply write “Description” in the `Display name` field and save.
+
+Finally, we'll add a `Reference` field. Like we did for our **Related products** component, we will start by defining the relationship. For the **Reference type**, we will select `Allow only one model to be referenced` because we only want to be able to add other products here. Because of this, we will also select **Product** as the **Model to reference** below.
+
+For the **Reference directions**, we will select `One-way reference`, and we will select the `Allow multiple Products per ProductGrid` checkbox. This creates a **one-to-many reference**, which will then allow us to add multiple related products to a product grid.
+
+On the **Configure reference** section of the screen, add the following information before clicking `Add` to save your reference:
+
+- **Display name:** Products
+- **API ID:** products
+- **Field visibility:** Read / Write
+
+Your component should look something like this:
+
+![Product grid component](/images/docs/getting-started/product-grid-component.png)
+
+## Included in the project
+
+### SEO
+
+![SEO component fields](/images/docs/getting-started/seo-component-fieldsview.png)
+
+**SEO** stands for “search engine optimization”, and it's used to improve discoverability by helping pages rank higher in search engines.
+
+We've included this component in our project from the start. We will be adding it to several models to illustrate SEO good practices, but we won't use it during the tutorial.
+
+The Component contains the following fields:
+
+- **Title:** This is the name of our component
+- **Description:** This is the desciption of our component
+- **SEO image:** This is a cover image that is properly named, sized, compressed, has clear AltText, and is the best file type for SEO optimization.
+- **Canonical URL:** A canonical URL is the URL of the best representative page from a group of duplicate pages, according to Google. Leaving blank means it's the default URL of the page.
+
+### Link
+
+The project includes a **Link** component from the start. This component is meant to be used in the **Navigation** model, which is also included in the project.
+
+This component is very simple and contains the following fields:
+
+- **Display text:** Display text for the link in the website navigation.
+- **External URL:** External URL for the website navigation.
+
+We will be introducing a modification here. This model still needs a `Reference` field that will allow us to link it to some of our other models.
+
+This field could not be originally included in the project, because it relates to content models that we created in previous lessons. This is a great example of how our schema is built in layers, as we needed to create the models before we could relate them.
+
+Just like in the previous lesson, we'll start by **defining the relationship**. We want to be able to relate multiple models, so we'll select **Allow multiple models to be referenced** and then select **Blog post**, **Landing page**, and **Product** under **Models to reference**.
+
+As for **reference directions**, we will select `One-way reference` so content can only be queried from this side.
+
+The graphic under **Relation cardinality** should show that the relationship is `To one`. Let's click `Continue` to configure the reference.
+
+The **Configure reference** section has been pre-configured according to our selection. Let's modify it so the `Display name` is “Page” and the `API ID` is “page”. We'll click `Continue` to move on.
+
+Finally, we'll click `Add` to save our `Reference` field. We'll see that it's been added at the bottom. Let's use the six-dots handlebar to move it upwards, under the `Display Text` field.
+
+Your component should look something like this:
+
+![Link component field](/images/docs/getting-started/link-component-finished.png)
+
+<Card theme="info" title="Next step">
+
+Once you've created all components, move on to our next lesson:
+
+<Button
+  href="/docs/getting-started/add-components-to-models"
+  size="md"
+  variant="outlined"
+  theme="primary"
+  iconRight="ArrowRight"
+>3.2 Add components to your models</Button>
+
+</Card>

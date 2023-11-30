@@ -1,0 +1,76 @@
+---
+title: 1.1 Plan your content flow
+meta_title: Lesson 1.1 on the Schema builder
+meta_description: You'll learn how to plan your content flow before you start building a schema.
+sidebar:
+  order: 1.1
+---
+
+import {Card} from "@astrojs/starlight/components"
+import Button from "@components/Button.astro"
+
+<Card theme="info" title="Lesson 1.1 - The Schema builder: Planning your content flow">
+
+In this lesson you'll learn how to create effective content models through proper planning.
+
+[Check out the complete lessons list for this tutorial here](/docs/getting-started/onboarding-overview#what-you-will-learn)
+
+</Card>
+
+## Overview
+
+To create effective content models, it's important to understand our business goals.
+
+![Content modeling](/images/docs/getting-started/content-modeling-matters.png)
+
+Our aim is to sell products through e-commerce, providing all the important product details. We also want to help customers compare similar products and make informed choices. We want to make it easy and intuitive for them to access these options, to encourage them to explore different product categories and get involved through clear calls to action
+We can support exploration and discovery by organizing products into categories that customers can navigate, and also showing related products that customers might be interested in.
+
+Similarly, we can engage customers through a “Call to Action” section, where they can take actions like following our e-commerce on social media.
+
+To encourage customers to read and write reviews, we can fetch information from remote sources. For example, we can display product reviews on our product pages or show our overall ratings.
+
+After we've built a solid use case and understand the needs of our users clearly, we are ready to establish our content flow.
+
+## Proposed content flow
+
+- **Models**
+  - Product
+  - Product category
+  - Blog post
+  - Seller information
+  - Landing page
+  - Navigation
+- **Components**
+  - Accessories
+  - Button
+  - Call to Action
+  - Clothing
+  - Decor
+  - Link
+  - Product Grid
+  - Product Variant
+  - Related products
+  - SEO
+  - Shoes
+- **Remote Source**
+  - Reviews: Top level for all and the ability to map reviews by product
+- **Enumerations**
+  - Clothes size
+  - Shoes size
+  - Decor items color
+  - Wearable items color
+
+<Card theme="info" title="Next step">
+
+Once you've properly planned your content flow, move on to our next lesson:
+
+<Button
+  href="/docs/getting-started/design-content-models"
+  size="md"
+  variant="outlined"
+  theme="primary"
+  iconRight="ArrowRight"
+>1.2 Designing content models</Button>
+
+</Card>

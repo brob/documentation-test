@@ -1,0 +1,156 @@
+/* Dark mode colors. */
+:root {
+	--sl-color-accent-low: #131e4f;
+	--sl-color-accent: #5b4cff;
+	--sl-color-accent-high: #eef0ff;
+	--sl-color-white: #ffffff;
+	--sl-color-gray-1: #eff1f4;
+	--sl-color-gray-2: #dfe3ea;
+	--sl-color-gray-3: #ced5e1;
+	--sl-color-gray-4: #909ebf;
+	--sl-color-gray-5: #7184ad;
+	--sl-color-gray-6: #2d3a5f;
+	--sl-color-black: #1a2444;
+}
+/* Light mode colors. */
+:root[data-theme='light'] {
+	--sl-color-accent-low: #eef0ff;
+	--sl-color-accent: #5b4cff;
+	--sl-color-accent-high: #2c25a1;
+	--sl-color-white: #081026;
+	--sl-color-gray-1: #1a2444;
+	--sl-color-gray-2: #2d3a5f;
+	--sl-color-gray-3: #2d3a5f;
+	--sl-color-gray-4: #ced5e1;
+	--sl-color-gray-5: #dfe3ea;
+	--sl-color-gray-6: #dfe3ea;
+	--sl-color-gray-7: #eff1f4;
+	--sl-color-black: #ffffff;
+}
+
+:root {
+    /* Background */
+    --bg-primary: 91 76 255;
+    --bg-primary-muted: 238 240 255;
+    --bg-primary-pale: 221 225 255;
+    --bg-neutral: 66 81 123;
+    --bg-neutral-strong: 45 58 95;
+    --bg-neutral-muted: 239 241 244;
+    --bg-info: 35 98 224;
+    --bg-info-muted: 230 242 255;
+    --bg-success: 17 125 76;
+    --bg-success-muted: 232 248 237;
+    --bg-warning: 229 186 68;
+    --bg-warning-muted: 253 248 209;
+    --bg-error: 199 49 49;
+    --bg-error-muted: 255 236 236;
+    --bg-light: 255 255 255;
+    --bg-body: 255 255 255;
+  
+    /* Surface */
+    --bg-surface-1: 246 248 249;
+    --bg-surface-2: 239 241 244;
+    --bg-surface-3: 231 234 239;
+    --bg-surface-4: 223 227 234;
+  
+    /* Surface Dark */
+    --bg-surface-dark-1: 8 16 38;
+    --bg-surface-dark-2: 12 21 47;
+    --bg-surface-dark-3: 16 26 55;
+    --bg-surface-dark-4: 26 36 68;
+    --bg-surface-dark-5: 45 58 95;
+  
+    /* State */
+    --state-primary-hover: 91 76 255 / 0.15;
+    --state-primary-pressed: 91 76 255 / 0.25;
+    --state-on-primary-muted-hover: 91 76 255 / 0.15;
+    --state-on-primary-muted-pressed: 91 76 255 / 0.25;
+    --state-on-primary-hover: 255 255 255 / 0.15;
+    --state-on-primary-pressed: 255 255 255 / 0.25;
+    --state-on-light-hover: 91 76 255 / 0.15;
+    --state-on-light-pressed: 91 76 255 / 0.25;
+    --state-light-hover: 255 255 255 / 0.15;
+    --state-light-pressed: 255 255 255 / 0.25;
+    --state-neutral-hover: 45 58 95 / 0.15;
+    --state-neutral-pressed: 45 58 95 / 0.25;
+    --state-on-neutral-hover: 255 255 255 / 0.15;
+    --state-on-neutral-pressed: 255 255 255 / 0.25;
+    --state-on-neutral-muted-hover: 45 58 95 / 0.15;
+    --state-on-neutral-muted-pressed: 45 58 95 / 0.25;
+  
+    /* Underlay */
+    --underlay-default: 16 26 55 / 0.8;
+  
+    /* Foreground/Text */
+    --fg-heading: 8 16 38;
+    --fg-heading-muted: 113 132 173;
+    --fg-paragraph: 45 58 95;
+    --fg-paragraph-muted: 89 106 149;
+    --fg-placeholder: 113 132 173;
+    --fg-neutral: 45 58 95;
+    --fg-neutral-muted: 89 106 149;
+    --fg-on-neutral: 255 255 255;
+    --fg-on-neutral-muted: 66 81 123;
+    --fg-primary: 91 76 255;
+    --fg-on-primary: 255 255 255;
+    --fg-on-primary-muted: 91 76 255;
+    --fg-info: 35 98 224;
+    --fg-on-info: 255 255 255;
+    --fg-on-info-muted: 35 98 224;
+    --fg-success: 17 125 76;
+    --fg-on-success: 255 255 255;
+    --fg-on-success-muted: 17 125 76;
+    --fg-warning: 160 98 0;
+    --fg-on-warning: 8 16 38;
+    --fg-on-warning-muted: 160 98 0;
+    --fg-error: 199 49 49;
+    --fg-on-error: 255 255 255;
+    --fg-on-error-muted: 199 49 49;
+    --fg-on-surface-dark: 255 255 255;
+    --fg-on-surface-dark-softened: 206 213 225;
+    --fg-on-surface-dark-muted: 144 158 191;
+    --fg-on-light: 91 76 255;
+  
+    /* Link */
+    --fg-light: 255 255 255;
+    --fg-link-default: 91 76 255;
+    --fg-link-default-hover: 70 49 217;
+    --fg-link-light: 255 255 255;
+    --fg-link-light-hover: 255 255 255 / 0.7;
+  
+    /* Border */
+    --border-muted: 223 227 234;
+    --border-default: 206 213 225;
+    --border-strong: 174 185 207;
+    --border-light: 255 255 255;
+    --border-divider: 223 227 234;
+    --border-primary: 91 76 255;
+    --border-neutral: 206 213 225;
+    --border-success: 17 125 76;
+    --border-error: 199 49 49;
+    --border-focus: 91 76 255;
+    --border-dark: 66 81 123;
+    --border-dark-muted: 45 58 95;
+    --border-dark-strong: 89 106 149;
+  
+    /* Shadow */
+    --shadow-default: 16 26 55;
+    --shadow-illustration: 45 58 95;
+  
+    /* Focus Ring */
+    --focusring-default: 91 76 255;
+    --focusring-light: 255 255 255;
+  
+    /* Fonts */
+    --font-body: 'Inter';
+    --font-heading: 'Plus Jakarta Sans';
+    --font-mono: 'Space Grotesk';
+  }
+  
+  :root {
+    --__sl-font: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }

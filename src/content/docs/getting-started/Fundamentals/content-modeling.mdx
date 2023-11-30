@@ -1,0 +1,136 @@
+---
+title: Headless content modeling
+meta_description: Learn the basics of content modeling with Hygraph, and why it is important for all projects.
+---
+
+import {Card} from "@astrojs/starlight/components"
+
+## Introduction
+
+The content model defines the schema of your content. It describes what kind of content you want to store, how it relates to each other, and in what way it can be edited within Hygraph. It is one of the most important components of your project and your model's quality will highly influence the daily life and satisfaction of your developers and content creators.
+
+Based on the content model, Hygraph will provide an elegant and easy to use content management interface as well as a highly versatile GraphQL API. You will use the API to integrate the content into your application.
+
+![Content modeling with Hygraph](/images/docs/user-guides/content-modeling-with-hygraph.png)
+
+The generated API and the user interface are only as good as your content model. If you set up a clean structure that works for both developers and content creators, implementation success is much more likely.
+
+## Who is responsible for content modeling, and when?
+
+Modeling is usually done very early in the lifecycle of a project and mostly taken care of by developers or product managers. Early decisions can have a long lasting effect on the whole project, so make sure to invest enough time into planning.
+
+Ideally, the content creator team is involved early on, as the content model will highly influence their experience on a daily basis. What can work great from a developer perspective can lead to a difficult experience for content creators and vice versa.
+
+As your website or application will evolve over time, changes to your schema are very likely to happen. Read on to understand how Hygraph can help you with an evolving content model.
+
+## How to get started with your content model
+
+Before starting to build your initial content model, you should already have sketched out how the first version of your product should look like. Having a design or mockup in front of you will help breaking down the content structures you will need to implement the website or application later on.
+
+Let's say you are building a streaming application for TV shows and you have an idea of what the frontend should look like. You will be able to identify that you will need to set up models for Series, Episodes and Actors and also how those models will relate to each other.
+
+![Movie content model](/images/docs/user-guides/movie-content-model.png)
+
+In this example, a Series is related to multiple Episodes, while an Episode may be related to multiple Authors and so on. We can identify that a Series will need to store different fields of information, such as a poster in the background, the name or logo of the show, the genre and release information etc.
+
+## Changing an existing model is difficult
+
+The content model can be adjusted at any time and Hygraph supports working with environments which will help you evolve your content model safely. However, the later a change is introduced, the harder it will get. In some cases you will need to consider migrating content that was already created from an old model to an updated model. By investing more time in setting up a potentially future-proof content model, you will be able to prevent future mundane work such as content migrations.
+
+![Environments flow](/images/docs/getting-started/environments-flow.png)
+
+<Card theme="info">
+
+We recommend reading the guide on [how to work with multiple environments](/blog/working-with-multiple-environments).
+
+</Card>
+
+## Set up fine grained access controls for each part of your model
+
+Once you have defined your initial structures, you can set up fine grained access controls to any part of your model. The access controls will affect how and what content can be edited from within the content management interface but also from the API.
+
+For example: You can set up specific roles for content creators that can only edit part of your content or set up API tokens that restrict reading some of your models.
+
+<Card theme="info">
+
+We recommend reading the documentation on [how to work with content permissions](/docs/guides/overview/roles-and-permissions).
+
+</Card>
+
+## Modeling for content reuse
+
+One of the major benefits of a headless content platform is that you can reuse and integrate your content into any website or application.
+
+If you are planning to build a sustainable content strategy and plan to integrate your content on several platforms such as websites, native mobile apps or virtual reality applications for the metaverse, you should keep your content model clean from presentational information.
+
+While a browser may be able to interpret a specific “Page” model, a native mobile or VR app might not be able to. Keeping your model free of presentational information and only focusing on the actual attributes and relationships of the represented content itself is called semantic modeling and will help you reusing your content for a broader set of applications.
+
+If on the other side, you only want to integrate your content on one specific channel, like a website, there is no harm in structuring your content closer to the component structure of your frontend. This will allow content creators to work more independently on new sites or landing pages without the need for aligning each time with the development team, in case they have a broad set of components to choose from.
+
+## Content modeling with Hygraph
+
+Content modeling is very similar to database modeling, but in addition, you enrich your fields with information that will influence the user experience for content creators, such as which form appearance a field will have.
+
+Hygraph makes this all too easy.
+
+### Models
+
+The “Model” is what encapsulates all of the different relationships, fields, and items you see below. You can think of a model as a database “table” that contains all of the rows (or content entries).
+
+Hygraph automatically generates an API for the models you create, and all of the different fields, components, enumerations, relationships, and more.
+
+### Fields
+
+You will need to add fields to models to store content. Hygraph provides content editors different input UI depending on the fields used. You can think of a field as a “column” inside of a database table. These fields can be of many different types, and in GraphQL we call those types “Scalars”.
+
+Hygraph provides many different scalar types for things like Strings, Integers, Dates, Booleans, and even for things like Colors, and Geo coordinates. You can learn about the supported [field types](/docs/api-reference/schema/field-types) inside of the API Reference.
+
+#### Field modifiers
+
+All fields added to your content models provide ways to modify how they're used. You can set fields to be a list, to be localized, to be used in a list, to be marked as required, or unique, as well as a bunch of other combinations.
+
+<Card theme="info">
+
+We recommend reading the API Reference for [Field Configuration](/docs/api-reference/schema/field-configuration#validations) to see which field modifiers are available, and how they are used.
+
+</Card>
+
+### Components
+
+You can think of components similar to a model, but they're embedded within an existing model, and cannot be interacted with as individual entries.
+
+As a content editor, you may wish to add components to structure data for things like a page “Hero”, or layout “Blocks”. You wouldn't query a Hero or Block on its own, but only fetch its content when you interact with the parent model.
+
+### Enumerations
+
+Enums are a special kind of type that we can use to enumerate all possible values in a field. GraphQL enums give us schema level validation by their pure existence.
+
+You would typically use enumerations outside of content, but for things that power a content UI. For example, you may wish to store the possible values that users can “Filter by”. These values could be `NAME_ASC`, `PRICE_ASC`, `PRICE_DESC`, etc.
+
+### System artifacts
+
+When working with a system that manages content, there are many things that the system needs to monitor to operate. Hygraph automatically provides some system models, and fields for projects.
+
+#### Asset model
+
+Content comes in many different formats, and we refer to “assets” as things you upload that are audio files, images, videos, and PDFs.
+
+Hygraph automatically provides a “transformation API” for images that you can use to alter the output of any uploaded images. A typical transformation is cropping, and moving the focal point.
+
+#### User model
+
+Any user of your Hygraph project is referred to as a “User”. These are managed automatically, and automatically relate to any content or asset uploaded so you can clearly identify who created, updated, or published content.
+
+Users are also connected to models at an API level, so you can fetch the users name, avatar, and more when fetching content.
+
+#### System fields
+
+Hygraph automatically handles fields that you don't need to. This includes fields for a document's unique ID, and the timestamps for when content was created, updated, published, and the user model connection mentioned above.
+
+## Resources
+
+- [The essential guide to content modeling](/blog/essential-guide-to-content-modeling): A detailed breakdown of what content modeling is and how you can work with it to build meaningful content systems.
+
+&nbsp;
+
+&nbsp;

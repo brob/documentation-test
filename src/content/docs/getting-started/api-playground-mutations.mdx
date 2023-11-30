@@ -1,0 +1,339 @@
+---
+title: 6.2 Exercises - Mutations
+meta_title: Lesson 6.2 on API Playground
+meta_description: This document contains exercises to provide mutations practice in our API Playground
+sidebar:
+  order: 6.2
+---
+import {Card, Tabs, TabItem} from "@astrojs/starlight/components"
+import Button from "@components/Button.astro"
+
+<Card theme="info" title="Lesson 6.2 - API Playground: Exercises - Mutations">
+
+This document contains exercises to provide mutations practice in our API Playground.
+
+[Check out the complete lessons list for this tutorial here](/docs/getting-started/onboarding-overview#what-you-will-learn)
+
+</Card>
+
+## Overview
+
+In this lesson, we'll use the following mutations, which Hygraph created automatically when we created our **Product** model:
+
+- `createProduct`
+- `updateProduct`
+- `publishProduct`
+- `unpublishProduct`
+- `deleteProduct`
+
+## `createProduct`
+
+First, we will create a product with the `productName` “My latest product” and the `productSlug` “my-latest-product” using the `createProduct` mutation.
+
+Our mutation looks like this:
+
+<Tabs panelHeight={600}>
+  <TabItem label="createProduct">
+
+```graphql
+mutation MyMutation {
+  createProduct(
+    data: {
+      productName: "My latest product"
+      productSlug: "my-latest-product"
+      productPrice: 59.99
+      productVariant: {
+        create: {
+          productType: { create: { Clothing: { size: M, color: Green } } }
+        }
+      }
+      relatedProducts: {
+        create: {
+          title: "Related Colorful socks"
+          products: { connect: { productSlug: "colorful-socks" } }
+        }
+      }
+      productCategories: { connect: { slug: "clothes" } }
+      productImage: { create: { handle: "", fileName: "" } }
+    }
+  ) {
+    productName
+    productPrice
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```graphql
+{
+  "data": {
+    "createProduct": {
+      "productName": "My latest product",
+      "productPrice": 59.99
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+If we go to the Content editor, we'll see our new entry created there, in the `DRAFT` stage.
+
+![createProduct mutation](/images/docs/getting-started/createproduct-mutations-example.png)
+
+## `updateProduct`
+
+Next, we'll use an `updateProduct` mutation to change the `productName` to “Updated product”. In order to identify the entry we want to update, we need to provide a unique identifier. We could use the entry `ID`, as it is unique, but for this tutorial we'll use the `slug`, which we configured to be unique when we added the field to the **Product** model.
+
+Let's try this mutation:
+
+<Tabs panelHeight={300}>
+  <TabItem label="updateProduct">
+
+```graphql
+mutation MyMutation {
+  updateProduct(
+    data: { productName: "Updated Product" }
+    where: { productSlug: "my-latest-product" }
+  ) {
+    productSlug
+    productName
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```graphql
+{
+  "data": {
+    "updateProduct": {
+      "productSlug": "my-latest-product",
+      "productName": "Updated Product"
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+![updateProduct mutation](/images/docs/getting-started/updateproduct-mutations-example1.png)
+
+We can update any product, not just newly created products. Let's try updating the Black leather shoes product:
+
+<Tabs panelHeight={300}>
+  <TabItem label="updateProduct">
+
+```graphql
+mutation MyMutation {
+  updateProduct(
+    data: { productName: "My black leather shoes" }
+    where: { productSlug: "black-leather-shoes" }
+  ) {
+    productSlug
+    productName
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```graphql
+{
+  "data": {
+    "updateProduct": {
+      "productSlug": "black-leather-shoes",
+      "productName": "My black leather shoes"
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+![updateProduct mutation - example 2](/images/docs/getting-started/updateproduct-mutations-example2.png)
+
+## `publishProduct`
+
+Now that our product contains the latest update, we should move it from the `DRAFT` stage to `PUBLISHED`;
+
+![publishProduct mutation](/images/docs/getting-started/publishProduct-mutations-draftmode.png)
+
+We'll use the `publishProduct` mutation for that, along with our product `Slug` to publish our product:
+
+<Tabs panelHeight={300}>
+  <TabItem label="publishProduct">
+
+```graphql
+mutation MyMutation {
+  publishProduct(where: { productSlug: "my-latest-product" }, to: PUBLISHED) {
+    stage
+    productName
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+If we go to the content editor, we'll be able to see it's now published:
+
+![Published product](/images/docs/getting-started/publishProduct-mutations-publishedmode.png)
+
+## `unpublishProduct`
+
+To unpublish it, we'll use the `unpublishProduct` mutation:
+
+<Tabs panelHeight={300}>
+  <TabItem label="unpublishProduct">
+
+```graphql
+mutation MyMutation {
+  unpublishProduct(
+    where: { productSlug: "my-latest-product" }
+    from: PUBLISHED
+  ) {
+    stage
+    productName
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```graphql
+{
+  "data": {
+    "unpublishProduct": {
+      "stage": "DRAFT",
+      "productName": "Updated Product"
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+And we can also see this change in the content editor:
+
+![Unpublished product](/images/docs/getting-started/publishProduct-mutations-draftmode2.png)
+
+## `deleteProduct`
+
+If we want to delete this product, we'll use the `deleteProduct` mutation:
+
+<Tabs panelHeight={200}>
+  <TabItem label="deleteProduct">
+
+```graphql
+mutation DeleteMutation {
+  deleteProduct(where: { productSlug: "my-latest-product" }) {
+    productName
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```graphql
+{
+  "data": {
+    "deleteProduct": {
+      "productName": "Updated Product"
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+We can run a quick query to check if the product was deleted. Create a new query in the API playground and paste in the following:
+
+<Tabs panelHeight={200}>
+  <TabItem label="Query">
+
+```graphql
+query CheckDeletion {
+  products {
+    productName
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```graphql
+{
+  "data": {
+    "products": [
+      {
+        "productName": "Colorful socks"
+      },
+      {
+        "productName": "Green Hoodie"
+      },
+      {
+        "productName": "Blue running shoes"
+      },
+      {
+        "productName": "Urban shoes"
+      },
+      {
+        "productName": "Plaid shirt"
+      },
+      {
+        "productName": "My black leather shoes"
+      },
+      {
+        "productName": "Floor Lamp"
+      },
+      {
+        "productName": "Coffee table"
+      },
+      {
+        "productName": "Coffee tray"
+      },
+      {
+        "productName": "Vase"
+      }
+    ]
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+You can also check the content editor, where you'll see that there is no longer a product entry called “Updated Product”.
+
+![Deleted product](/images/docs/getting-started/checkdeletionquery-mutations-example.png)
+
+The API Playground in Hygraph is a great space to conduct mutations because you can run queries quickly to verify that your mutation worked.
+
+Now that we have practiced queries and mutations, we are ready to connect a frontend to create a storefront website to sell our products!
+
+<Card theme="info" title="Next step">
+
+Once you're done with the mutations practice, move on to our next lesson:
+
+<Button
+  href="/docs/getting-started/frontend-creation"
+  size="md"
+  variant="outlined"
+  theme="primary"
+  iconRight="ArrowRight"
+>7.1 Create a frontend using Next</Button>
+
+</Card>
