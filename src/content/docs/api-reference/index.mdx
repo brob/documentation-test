@@ -1,0 +1,76 @@
+---
+title: API Reference
+meta_title: Hygraph API reference overview
+meta_description: Hygraph API reference overview.
+---
+
+Our API reference contains information on how to work with our Content API, as well as our Schema, Management SDK, and other developer tools.
+
+This section of our documentation covers:
+
+## Basics
+
+| Document                                                    | Contents                                                                                                                                                                                             |
+| ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Authorization](/docs/api-reference/basics/authorization)   | Contains information about Public API permissions, Permanent auth tokens, and API endpoints                                                                                                          |
+| [Permissions](/docs/api-reference/basics/permissions)       | Contains information about our advanced permissions feature, which allows you to configure granular permissions to access content from a Hygraph project.                                            |
+| [Caching](/docs/api-reference/basics/caching)               | Contains information about cache management through two different content API enpdoints: the regular read & write endpoint, and the high performance read-only endpoint.                             |
+| [Environments](/docs/api-reference/basics/environments)     | Contains information about working with different environments.                                                                                                                                      |
+| [Errors](/docs/api-reference/basics/errors)                 | Contains information about common error codes.                                                                                                                                                       |
+| [Webhooks](/docs/api-reference/basics/webhooks)             | Contains information about working with webhooks in your Hygraph project.                                                                                                                            |
+| [API Playground](/docs/api-reference/basics/api-playground) | Contains information about Hygraph's API Playground, which is a great way to experiment with querying, and mutating data.                                                                            |
+| [Rate limits](/docs/api-reference/basics/rate-limits)       | Contains information about the limits to the number of uncached requests you can make to your content API. Our rate limjits are enforced to ensure delivery of optimal experiences to all customers. |
+
+## Schema
+
+| Document                                                              | Contents                                                                                                                                                                                                                                                                               |
+| --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Models](/docs/api-reference/schema/models)                           | Contains information about working with models. The models you create and the fields you add define your project's schema.                                                                                                                                                             |
+| [System fields](/docs/api-reference/schema/system-fields)             | Contains information about system fields. All default and custom content types come with some managed system fields.                                                                                                                                                                   |
+| [Field types](/docs/api-reference/schema/field-types)                 | Contains information about the field types you can use in your project. It also contains information about how input types work for filtering, ordering, paginating, and mutating data.                                                                                                |
+| [Field configuration](/docs/api-reference/schema/field-configuration) | Contains information on how to configure field types for your model with validations, visibility options, and more.                                                                                                                                                                    |
+| [Enumerations](/docs/api-reference/schema/enumerations)               | Contains information on how to work with enumerations.                                                                                                                                                                                                                                 |
+| [Components](/docs/guides/schema/components)                          | Contains information on how to work with components. A component is a pre-defined set of fields that can be reused across models and content entries.                                                                                                                                  |
+| [Remote sources](/docs/guides/schema/remote-sources)                  | Contains information on how to work with remote sources. With **Remote Sources**, our [content federation](/blog/introducing-content-federation) utility, it's possible to add content from other systems and sources to the Hygraph API without having to migrate the content itself. |
+| [Remote content & data](/docs/guides/schema/remote-content)           | Contains information about using remote fields to fetch external data. Use this document to learn about remote fields in the context of a regular model, and top level remote fields, which fetch data unrelated to Hygraph.                                                           |
+| [Reserved terms](/docs/guides/schema/reserved-terms)                  | This document contains a list of reserved terms, organized by category. Attempting to use these terms will result in a warning, informing you that you must use a different word instead.                                                                                              |
+| [Environment diffing](/docs/api-reference/schema/environment-diffing) | Contains information on how to use environment diffing to compare two schemas, then apply those changes using the **Management API**.                                                                                                                                                  |
+
+## Content API
+
+| Document                                                         | Contents                                                                                                                                                                                                          |
+| ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Queries](/docs/api-reference/content-api/queries)               | Contains information about working with queries. Hygraph automatically generates queries for fetching single and multiple entries for each defined content type belonging to your project.                        |
+| [Mutations](/docs/api-reference/content-api/mutations)           | Contains information about working with mutations. Your project endpoint exposes GraphQL mutations you can use to modify the contents of your project.                                                            |
+| [Filtering](/docs/api-reference/content-api/filtering)           | Contains information about using filters. Hygraph automatically creates filters for types you add to your content models. These filters can be applied to a single or multiple entries, and nested object fields. |
+| [Ordering](/docs/api-reference/content-api/ordering)             | Contains information about ordering. When fetching multiple entries you can use the `orderBy` argument to define the order of the returned records.                                                               |
+| [Pagination](/docs/api-reference/content-api/pagination)         | Contains information about pagination. Hygraph supports various arguments for paginating content entries.                                                                                                         |
+| [Content stages](/docs/api-reference/content-api/content-stages) | Contains information about content stages. You can create your own content stages inside the Hygraph UI, and query content from these stages, as well as publish to.                                              |
+| [Localization](/docs/api-reference/content-api/localization)     | Contains information about localization. Hygraph boasts a flexible localization API that you can use to publish content for all or specific locales in your project.                                              |
+| [Assets](/docs/api-reference/content-api/assets)                 | Contains information about assets. With inbuilt Digital Asset Management (DAM), the Asset model is included with every project.                                                                                   |
+| [Variables](/docs/api-reference/content-api/variables)           | Contains information about working with variables, and how to use them to create dynamic queries and mutations.                                                                                                   |
+| [Rich text](/docs/api-reference/content-api/rich-text-field)     | Contains information on Hygraph's rich text field and how to use it to customize your front end.                                                                                                                  |
+| [Headers](/docs/api-reference/content-api/headers)               | Contains information on use headers as a global way to send more specific requests to our API.                                                                                                                    |
+
+## Management SDK
+
+| Document                                                                            | Contents                                                                                                                  |
+| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| [Overview](/docs/api-reference/management-sdk/management-sdk)                       | Contains information about Hygraph's Management SDK. Learn about its advantages and how it works.                         |
+| [Quickstart](/docs/api-reference/management-sdk/management-sdk-quickstart)          | Contains our Management SDK Quicktstart, with information on installation, and usage.                                     |
+| [Migration](/docs/api-reference/management-sdk/management-sdk-migration)            | Contains information on how to migrate from the previous SDK to the Management SDK.                                       |
+| [Batch migration](/docs/api-reference/management-sdk/management-sdk-batchmigration) | Contains information on how to use the **Management SDK Method** for batch migrations.                                    |
+| [Examples](/docs/api-reference/management-sdk/management-sdk-examples)              | Contains examples on how to use the Management SDK to create different fields types, as well as nested `componentApiIds`. |
+| [Field examples](/docs/api-reference/management-sdk/management-sdk-field-examples)  | Contains information on how to work with different field types using the Management SDK.                                  |
+
+## Developer tools
+
+| Document / Repos                                                                               | Contents                                                                               |
+| ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| [Rich text](https://github.com/hygraph/rich-text)                                              | External link to our rich text renderer repo.                                          |
+| [HTML to Slate AST](https://github.com/hygraph/rich-text/tree/main/packages/html-to-slate-ast) | External link to our HTML to Slate AST converter for the Hygraph's RichTextAST format. |
+| [Gatsby Source Plugin](https://github.com/hygraph/gatsby-source-graphcms)                      | External link to our Gatsby Source Plugin.                                             |
+
+&nbsp;
+
+&nbsp;

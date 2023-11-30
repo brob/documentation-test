@@ -1,0 +1,1325 @@
+---
+title: Filtering
+meta_description: Hygraph automatically creates filters for types you add to your content models. These filters can be applied to a single, or multiple entries, and nested object fields.
+---
+import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+
+Hygraph automatically creates filters for types you add to your content models. These filters can be applied to a single, or multiple entries, and nested object fields.
+
+The best place to explore all available filters is by using the [API Playground](/docs/api-reference/basics/api-playground).
+
+## Using filters
+
+To filter content entries, simply pass the `where` argument to the query, followed by any of the [filter types](#filter-types) for the fields on your model.
+
+<Card theme="info">
+
+All models come with their own custom GraphQL input type. Depending on the field type you want to filter by, there will be different fields you can filter by. String fields will behaviour differently to Boolean fields for example.
+
+</Card>
+
+For example, a `Post` model will have the `where` input types `PostWhereInput` and `PostWhereUniqueInput` on the `posts`, and `postsConnection` query types. These types contain filters specific to that content type.
+
+<Card theme="warning">
+
+Hygraph does not currently support filtering for Rich Text - even if inside components -, JSON, multi-value fields, colors, or coordinates.
+
+</Card>
+
+## Filter types
+
+### ID
+
+Entries can be filtered by `id`.
+
+| Matches              | Type    | Behaviour                |
+| -------------------- | ------- | ------------------------ |
+| `id`                 | `ID`    | Equal to                 |
+| `id_not`             | `ID`    | Not this (null excepted) |
+| `id_in`              | `[ID!]` | One of                   |
+| `id_not_in`          | `[ID!]` | Not one of               |
+| `id_starts_with`     | `ID`    | Starts with              |
+| `id_not_starts_with` | `ID`    | Does not start with      |
+| `id_ends_with`       | `ID`    | Ends with                |
+| `id_not_ends_with`   | `ID`    | Does not end with        |
+| `id_contains`        | `ID`    | Contains                 |
+| `id_not_contains`    | `ID`    | Does not contain         |
+
+### String
+
+All String fields can be filtered using:
+
+| Matches                       | Type       | Behaviour                 |
+| ----------------------------- | ---------- | ------------------------- |
+| `[fieldName]_not`             | `String`   | Not this (null excepted)  |
+| `[fieldName]_in`              | `[String]` | One of                    |
+| `[fieldName]_not_in`          | `[String]` | Not one of                |
+| `[fieldName]_starts_with`     | `String`   | Starts with string        |
+| `[fieldName]_not_starts_with` | `String`   | Doesn't start with string |
+| `[fieldName]_ends_with`       | `String`   | Ends with string          |
+| `[fieldName]_not_ends_with`   | `String`   | Doesn't end with string   |
+| `[fieldName]_contains`        | `String`   | Includes string           |
+| `[fieldName]_not_contains`    | `String`   | Does not include string   |
+
+### Integer
+
+All Integer fields can be filtered using:
+
+| Matches              | Type    | Behaviour                |
+| -------------------- | ------- | ------------------------ |
+| `[fieldName]_not`    | `Int`   | Not this (null excepted) |
+| `[fieldName]_in`     | `[Int]` | One of                   |
+| `[fieldName]_not_in` | `[Int]` | Not one of               |
+| `[fieldName]_lt`     | `Int`   | Less than                |
+| `[fieldName]_gt`     | `Int`   | Greater than             |
+| `[fieldName]_lte`    | `Int`   | Less than or equal to    |
+| `[fieldName]_gte`    | `Int`   | Greater than or equal to |
+
+```graphql
+{
+  products(where: { quantity: 100 }) {
+    quantity
+  }
+
+  multipleQuantities: products(where: { quantity_in: [10, 100, 1000] }) {
+    quantity
+  }
+}
+```
+
+### Float
+
+All Float fields can be filtered using:
+
+| Matches              | Type      | Behaviour                |
+| -------------------- | --------- | ------------------------ |
+| `[fieldName]_not`    | `Float`   | Not this (null excepted) |
+| `[fieldName]_in`     | `[Float]` | One of                   |
+| `[fieldName]_not_in` | `[Float]` | Not one of               |
+| `[fieldName]_lt`     | `Float`   | Less than                |
+| `[fieldName]_gt`     | `Float`   | Greater than             |
+| `[fieldName]_lte`    | `Float`   | Less than or equal to    |
+| `[fieldName]_gte`    | `Float`   | Greater than or equal to |
+
+```graphql
+{
+  products(where: { rating: 4.5 }) {
+    name
+    rating
+  }
+}
+```
+
+### Boolean
+
+All Booleans belonging to your content model can be filtered using the field name directly, as well as appended with `_not`, with a Boolean input type.
+
+| Matches       | Type      | Behaviour                                   |
+| ------------- | --------- | ------------------------------------------- |
+| `[field]`     | `Boolean` | Is                                          |
+| `[field]_not` | `Boolean` | Flips boolean (null not taken into account) |
+
+For example, let's filter posts where the custom field `verified` is `true`:
+
+```graphql
+{
+  posts(where: { verified: true }) {
+    id
+  }
+
+  posts(where: { verified_not: true }) {
+    id
+  }
+}
+```
+
+### Date
+
+All Date fields can be filtered using:
+
+| Matches              | Type     | Behaviour                |
+| -------------------- | -------- | ------------------------ |
+| `[fieldName]_not`    | `Date`   | Not this (null excepted) |
+| `[fieldName]_in`     | `[Date]` | One of                   |
+| `[fieldName]_not_in` | `[Date]` | Not one of               |
+| `[fieldName]_lt`     | `Date`   | Less than                |
+| `[fieldName]_gt`     | `Date`   | Greater than             |
+| `[fieldName]_lte`    | `Date`   | Less than or equal to    |
+| `[fieldName]_gte`    | `Date`   | Greater than or equal to |
+
+```graphql
+{
+  today: events(where: { day: "2020-10-07" }) {
+    day
+  }
+
+  upcoming: events(where: { day_gt: "2020-10-07" }) {
+    day
+  }
+}
+```
+
+### DateTime
+
+Hygraph stores Date/DateTime fields as UTC strings, ISO 8601.
+
+Like Date fields, DateTime fields can be filtered using:
+
+| Matches              | Type         | Behaviour                |
+| -------------------- | ------------ | ------------------------ |
+| `[fieldName]_not`    | `DateTime`   | Not this (null excepted) |
+| `[fieldName]_in`     | `[DateTime]` | One of                   |
+| `[fieldName]_not_in` | `[DateTime]` | Not one of               |
+| `[fieldName]_lt`     | `DateTime`   | Less than                |
+| `[fieldName]_gt`     | `DateTime`   | Greater than             |
+| `[fieldName]_lte`    | `DateTime`   | Less than or equal to    |
+| `[fieldName]_gte`    | `DateTime`   | Greater than or equal to |
+
+```graphql
+{
+  events(where: { start: "2020-10-07T09:00:00+00:00" }) {
+    start
+  }
+
+  previous: events(where: { start_lt: "2020-10-07T09:00:00+00:00" }) {
+    start
+  }
+}
+```
+
+### Basic Reference
+
+All relations (except Unions) can be filtered using filters on the fields of the model you are referencing. You can filter where every, some, and none at all match the conditions provided.
+
+| Matches             | Behaviour               |
+| ------------------- | ----------------------- |
+| `[fieldName]_every` | Every reference matches |
+| `[fieldName]_some`  | Some references match   |
+| `[fieldName]_none`  | No references match     |
+
+For example, you could fetch every post by the provided author name.
+
+```graphql
+{
+  posts(where: { authors_every: { name_in: ["John", "Simona"] } }) {
+    title
+    authors {
+      name
+    }
+  }
+}
+```
+
+<a id="null-references"></a>
+
+#### Null references
+
+It is possible to filter on single, and multi reference fields for when these references are empty.
+
+<Tabs panelHeight={230}>
+  <TabItem label="Where no author connected">
+
+```graphql
+{
+  posts(where: { author: null }) {
+    id
+    author {
+      id
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Where one author is connected">
+
+```graphql
+{
+  posts(where: { author: {} }) {
+    id
+    author {
+      id
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+- `[fieldName]_every: {}`: Returns all authors, with or without connected posts
+- `[fieldName]_some: {}`: Returns all authors with at least one connected post
+- `[fieldName]_none: {}`: Returns all authors that have no posts connected
+
+<Tabs panelHeight={230}>
+  <TabItem label="_none">
+
+```graphql
+{
+  authors(where: { posts_none: {} }) {
+    id
+    posts {
+      id
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="_some">
+
+```graphql
+{
+  authors(where: { posts_some: {} }) {
+    id
+    posts {
+      id
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="_every">
+
+```graphql
+{
+  authors(where: { posts_every: {} }) {
+    id
+    posts {
+      id
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+### Union reference
+
+Using the `where` filter, you can filter by unions to get into the models and even fields inside of them.
+
+<Tabs panelHeight={350}>
+<TabItem label="Query">
+```graphql
+query MyQuery {
+  # Find posts where the postPageUnion field  has entries connected
+  posts(where: { postPageUnion_empty: false }) {
+    id
+    postPageUnion {
+      __typename
+      ... on Page {
+        id
+        path
+        updatedAt
+      }
+    }
+  }
+}
+```
+</TabItem>
+<TabItem label="Response">
+```graphql
+{
+  "data": {
+    "posts": [
+      {
+        "id": "clfuxrsxicbtn0bw80otuqvdc",
+        "postPageUnion": [
+          {
+            "__typename": "Page",
+            "id": "clfusno48bgnj0bw8r09tkfmd",
+            "path": "home",
+            "updatedAt": "2023-03-30T09:51:30.842718+00:00"
+          },
+          {
+            "__typename": "Page",
+            "id": "clfusoca3bfb20bw7qq5ppcs7",
+            "path": "features",
+            "updatedAt": "2023-03-30T10:40:38.541517+00:00"
+          },
+          {
+            "__typename": "Page",
+            "id": "clfusouvbbbob0bulri695oa1",
+            "path": "404",
+            "updatedAt": "2023-03-30T10:53:26.196075+00:00"
+          }
+        ]
+      },
+      {
+        "id": "clfuzysanci8n0bw7y29vd16n",
+        "postPageUnion": [
+          {
+            "__typename": "Page",
+            "id": "clfusouvbbbob0bulri695oa1",
+            "path": "404",
+            "updatedAt": "2023-03-30T10:53:26.196075+00:00"
+          },
+          {
+            "__typename": "Page",
+            "id": "clfusqhb8bbyt0buljnh37oxd",
+            "path": "new",
+            "updatedAt": "2023-03-30T10:54:59.459294+00:00"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+</TabItem>
+</Tabs>
+
+You can combine the `where` filter with the following:
+
+| Matches             | Type      | Behaviour                                                                                |
+| ------------------- | --------- | ---------------------------------------------------------------------------------------- |
+| `[FieldName]_empty` | `Boolean` | If true, it returns every result where the filtered union is not connected / is empty    |
+| `[FieldName]_some`  | `Array`   | Matches if the union contains at least one connection to the item provided to the filter |
+
+<Card theme="info">
+
+- `_empty` and `_some` can be used to query union fields that allow multiple values.
+
+- The filter does not modify the query, but will simply select a subset of entries from the results returned by that query, based on the filter.
+
+</Card>
+
+<Tabs panelHeight={420}>
+<TabItem label="_empty">
+```graphql
+query MyQuery { # Find pages where no sections are connected
+  pages(where: {sections_empty: true}) {
+    id
+    sections {
+      __typename
+      ... on TextComponent {
+        heading
+      }
+      ... on GalleryComponent {
+        heading
+      }
+      ... on Testimonial {
+        customerName
+      }
+    }
+  }
+}
+```
+</TabItem>
+<TabItem label="_some">
+```graphql
+query MyQuery { # Find pages where the testimonal is from Hygraph
+  pages(where: {sections_some: {Testimonial: {customerName_contains: "Hygraph"}}}) {
+    id
+    sections {
+      __typename
+      ... on TextComponent {
+        heading
+      }
+      ... on GalleryComponent {
+        heading
+      }
+      ... on Testimonial {
+        customerName
+      }
+    }
+  }
+}
+```
+</TabItem>
+<TabItem label="Match">
+```graphql
+# Union reference doesn't allow multiple values
+# Find pages where the section union testimonial's customer name contains "Hygraph"
+query MyQuery {
+  pages(where: {section: {Testimonial: {customerName_contains: "Hygraph"}}}) {
+    id
+  }
+}
+```
+</TabItem>
+</Tabs>
+
+#### Nested unions
+
+Using filters allows going into the reverse field and getting information from the start model.
+
+<Tabs panelHeight={800}>
+<TabItem label="Query">
+```graphql
+query MyQuery {
+  # Find pages where the Testimonal List contains Hygraph
+  pages(
+    where: {
+      sections_some: {
+        # Union relational field
+        TestimonialList: {
+          # The linked component
+          customerList_some: {
+            # Basic relational field on the component
+            name: "Hygraph" # Field we are filtering for
+          }
+        }
+      }
+    }
+  ) {
+    id
+    sections {
+      __typename
+      ... on TextComponent {
+        heading
+      }
+      ... on GalleryComponent {
+        heading
+      }
+      ... on Testimonial {
+        customerName
+      }
+    }
+    seo {
+      metaTitle
+    }
+  }
+}
+```
+</TabItem>
+<TabItem label="Response">
+```graphql
+{
+  "data": {
+    "pages": [
+      {
+        "id": "clfusno48bgnj0bw8r09tkfmd",
+        "sections": [
+          {
+            "__typename": "TextComponent",
+            "heading": "Welcome"
+          },
+          {
+            "__typename": "GalleryComponent",
+            "heading": "Product Pictures"
+          },
+          {
+            "__typename": "Testimonial",
+            "customerName": "Hygraph"
+          },
+          {
+            "__typename": "TestimonialList"
+          }
+        ],
+        "seo": {
+          "metaTitle": "Homepage"
+        }
+      },
+      {
+        "id": "clfusoca3bfb20bw7qq5ppcs7",
+        "sections": [
+          {
+            "__typename": "TextComponent",
+            "heading": "Feature Showcase"
+          },
+          {
+            "__typename": "GalleryComponent",
+            "heading": "Pictures"
+          },
+          {
+            "__typename": "TestimonialList"
+          }
+        ],
+        "seo": {
+          "metaTitle": "Hygraph"
+        }
+      }
+    ]
+  }
+}
+```
+</TabItem>
+</Tabs>
+
+### Basic component
+
+#### Basic component field allows multiple values
+
+All basic component fields that allow multiple values can be filtered using:
+
+| Matches             | Behaviour               |
+| ------------------- | ----------------------- |
+| `[fieldName]_every` | Every reference matches |
+| `[fieldName]_some`  | Some references match   |
+| `[fieldName]_none`  | No references match     |
+
+<Tabs panelHeight={200}>
+<TabItem label="_every">
+```graphql
+query MyQuery { # Finds pages where all Post component paths contain "example"
+  pages(where: {posts_every: {path_contains: "example"}}) {
+    id
+    title
+    path
+  }
+}
+```
+</TabItem>
+<TabItem label="_some">
+```graphql
+query MyQuery { # Finds pages where at least one Post component path contains "example"
+  pages(where: {posts_some: {path_contains: "example"}}) {
+    id
+    title
+    path
+  }
+}
+```
+</TabItem>
+<TabItem label="_none">
+```graphql
+query MyQuery { # Finds pages where none of the Post component paths contain "example"
+  pages(where: {posts_none: {path_contains: "example"}}) {
+    id
+    title
+    path
+  }
+}
+```
+</TabItem>
+</Tabs>
+
+#### Basic component field doesn't allow multiple values
+
+If the basic component field does not allow multiple values, the `_every`, `_some`, and `_none` filters are unavailable, but you can query for a match as well as for empty components.
+
+<Tabs panelHeight={500}>
+<TabItem label="Empty component">
+```graphql
+query MyQuery { # Find pages where the seo field is empty (basic component field)
+  pages(where: {seo: {}}) {
+    id
+    sections {
+      __typename
+      ... on TextComponent {
+        heading
+      }
+      ... on GalleryComponent {
+        heading
+      }
+      ... on Testimonial {
+        customerName
+      }
+    }
+    seo {
+      metaTitle
+    }
+  }
+}
+```
+</TabItem>
+<TabItem label="Match">
+```graphql
+query MyQuery { # Find pages where the Seo components field metatitle contains "Home"
+  pages(where: {seo: {metaTitle_contains: "Home"}}) {
+    id
+    sections {
+      __typename
+      ... on TextComponent {
+        heading
+      }
+      ... on GalleryComponent {
+        heading
+      }
+      ... on Testimonial {
+        customerName
+      }
+    }
+    seo {
+      metaTitle
+    }
+  }
+}
+```
+</TabItem>
+</Tabs>
+
+### Modular component
+
+All modular component fields that allow multiple values can be filtered using:
+
+| Matches             | Type      | Behaviour                                                                                |
+| ------------------- | --------- | ---------------------------------------------------------------------------------------- |
+| `[FieldName]_empty` | `Boolean` | If true, it returns every result where the filtered model is empty                       |
+| `[FieldName]_some`  | `Array`   | Matches if the model contains at least one connection to the item provided to the filter |
+
+<Tabs panelHeight={200}>
+<TabItem label="_empty">
+```graphql
+query MyQuery { # Find the id of pages where the sections component is not empty
+  pages(where: {sections_empty: false}) {
+    id
+  }
+}
+
+````
+</TabItem>
+<TabItem label="_some">
+```graphql
+# Find pages that contain at least one connection to the sections component
+query MyQuery {
+  pages(where: {sections_some: { # Modular component field
+    TextComponent: { # The linked component
+      heading_contains: "showcase" # The field that we are filtering for
+    }
+  }
+  }) {
+    id
+    sections {
+      __typename
+      ... on TextComponent {
+        heading
+        body
+      }
+    }
+  }
+}
+````
+
+</TabItem>
+<TabItem label="Match">
+```graphql
+# Modular component doesn't allow multiple values
+# Finds pages where the Section component TextComponent's  heading matches "test"
+query MyQuery {
+  pages (where: {section: {TextComponent: {heading: "test"}}}) {
+    id
+  }
+}
+```
+</TabItem>
+</Tabs>
+
+#### Nested components
+
+You can use the above filters to filter data from different levels of nested components as follows:
+
+<Tabs panelHeight={800}>
+<TabItem label="Query">
+```graphql
+query MyQuery {
+  # Find pages where the Testimonal List constains Hygraph
+  pages(
+    where: {
+      sections_some: {
+        # Modular component field
+        TestimonialList: {
+          # The linked component
+          customerList_some: {
+            # Basic component field on the component
+            name: "Hygraph" # Field we are filtering for
+          }
+        }
+      }
+    }
+  ) {
+    id
+    sections {
+      __typename
+      ... on TextComponent {
+        heading
+      }
+      ... on GalleryComponent {
+        heading
+      }
+      ... on Testimonial {
+        customerName
+      }
+    }
+    seo {
+      metaTitle
+    }
+  }
+}
+```
+</TabItem>
+<TabItem label="Response">
+```graphql
+{
+  "data": {
+    "pages": [
+      {
+        "id": "clfusno48bgnj0bw8r09tkfmd",
+        "sections": [
+          {
+            "__typename": "TextComponent",
+            "heading": "Welcome"
+          },
+          {
+            "__typename": "GalleryComponent",
+            "heading": "Product Pictures"
+          },
+          {
+            "__typename": "Testimonial",
+            "customerName": "Hygraph"
+          },
+          {
+            "__typename": "TestimonialList"
+          }
+        ],
+        "seo": {
+          "metaTitle": "Homepage"
+        }
+      },
+      {
+        "id": "clfusoca3bfb20bw7qq5ppcs7",
+        "sections": [
+          {
+            "__typename": "TextComponent",
+            "heading": "Feature Showcase"
+          },
+          {
+            "__typename": "GalleryComponent",
+            "heading": "Pictures"
+          },
+          {
+            "__typename": "TestimonialList"
+          }
+        ],
+        "seo": {
+          "metaTitle": "Hygraph"
+        }
+      }
+    ]
+  }
+}
+```
+</TabItem>
+</Tabs>
+
+### Enumeration
+
+All Enum fields can be filtered by using:
+
+| Matches              | Type                 | Behaviour                |
+| -------------------- | -------------------- | ------------------------ |
+| `[fieldName]_not`    | `EnumerationValue`   | Not this (null excepted) |
+| `[fieldName]_in`     | `[EnumerationValue]` | One of                   |
+| `[fieldName]_not_in` | `[EnumerationValue]` | Not one of               |
+| `[fieldName]_lt`     | `EnumerationValue`   | Less than                |
+| `[fieldName]_gt`     | `EnumerationValue`   | Greater than             |
+| `[fieldName]_lte`    | `EnumerationValue`   | Less than or equal to    |
+| `[fieldName]_gte`    | `EnumerationValue`   | Greater than or equal to |
+
+The type of enumeration you can filter by will be the actual Enumeration values defined in your schema.
+
+```graphql
+{
+  resources(where: { type_in: [Webinar, Ebook] }) {
+    id
+  }
+}
+```
+
+<Card theme="info">
+
+`Webinar` and `Ebook` are Enumeration values for field `type`.
+
+</Card>
+
+### Asset
+
+All Asset fields can be filtered using:
+
+| Matches              | Type            | Behaviour                |
+| -------------------- | --------------- | ------------------------ |
+| `[fieldName]_not`    | `String`        | Not this (null excepted) |
+| `[fieldName]_in`     | `[String]`      | One of                   |
+| `[fieldName]_not_in` | `[String]`      | Not one of               |
+| `[fieldName]_lt`     | `String`        | Less than                |
+| `[fieldName]_gt`     | `String`        | Greater than             |
+| `[fieldName]_lte`    | `String`        | Less than or equal to    |
+| `[fieldName]_gte`    | `String`        | Greater than or equal to |
+| `[fieldName]_every`  | _Relation Type_ | Every reference matches  |
+| `[fieldName]_some`   | _Relation Type_ | Some references match    |
+| `[fieldName]_none`   | _Relation Type_ | No references match      |
+
+Asset fields come with their own [System Fields](/docs/api-reference/schema/system-fields#asset-fields) which you can apply these filters on, as well as any custom fields, or references you add.
+
+You can filter the asset through the reference, or when querying all assets.
+
+For example, we could fetch posts where the `coverImage` field meets the provided criteria on the systme field `fileName`:
+
+```graphql
+{
+  posts(where: { coverImage: { fileName: "image.png" } }) {
+    id
+    coverImage {
+      fileName
+    }
+  }
+}
+```
+
+## Combining filters
+
+Just like [combining query arguments](/docs/api-reference/content-api/queries#combining-arguments), it is also possible to combine filters.
+
+```graphql
+{
+  events(
+    where: {
+      start_gt: "2020-10-01T09:00:00+00:00"
+      start_lt: "2020-10-31T09:00:00+00:00"
+      fancyDress: true
+      price: 100
+    }
+  ) {
+    start
+    fancyDress
+    price
+  }
+
+  previous: events(where: { start_lt: "2020-10-07T09:00:00+00:00" }) {
+    start
+  }
+}
+```
+
+## Conditional filters
+
+Hygraph supports conditional filters for your content using `AND`, `NOT` and `OR`. Useful for filtering results basd on more than one criteria.
+
+<Card theme="info">
+
+Conditional filters are a way to logically apply conditions of the applicable filters above. They can also be nested.
+
+</Card>
+
+| Input Type | Description                                          |
+| ---------- | ---------------------------------------------------- |
+| `AND`      | Fetch entires that meet both conditions.             |
+| `OR`       | Fetch entries that match either condition.           |
+| `NOT`      | Fetch all entries where the conditions do not match. |
+
+<Tabs panelHeight={230}>
+  <TabItem label="AND">
+
+```graphql
+{
+  events(
+    where: { AND: [{ start_gte: "2020-10-01" }, { start_lte: "2020-10-31" }] }
+  ) {
+    id
+    start
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="OR">
+
+```graphql
+{
+  events(where: { OR: [{ free: true }, { start_gt: "2020-10-31" }] }) {
+    id
+    start
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="NOT">
+
+```graphql
+{
+  events(where: { NOT: [{ free: true }, { start_gt: "2020-10-31" }] }) {
+    id
+    start
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Nested">
+
+```graphql
+{
+  events(
+    where: {
+      OR: [
+        { AND: [{ start_gte: "2020-10-01" }, { start_lte: "2020-10-31" }] }
+        { id: "..." }
+      ]
+    }
+  ) {
+    id
+    start
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Filter by locales
+
+When querying content entries, you can also filter by `locales`:
+
+```graphql
+{
+  posts(locales: [en]) {
+    id
+  }
+}
+```
+
+Learn more about [localization](/docs/api-reference/content-api/localization).
+
+## Filter by stage argument
+
+When querying content entries, you can also filter by `stage`. The stage argument decides what document variation gets returned and searched through. Therefore, if the document does not exist in the stage variation, it gets filtered out.
+
+```graphql
+{
+  posts(stage: PUBLISHED) {
+    id
+    stage
+  }
+}
+```
+
+Learn more about [content stages](/docs/api-reference/content-api/content-stages).
+
+## Filter by content stage
+
+Stages work a bit differently in the API than in the UI. In the UI, we use the most intuitive and editor-friendly way of treating filters. So, for instance, if you see a green `PUBLISHED` pill next to an entry, then this entry is only in the `PUBLISHED` stage. However, in the backend, our stages are organized slightly differently. The main difference is that each content entry always exists in `DRAFT`, and other stages are added or removed. For example, an entry that has a green `PUBLISHED` pill in the UI is actually in both `DRAFT` and `PUBLISHED` stages on the API side, and both versions of the entry are identical. If you update the `DRAFT` version but don't publish it, the entry will continue to exist in both stages, but will be marked as blue `PUBLISHED` in the UI.
+
+Stages can be filtered using:
+
+| Matches                  | Behaviour                                                                 |
+| ------------------------ | ------------------------------------------------------------------------- |
+| `documentInStages_every` | All existing stage variations must match the sub-filter                   |
+| `documentInStages_some`  | At least one of the existing stage variations must match the sub-filter   |
+| `documentInStages_none`  | None of the existing stage variations are allowed to match the sub-filter |
+
+To summarize, like we mentioned before, a document will always exist in the `DRAFT` stage, and they may or may not exist in other published stages such as `PUBLISHED` or for example `QA` - which is a custom content stage that can be published to.
+
+If you, as a user, want to find documents that exist in the `PUBLISHED` stage, you can run the following query:
+
+```graphql
+stage: DRAFT
+    where: {
+			documentInStages_some: {
+        stage: PUBLISHED
+      }
+    }
+```
+
+The above `documentInStages_some` allows the user to find documents which exist in a different stage. Let's consider the following 3 documents, which exist in the following stages:
+
+| ID          | STAGES                 |
+| ----------- | ---------------------- |
+| cldocument1 | [DRAFT, PUBLISHED]     |
+| cldocument2 | [DRAFT]                |
+| cldocument4 | [DRAFT, PUBLISHED, QA] |
+
+The above query will return documents that also exist in the `PUBLISHED` stage, which are `cldocument1` and `cldocument4`.
+
+However you may have noticed that `cldocument4` also has been published to the `QA` stage - If you have access to custom stages.
+
+Imagine you want to query documents which exist only in one published stage `PUBLISHED`, but not any other publishable stages. In this case the result you want is `cldocument1`. For this we can use `documentInStages_every`.
+
+Keeping in mind that a document entry can exist in multiple stages, the difference between `documentInStages_some` and `documentInStages_every` is that `documentInStages_some` checks if an entry exists in a particular stage, whereas by using `documentInStages_every` we request an entry that exists in only and exactly that stage. So if we use `documentInStages_every` with `PUBLISHED` the query will return results only if the document exists in `PUBLISHED` and no other stage.
+
+You might read this and try a query such as the following:
+
+```graphql
+
+    where: {
+			documentInStages_every: {
+        stage: PUBLISHED
+      }
+    }
+```
+
+While you are on the right track, this will unfortunately return no results. The reason is that, as we mentioned earlier, every document **always** exists in `DRAFT`, so no document will ever only exist in `PUBLISHED`.
+
+If you try changing the above `PUBLISHED` to `DRAFT`, however, you will get `cldocument2` as a result, as this document only exists in the `DRAFT` stage.
+
+As a workaround for this problem, we can use the `OR` meta filter, by using the following query:
+
+```graphql
+
+    where: {
+      documentInStages_every: {
+        OR: [
+          {
+            stage: DRAFT
+          },
+          {
+            stage: PUBLISHED
+          }
+        ]
+      }
+    }
+```
+
+Since the internal query is that the stage must exist either in `DRAFT` or `PUBLISHED`, the query evaluates to true for both document `cldocument1` and `cldocument2`. It skips `cldocument4`, which is what we want, but we still get `cldocument2` which exists only in `DRAFT`.
+
+We can use the same pattern of using meta filters to filter out the `DRAFT` entry. Let's start by writing this query:
+
+```graphql
+
+    where: {
+      NOT: [
+        {
+          documentInStages_every: {
+            stage: DRAFT
+          }
+        }
+      ]
+    }
+```
+
+As you can see, this query returns any document that does not exist _only_ in `DRAFT`, Which in this case would be `cldocument1` and `cldocument4`. If we were to do an intersection of the results of the above two queries, we would get `cldocument1`, which is the document that we want.
+
+In order to do this, we combine the above two queries to create the following:
+
+```graphql
+where: {
+      AND: [
+			  {
+			    documentInStages_every: {
+			      OR: [
+			        {
+			          stage: DRAFT
+			        },
+			        {
+			          stage: PUBLISHED
+			        }
+			      ]
+			    }
+			  },
+			  {
+			    NOT: [
+			      {
+			        documentInStages_every: {
+			          stage: DRAFT
+			        }
+			      }
+			    ]
+			  }
+			]
+    }
+```
+
+As you can see above, by using the `AND` meta filter we get the intersection between the two queries above, which returns the `cldocument1` document.
+
+**compareWithParent**
+
+`compareWithParent` allows the comparison of a document with its parent entry using any comparison operators available within it.
+
+At the moment `compareWithParent` is available only inside a `documentInStages_*` filter, and only allows the use of one attribute which is `outdated_to`. This attribute can be found inside the `compareWithParent` filter. The attribute is used to specify if we wish to check whether the child document is outdated compared to the parent document. For example:
+
+```graphql
+variousDocuments(
+    stage: DRAFT
+    where: {
+      documentInStages_some: {
+        stage: PUBLISHED
+        compareWithParent: {
+          outdated_to: true
+        }
+      }
+    }
+  )
+```
+
+In the above example, we enable the filter by setting `outdated_to` to **true** - if it were set to **false**, it would be the same as having the filter omitted entirely. The **true** and **false** values are simply indicators of whether to process the filter in the query.
+
+In the above query, we check if the child `PUBLISHED` version is outdated compared to the `DRAFT` parent version. At the moment, we check if a document is outdated by comparing the `updatedAt` attributes of both the `DRAFT` and `PUBLISHED` versions. If the `DRAFT` has a greater `updatedAt`, that means the document has been modified since it was last published, and is therefore considered outdated.
+
+## JSON filtering
+
+You can filter the data in the `JSON` fields of your Hygraph project using the following filters.
+
+### value_recursive
+
+You can filter the data in your `JSON` fields by using the following `value_recursive` syntax to find exact matches:
+
+```graphql
+query for {
+  posts(where: { jsonField_value_recursive: "hallo" }) {
+    id
+    jsonField
+  }
+}
+```
+
+The query above would search the `JSON` fields for an exact match of **"hallo"** on all values, excluding the json keys.
+
+<Card theme="success">
+
+Using this filter, you can easily filter the content, even if you're not familiar with the `json_path` syntax.
+
+</Card>
+
+### json_path_exists
+
+You can filter the data in your `JSON` fields by using `json_path_exists` syntax from [`PostgreSQL`](https://www.postgresql.org/docs/12/functions-json.html).
+
+To be able to query this content, you need to know the `JSON` structure to navigate through it.
+
+If you're not familiar with the structure, you can query for all content - without passing a filter, or with just a pagination filter depending on number of entries - and look into it. A great way to go about this kind of exploration is using the **API Playground**, where you can type **“json”** then use `ctrl + space` or `command + space` to display all the filters you can use and select one.
+
+<Card theme="warning">
+
+Please note that if the content data is in a JSON field that allows multiple values, the query will return the complete list.
+
+</Card>
+
+#### Query syntax examples
+
+Imagine we have the following content data in a `JSON` field which allows multiple values:
+
+```json
+"data": {
+    "testFieldsModels": [
+      {
+        "listJsonField": [
+          {
+            "items": {
+              "qty": 24,
+              "product": "Diaper"
+            },
+            "customer": "Lily Bush"
+          },
+          {
+            "items": {
+              "qty": 1,
+              "product": "Toy Car"
+            },
+            "customer": "Josh William"
+          },
+          {
+            "items": {
+              "qty": null,
+              "product": "Headphones"
+            },
+            "customer": "James Buyer"
+          }
+        ]
+      }
+    ]
+  },
+```
+
+Using the above sample content data, here are some query examples:
+
+- [Query by quantity](/docs/api-reference/content-api/filtering#query-by-quantity)
+- [Query by string](/docs/api-reference/content-api/filtering#query-by-string)
+- [Query by `null`](/docs/api-reference/content-api/filtering#query-by-null)
+- [Query by range](/docs/api-reference/content-api/filtering#query-by-range)
+
+<Card theme="warning">
+
+Please note that in the query examples below, we escape the quotes with a backslash, like this `\”`. This is because the query is already inside double quotes, so any additional quotes require this format.
+
+</Card>
+
+<a id="query-by-quantity"></a>
+
+**Query by quantity**
+
+You can use `"$[*].** ? (@ > N)”` to filter all values all for integers above a certain number. Just replace `N` with the number of your choice.
+
+```graphql
+query for {
+  testFieldsModels(
+    where: { listJsonField_json_path_exists: "$[*].items.qty ? (@ > 5)" }
+  ) {
+    listJsonField
+  }
+}
+```
+
+The above query example returns products with a quantity greater than 5.
+
+<Card theme="info">
+
+**You can use:**
+
+- `>`: Greater than
+- `>=`: Greater than or equal to
+- `<`: Less than
+- `<=`: Less than or equal to
+
+</Card>
+
+<a id="query-by-string"></a>
+
+**Query by string**
+
+You can use `"$.** ? (@ == \"String\")”` to filter all values all for the matching string:
+
+```graphql
+query for {
+  testFieldsModels(
+    where: {
+      listJsonField_json_path_exists: "$.items.product ? (@ == \"Toy Car\")"
+    }
+  ) {
+    listJsonField
+  }
+}
+```
+
+The above query example returns products with the name **“Toy Car”**.
+
+<a id="query-by-null"></a>
+
+**Query by `null`**
+
+You can use `"$[*].** ? (@ == null)”` to filter all values all for null.
+
+```graphql
+query for {
+  testFieldsModels(
+    where: { listJsonField_json_path_exists: "$[*].items.qty ? (@ == null)" }
+  ) {
+    listJsonField
+  }
+}
+```
+
+The above query example returns items where quantity (qty) = `null`.
+
+<a id="query-by-range"></a>
+
+**Query by range**
+
+You can use `"$[*].** ? (@ > N && @ < N)”` to filter all values all for a range of numbers. Just replace `N` with the numbers of your choice.
+
+```graphql
+query for {
+  testFieldsModels(
+    where: {
+      listJsonField_json_path_exists: "$[*].items.qty ? (@ > 1 && @ < 5)"
+    }
+  ) {
+    listJsonField
+  }
+}
+```
+
+The above query example returns items with a quantity between 1 and 5.
+
+<Card theme="success">
+
+**You can use:**
+
+- `>`: Greater than
+- `>=`: Greater than or equal to
+- `<`: Less than
+- `<=`: Less than or equal to
+
+</Card>

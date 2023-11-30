@@ -1,0 +1,54 @@
+---
+title: Enumerations
+meta_description: An enumeration (or enum for short) can be used to group values within a type. Enums can be useful to filter, and define certain content entries in your project.
+---
+
+An enumeration (or enum for short) can be used to group values within a type. Enums can be useful to filter, and define certain content entries in your project.
+
+For example, a product model may contain the enum `COMMODITY`, and values `Digital` and `Physical`.
+
+Enums values can only contain alphanumeric characters, and underscores.
+
+Learn more about [Enumerations](/docs/api-reference/schema/field-types#enumerations).
+
+## Fetching enumeration values
+
+You may want to fetch all possible values of an Enum you have created. You can do this via GraphQL using your projects API endpoint.
+
+```graphql
+{
+  __type(name: "COMMODITY") {
+    enumValues {
+      name
+    }
+  }
+}
+```
+
+## Creating an enumeration
+
+1. Navigate to the schema editor in the side-bar.
+2. If you don't see it, your role does not have access to the schema editor.
+3. In the collapsible side-bar, next to the label "Enumerations", click the "+ Add" button.
+4. Provide a display name, API ID and description.
+
+## Adding enumeration values
+
+Enums must begin with a capital letter.
+
+1. Add a value in the input of the "Enumeration Values".
+2. Press the return key or press the "Add to List" button.
+3. Continue adding more items until the list is complete.
+
+## Removing enumeration values
+
+1. Navigate to the Enumeration area of the schema editor.
+2. Open an enumeration you'd like to edit by pressing the "edit" button below the name of the enumeration you'd like to edit.
+3. Locate the "-" icon next to the Enumeration pill.
+4. Press the minus button to remove the Enumeration from the list.
+5. Press "Update Enumeration".
+
+## Delete an enumeration
+
+1. Navigate to the Enumeration area of the schema editor.
+2. Press the "delete" button below the name of the enumeration you'd like to delete.

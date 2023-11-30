@@ -1,0 +1,435 @@
+---
+title: Localization
+meta_title: Localization (i18n)
+meta_description: Hygraph boasts a flexible localization API that you can use to publish content for all or specific locales in your project.
+---
+import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+
+Hygraph boasts a flexible localization API that you can use to publish content for all or specific locales in your project.
+
+<Card theme="warning">
+
+**Locales are environment specific**. This means their configuration is applied per environment. Take this into consideration if you're working with a project using more than one environment.
+
+</Card>
+
+Localized content can be managed through the Hygraph UI, or via GraphQL mutations.
+
+## Localizing fields
+
+When adding a field that can be localized inside the schema editor, such as a string, mark the field as can be localized, and you will be able to perform all of the localization queries, and mutations outlined below.
+
+![Hygraph Localize Fields](/images/docs/api-reference/content-api/localize-field.png)
+
+The model will be updated to contain additional [localized system fields](/docs/api-reference/schema/system-fields#localization-fields) that you can use to fetch localized content.
+
+## Fetching localized content
+
+Fetching localized content is done by [fetching content](/docs/api-reference/content-api/queries) the same way you are used to. For example, a product model containing localized fields can be queried like so:
+
+```graphql
+{
+  product(where: { id: "..." }) {
+    name
+  }
+  products {
+    name
+  }
+}
+```
+
+The above will return the default locale values for the fields requested.
+
+### Default locale
+
+As shown as above, queried content will always return the default locale, unless told otherwise.
+
+You can set the default locale inside `Settings > Locales`.
+
+![Hygraph default locale](/images/docs/api-reference/content-api/default-locale.png)
+
+### Fallback locale(s)
+
+Locales will be returned in the order they are requested, from left to right.
+
+In this example, we will request products with the locales `en`, and `de`.
+
+<Tabs panelHeight={200}>
+  <TabItem label="Request">
+
+```graphql
+{
+  products(locales: [en, de]) {
+    id
+    locale
+    name
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "products": [
+      {
+        "id": "ck3ee0ltu3kfn0b73wbslopia",
+        "locale": "en",
+        "name": "Unisex Long Sleeve Tees"
+      },
+      {
+        "id": "ck3itjds7hnwo0b66au5rkvm9",
+        "locale": "en",
+        "name": "Snapback"
+      },
+      {
+        "id": "ck3oqti2stn5o0b20ogmpwxer",
+        "locale": "en",
+        "name": "Unisex Zip Hoodie"
+      },
+      {
+        "id": "ck3shntzy1xxw0b324jfxcjtl",
+        "locale": "en",
+        "name": "Mug"
+      }
+    ]
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+### HTTP header
+
+You can pass the `gcms-locales` header when localized content with your required locales.
+
+```js
+const fetch = require('cross-fetch');
+
+const headers = {
+  'Content-Type': 'application/json',
+  'gcms-locales': 'en',
+};
+
+const body = JSON.stringify({ query: '{ products { name } }' });
+
+const { products } = await fetch('<your-hygraph-endpoint>', {
+  method: 'POST',
+  headers,
+  body,
+});
+```
+
+You can also pass an array of locales to `gcms-locales` to define your fallback preference.
+
+### All localizations
+
+Whether you're fetching a [single content entry](/docs/api-reference/content-api/queries#fetching-a-single-entry), or [multiple](/docs/api-reference/content-api/queries#fetching-multiple-entries), you can fetch all `localizations` of that entry.
+
+<Tabs panelHeight={280}>
+  <TabItem label="Request">
+
+```graphql
+{
+  products {
+    id
+    name
+    localizations {
+      id
+      name
+      locale
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "products": [
+      {
+        "id": "ck3ee0ltu3kfn0b73wbslopia",
+        "name": "Unisex Long Sleeve Tees",
+        "localizations": [
+          {
+            "id": "ck3ee0ltu3kfn0b73wbslopia",
+            "name": "Unisex Longsleeve",
+            "locale": "de"
+          }
+        ]
+      },
+      {
+        "id": "ck3itjds7hnwo0b66au5rkvm9",
+        "name": "Snapback",
+        "localizations": [
+          {
+            "id": "ck3itjds7hnwo0b66au5rkvm9",
+            "name": "Cap",
+            "locale": "de"
+          }
+        ]
+      },
+      {
+        "id": "ck3oqti2stn5o0b20ogmpwxer",
+        "name": "Unisex Zip Hoodie",
+        "localizations": [
+          {
+            "id": "ck3oqti2stn5o0b20ogmpwxer",
+            "name": "Unisex Hoodie",
+            "locale": "de"
+          }
+        ]
+      },
+      {
+        "id": "ck3shntzy1xxw0b324jfxcjtl",
+        "name": "Mug",
+        "localizations": [
+          {
+            "id": "ck3shntzy1xxw0b324jfxcjtl",
+            "name": "Tasse mit Print",
+            "locale": "de"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+Since the root graphql type returns the default locale `en` values, you'll notice the `localizations` response above returns just the `de` content entries.
+
+Pass `includeCurrent: true` inside the `localizations` query arguments to include the default `en` locale.
+
+<Tabs panelHeight={280}>
+  <TabItem label="Request">
+
+```graphql
+{
+  products {
+    id
+    name
+    localizations(includeCurrent: true) {
+      id
+      name
+      locale
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "products": [
+      {
+        "id": "ck3ee0ltu3kfn0b73wbslopia",
+        "name": "Unisex Long Sleeve Tees",
+        "localizations": [
+          {
+            "id": "ck3ee0ltu3kfn0b73wbslopia",
+            "name": "Unisex Long Sleeve Tees",
+            "locale": "en"
+          },
+          {
+            "id": "ck3ee0ltu3kfn0b73wbslopia",
+            "name": "Unisex Longsleeve",
+            "locale": "de"
+          }
+        ]
+      },
+      {
+        "id": "ck3itjds7hnwo0b66au5rkvm9",
+        "name": "Snapback",
+        "localizations": [
+          {
+            "id": "ck3itjds7hnwo0b66au5rkvm9",
+            "name": "Snapback",
+            "locale": "en"
+          },
+          {
+            "id": "ck3itjds7hnwo0b66au5rkvm9",
+            "name": "Cap",
+            "locale": "de"
+          }
+        ]
+      },
+      {
+        "id": "ck3oqti2stn5o0b20ogmpwxer",
+        "name": "Unisex Zip Hoodie",
+        "localizations": [
+          {
+            "id": "ck3oqti2stn5o0b20ogmpwxer",
+            "name": "Unisex Zip Hoodie",
+            "locale": "en"
+          },
+          {
+            "id": "ck3oqti2stn5o0b20ogmpwxer",
+            "name": "Unisex Hoodie",
+            "locale": "de"
+          }
+        ]
+      },
+      {
+        "id": "ck3shntzy1xxw0b324jfxcjtl",
+        "name": "Mug",
+        "localizations": [
+          {
+            "id": "ck3shntzy1xxw0b324jfxcjtl",
+            "name": "Mug",
+            "locale": "en"
+          },
+          {
+            "id": "ck3shntzy1xxw0b324jfxcjtl",
+            "name": "Tasse mit Print",
+            "locale": "de"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+<Card theme="warning">
+
+This will return all locales where values present. If nothing is found, the default locale will be returned.
+
+</Card>
+
+## Mutating localized content
+
+Just like you can query localized content, you can also create, update, upsert, and delete localized content using the [Mutations API](/docs/api-reference/content-api/mutations).
+
+Let's continue with the products model in our examples below. We can use the [auto-generated mutations](/docs/api-reference/content-api/mutations#auto-generated-mutations) for modifying the locales for each entry.
+
+### Create a localization
+
+```graphql
+mutation {
+  updateProduct(
+    where: { id: "..." }
+    data: {
+      localizations: {
+        create: { locale: de, data: { name: "Tasse mit Print" } }
+      }
+    }
+  ) {
+    id
+  }
+}
+```
+
+<Card theme="info">
+
+You'll notice above we are using the `update[Model]` mutation to "create" a locale. This is because the existing entry is the default locale, and you can create additional localized content for fields on that entry.
+
+</Card>
+
+You can also pass an array of localizations for locales that aren't your projects default. For example, here we create localizations for both `de`, and `es`.
+
+```graphql
+mutation {
+  updateProduct(
+    where: { id: "..." }
+    data: {
+      localizations: {
+        create: [
+          { locale: de, data: { name: "Tasse mit Print" } }
+          { locale: es, data: { name: "Taza con estampado" } }
+        ]
+      }
+    }
+  ) {
+    id
+  }
+}
+```
+
+The examples here assume you already have a product that you can update. It is possible to create a new entry, with the base locale, and the localized content via `localizations` at the same time:
+
+```graphql
+mutation {
+  createProduct(
+    data: {
+      name: "Mug"
+      localizations: {
+        create: [
+          { locale: de, data: { name: "Tasse mit Print" } }
+          { locale: es, data: { name: "Taza con estampado" } }
+        ]
+      }
+    }
+  ) {
+    id
+    localizations(includeCurrent: true) {
+      title
+    }
+  }
+}
+```
+
+### Update a localization
+
+```graphql
+mutation {
+  updateProduct(
+    where: { id: "..." }
+    data: { localizations: { update: { locale: en, data: { name: "Mug" } } } }
+  ) {
+    id
+  }
+}
+```
+
+### Upsert a localization
+
+Just like you can create, or update content entries by unique filters, you can either also upsert localizations. Simply pass the `locale` you want to update, or create if it does not exist.
+
+```graphql
+mutation {
+  createProduct(
+    where: { id: "..." }
+    data: {
+      localizations: {
+        upsert: {
+          locale: de
+          create: { name: "Tasse mit Print" }
+          update: { name: "Tasse mit Print" }
+        }
+      }
+    }
+  ) {
+    id
+  }
+}
+```
+
+### Delete a localization
+
+You can delete all but the default localization using the auto-generated delete mutation.
+
+```graphql
+mutation {
+  deleteMessage(
+    where: { id: "..." }
+    data: { localizations: { delete: { locale: de } } }
+  ) {
+    id
+  }
+}
+```

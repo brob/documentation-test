@@ -1,0 +1,37 @@
+---
+title: Management SDK
+meta_description: Learn about what Hygraph's Management SDK does and how to use it.
+---
+import { Card } from '@astrojs/starlight/components';
+
+Our **Management SDK** is a helper that can be used to execute operations without using UI, making your work easier. It provides a typed SDK that allows multiple schema-related actions to be **executed in order and in a single transaction**.
+
+## Advantages
+
+Our **Management SDK** makes work easier when you want to apply multiple schema-related changes. It allows accepting a set of changes which are applied on an “all or none” basis. So if anything fails in one of the events along the process, everything is rolled back automatically.
+
+The Management SDK also provides a way of working on a project that bypasses the Web App, by allowing you to create a script that applies all the changes at once, without you having to procedurally create everything.
+
+Finally, you can apply the scripts you create to different environments. So they can be used in test environments to test schema changes upfront. In this scenario, you would make all the schema changes in this migration script, test it, then apply the script to the master environment when everything works as intended.
+
+## How it works
+
+Our Management SDK works with names, using the `submitBatchChanges` mutation, as follows:
+
+![submitBatchChanges mutation](/images/docs/api-reference/developer-tools/managementsdk-createsimplefield.png)
+
+As mentioned above, the SDK uses a special mutation:
+
+```ts
+submitBatchChanges(data: BatchMigrationInput!): AsyncOperationPayload!
+```
+
+This mutation takes an `environmentId`, an optional name, and a list of changes as arguments, then executes them in a single transaction.
+
+<Card title="Next steps" theme="success">
+
+- Take a look at our [Quickstart](/docs/api-reference/management-sdk/management-sdk-quickstart).
+- Learn more about the [Management SDK installation and usage](/docs/api-reference/management-sdk/management-sdk-quickstart#installation).
+- Learn how to [migrate from the old SDK](/docs/api-reference/management-sdk/management-sdk-migration).
+
+</Card>

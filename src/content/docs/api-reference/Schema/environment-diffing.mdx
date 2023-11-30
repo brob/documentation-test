@@ -1,0 +1,203 @@
+---
+title: Environment diffing
+meta_description: Learn to compare the schemas of two environments in a project using environment diffing.
+---
+import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+
+Environment diffing is a functionality on the Management API that allows you to compare the schemas of two environments in a project.
+
+<Card theme="warning">
+
+Please note that this guide and the examples offered in it will consider the master environment as the **target environment**, and the development environment as the **source**.
+
+You can alternatively use the [Management SDK method](/docs/api-reference/management-sdk/management-sdk-batchmigration) to get the diff and apply schema changes.
+
+</Card>
+
+When you work with multiple environments, you can use environment diffing as a way to know what changes were made in your development environment with respect to your master environment. That way you can know what changes you need to apply to your target environment so that it's the same as your source environment.
+
+## How it works
+
+Right after cloning, your environments are identical. After applying schema changes to your development environment, there is obviously a divergence. In order to find out what exactly those differences are and then apply them to your target environment, you can create a diff.
+
+## 1. Get the target and source environment names
+
+In order to create a diff, you need to provide the names of the target and source environments.
+
+<Card theme="warning">
+
+When working in the **API Playground**, make sure to change the value in the **API selector** dropdown to **Management API**.
+
+</Card>
+
+The query to the `ManagementApi` would look similar to this:
+
+```graphql
+query MyQuery {
+  viewer {
+    project(id: "<your-project-id>") {
+      environments {
+        name
+        id
+      }
+    }
+  }
+}
+```
+
+## 2. Create the diff
+
+With this information, you can now create the diff. To differentiate between the environments `master` and `dev`, you can use the following query to the `ManagementApi`:
+
+```graphql
+{
+  viewer {
+    project(id: "<your-project-id>") {
+      environment(name: "master") {
+        diff(environmentName: "development") {
+          changes
+        }
+      }
+    }
+  }
+}
+```
+
+As a response, you will receive an array of objects - an ordered list of `BatchMigrations`, showing all the changes you need to apply to your target environment so that it's the same as your source environment.
+
+## 3. Apply the changes
+
+To apply these changes to the target environment, you can use the following mutation in the `ManagementApi`:
+
+```graphql
+mutation MyMutation($changes: [BatchMigrationChangeInput!]!) {
+  submitBatchChanges(
+    data: { environmentId: "<your-target-environment-id>", changes: $changes }
+  ) {
+    migration {
+      id
+    }
+  }
+}
+```
+
+<Card theme="warning">
+
+Your target environment ID can be found using the first example query shown in this document.
+
+</Card>
+
+In the above example, `$changes` is the environment variable with value equal to the changes object in the diff. This can be supplied like so:
+
+![$changes example in API Playground](/images/docs/api-reference/schema/env-diffing-changes.png)
+
+## Supported schema elements
+
+The following schema elements are supported:
+
+- Models
+- Components
+- Locales
+- Simple fields
+- Relational fields
+- Enumerations
+- Stages
+- Union fields
+- Enumerable fields.
+
+<Card theme="warning">
+
+**Not supported yet:** Remote type definitions, remote fields, remote sources, UI extensions, apps.
+
+</Card>
+
+## Limitations
+
+Please take into account the following limitations when using environment diffing.
+
+### Schema changes to your master environment
+
+**Environment diffing** is not the same as a merge in that it's not additive. Instead, it creates a diff to list all the necessary operations to turn the target environment (master) into the source environment (development). The diff is then applied, which replaces / overwrites one schema with another. It is important that you are aware of this at the time of applying changes to your target environment to avoid content loss.
+
+Because of this, when you change something in the master environment that causes it not to be coherent with what is in development, the changes will always suggest deleting the piece of information it does not recognize to then create a new one.
+
+<Card theme="warning">
+
+Since a diff is a list of operations that transforms the schema of the target environment into the schema of the source environment, any change to the target that doesn't exist on the source will get replaced / overwritten.
+
+**This applies to any schema changes to your master environment**, such as adding, editing, or deleting models, fields or sidebar widgets.
+
+</Card>
+
+**Example situations:**
+
+- Imagine you cloned your `master` environment last week to create a `development` environment and have spent some time since then working on `development`, making changes to the schema. During that time, you also applied schema changes to your `master` environment, which you did not mirror in `development`. Later on, when using environment diffing to get the diff and apply it, the diff will find those differences, and suggest deleting the changes you made to the schema in your `master` during the last week. Remember it does not merge, but **replaces / overwrites**.
+
+- Imagine your target environment schema has a field called **Title Field**, and after cloning you change its name to **Title** in master. In this case, environment diffing would suggest to delete **Title** and create **Title Field**. Doing this would result in schemas being the same in both environments, but you will have lost the content.
+
+- Imagine you delete a field in your development environment, then create a new field with the same name, environment diffing would not detect them as different fields at all.
+
+Once you get the diff, you can apply it as is or, if necessary, edit it manually before applying to avoid content loss in the case of schema changes in the target environment.
+
+It is important that you go over the diff changes one by one before you apply them, to make sure they are what you want to apply. **Be extra cautious with deletions to avoid content loss.**
+
+<Card title="Suggested workarounds:" theme="success">
+
+- Call a content freeze and do not make schema changes to your master.
+- Every time you make a schema change in your master environment, also add the change to your development environment so the schemas remain the same.
+- Go over the diff manually and remove all actions deleting models from the schema.
+
+</Card>
+
+### Required fields in development
+
+Another thing to consider is the scenario where, after a clone, you make a field **Required** in your development environment, when content has already been created for the model that the field is a part of. In this case, you need to provide a **migration value**. This migration value will replace `null` in the previously created content. You will find this in the **Validations** section of your field details in the **Schema editor**:
+
+![Migration value in field validations](/images/docs/api-reference/schema/env-diffing-migrationvalue.png)
+
+In this case, environment diffing would suggest updating the field to `required`, but would not provide a migration value. Applying this change would fail because of the missing migration value. **Since migration values are not stored, you will need to manually add the migration value to your change before applying it**.
+
+To do this manually, add `"migrationValue": "value"` like in the following example for a simple field:
+
+```json
+{
+  "changes": [
+    {
+      "createSimpleField": {
+        "apiId": "newField",
+        "parentApiId": "Post",
+        "type": "STRING",
+        "displayName": "NewField",
+        "description": null,
+        "initialValue": null,
+        "tableRenderer": "GCMS_SINGLE_LINE",
+        "formRenderer": "GCMS_SINGLE_LINE",
+        "tableExtension": null,
+        "formExtension": null,
+        "formConfig": {},
+        "tableConfig": {},
+        "isList": false,
+        "isLocalized": false,
+        "isRequired": true,
+        "isUnique": false,
+        "isHidden": false,
+        "embeddableModels": [],
+        "visibility": "READ_WRITE",
+        "isTitle": false,
+        "position": 3,
+        "validations": null,
+        "embedsEnabled": null,
+        "migrationValue": "value"
+      }
+    }
+  ]
+}
+```
+
+This way, `"value"` will replace `null` after the diff.
+
+<Card theme="info">
+
+If you're working with a boolean field, you would need to pass the values `true` or `false` instead.
+
+</Card>

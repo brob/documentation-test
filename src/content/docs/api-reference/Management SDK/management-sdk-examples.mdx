@@ -1,0 +1,307 @@
+---
+title: Management SDK
+meta_description: Learn about what Hygraph's Management SDK does and how to use it.
+---
+import { Card } from '@astrojs/starlight/components';
+
+<Card theme="success">
+
+If you prefer to read a step by step version of this example, please click <a href="/docs/api-reference/management-sdk/management-sdk-example" target="_blank">here</a>.
+
+If what you're looking for is an example on how to work with a specific field type, <a href="/docs/api-reference/management-sdk/management-sdk-field-examples" target="_blank">this additional document</a> will help you.
+
+</Card>
+
+## Create different field types
+
+The following example shows you how to use the Management SDK with different field types.
+
+Please consider that the example shown here creates fields in a certain order because said fields depend on something being created before them as part of the schema.
+
+```ts
+import {
+  Client,
+  RelationalFieldType,
+  SimpleFieldType,
+  VisibilityTypes,
+} from '@hygraph/management-sdk';
+
+const client = new Client({
+  authToken: '',
+  endpoint: '',
+});
+
+client.createModel({
+  apiId: 'Page',
+  apiIdPlural: 'Pages',
+  displayName: 'Page',
+});
+
+client.createModel({
+  apiId: 'Author',
+  apiIdPlural: 'Authors',
+  displayName: 'Author',
+});
+
+client.createModel({
+  apiId: 'Book',
+  apiIdPlural: 'Books',
+  displayName: 'Book',
+});
+
+// required title field of type string:
+client.createSimpleField({
+  parentApiId: 'Page',
+  type: SimpleFieldType.String,
+  apiId: 'title',
+  displayName: 'Title',
+  isTitle: true,
+  isRequired: true,
+  visibility: VisibilityTypes.ReadWrite,
+});
+
+// simple field of type string:
+client.createSimpleField({
+  parentApiId: 'Author',
+  type: SimpleFieldType.String,
+  apiId: 'favouritePastime',
+  displayName: 'Author Favourite Pastime',
+  isRequired: true,
+  visibility: VisibilityTypes.ReadWrite,
+});
+
+// slug field:
+client.createSimpleField({
+  parentApiId: 'Page',
+  type: SimpleFieldType.String,
+  apiId: 'slug',
+  displayName: 'Slug',
+  description: 'Enter the slug for this page, such as about, blog, or contact',
+  isRequired: true,
+  isUnique: true,
+  tableRenderer: 'GCMS_SLUG',
+  formRenderer: 'GCMS_SLUG',
+});
+
+// hidden integer field with custom field validation:
+client.createSimpleField({
+  parentApiId: 'Page',
+  type: SimpleFieldType.Int,
+  apiId: 'count',
+  displayName: 'Count',
+  visibility: VisibilityTypes.Hidden,
+  validations: {
+    Int: {
+      range: {
+        max: 1000,
+        min: 0,
+        errorMessage: 'Counter has to be between 0 and 1000',
+      },
+    },
+  },
+});
+
+// required + unique string field with custom regex validation for emails:
+client.createSimpleField({
+  parentApiId: 'Page',
+  type: SimpleFieldType.String,
+  apiId: 'email',
+  displayName: 'Email',
+  isRequired: true,
+  isUnique: true,
+  validations: {
+    String: {
+      matches: {
+        regex: '^([a-z0-9_\\.\\+-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$',
+      },
+    },
+  },
+});
+
+// basic richtext field
+client.createSimpleField({
+  parentApiId: 'Page',
+  type: SimpleFieldType.Richtext,
+  apiId: 'content',
+  displayName: 'Content',
+  description:
+    'Enter the content for this page. The content uses the rich-text editor, giving you a better visual representation.',
+  isRequired: true,
+});
+
+// richtext with embeds and single allowed embeddable model:
+client.createSimpleField({
+  parentApiId: 'Page',
+  type: SimpleFieldType.Richtext,
+  apiId: 'contentExtended',
+  displayName: 'Content Extended',
+  embedsEnabled: true,
+  embeddableModels: ['Author'],
+});
+
+// list of date times
+client.createSimpleField({
+  parentApiId: 'Page',
+  type: SimpleFieldType.Datetime,
+  apiId: 'lastSeen',
+  displayName: 'Last Seen',
+  isRequired: true,
+  isList: true,
+});
+
+// required uni-directional asset field
+client.createRelationalField({
+  parentApiId: 'Page',
+  apiId: 'preview',
+  displayName: 'Preview',
+  type: RelationalFieldType.Asset,
+  isRequired: true,
+  reverseField: {
+    isUnidirectional: true,
+    apiId: 'page',
+    displayName: 'Page',
+    modelApiId: 'Asset',
+  },
+});
+
+// regular bi-directional m-1 relation
+client.createRelationalField({
+  parentApiId: 'Page',
+  apiId: 'writtenBy',
+  displayName: 'Written By',
+  type: RelationalFieldType.Relation,
+  reverseField: {
+    modelApiId: 'Author',
+    apiId: 'pages',
+    displayName: 'pages',
+    isList: true,
+  },
+});
+
+// m-n relation
+client.createRelationalField({
+  parentApiId: 'Author',
+  apiId: 'favouriteBooks',
+  displayName: 'Favourite Books',
+  type: RelationalFieldType.Relation,
+  isList: true,
+  reverseField: {
+    modelApiId: 'Page',
+    apiId: 'favouriteOf',
+    displayName: 'Favourite of',
+    isList: true,
+  },
+});
+
+// create union field:
+client.createUnionField({
+  parentApiId: 'Author',
+  apiId: 'favourites',
+  displayName: 'Author Favourite Books',
+  reverseField: {
+    apiId: 'authorFavouriteBook',
+    displayName: 'author favourite book',
+    modelApiIds: ['Book'],
+  },
+});
+
+// add a union member to the previous union field
+client.updateUnionField({
+  parentApiId: 'Author',
+  apiId: 'favourites',
+  displayName: 'Favourite Pastime',
+  reverseField: {
+    modelApiIds: ['Book', 'Movie'],
+  },
+});
+
+// create a component:
+client.createComponent({
+  apiId: 'Address',
+  apiIdPlural: 'Adresses',
+  displayName: 'Address',
+});
+
+client.createComponent({
+  apiId: 'Contributor',
+  apiIdPlural: 'Contributors',
+  displayName: 'Contributor',
+});
+
+client.createComponent({
+  apiId: 'VideoBlock',
+  apiIdPlural: 'VideoBlocks',
+  displayName: 'VideoBlock',
+});
+
+// add a field to the component:
+client.createSimpleField({
+  parentApiId: 'Address',
+  type: SimpleFieldType.String,
+  apiId: 'city',
+  displayName: 'City',
+});
+
+// create basic component field:
+client.createComponentField({
+  parentApiId: 'Author',
+  apiId: 'address',
+  displayName: 'Address',
+  description: 'Address of the author',
+  componentApiId: 'Address',
+});
+
+// create a component union field:
+client.createComponentUnionField({
+  parentApiId: 'Page',
+  apiId: 'section',
+  displayName: 'Section',
+  componentApiIds: ['Contributor', 'VideoBlock'],
+});
+
+// remove VideoBlock from the previous component union field:
+client.updateComponentUnionField({
+  parentApiId: 'Page',
+  apiId: 'section',
+  displayName: 'Section',
+  componentApiIds: ['Contributor'],
+});
+```
+
+## Create nested `componentApiIds`
+
+Essentially, the code syntax is the same as for creating a model, except that the `parentApiId` for a component field points to an `ApiId` of a component.
+
+```ts
+client.createModel({
+  apiId: 'Apple',
+  apiIdPlural: 'Apples',
+  displayName: 'Apple',
+});
+
+client.createComponent({
+  apiId: 'Level1',
+  apiIdPlural: 'Level1S',
+  displayName: 'Level1',
+});
+
+client.createComponent({
+  apiId: 'Level2',
+  apiIdPlural: 'Level2S',
+  displayName: 'Level2',
+});
+
+client.createComponentField({
+  apiId: 'sub1',
+  parentApiId: 'Apple', // Model
+  displayName: 'Entry1',
+  componentApiId: 'Level1',
+});
+
+client.createComponentField({
+  apiId: 'sub2',
+  parentApiId: 'Level1', // Component
+  displayName: 'Entry2',
+  componentApiId: 'Level2',
+});
+```

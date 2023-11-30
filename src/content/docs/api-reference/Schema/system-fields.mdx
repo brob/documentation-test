@@ -1,0 +1,268 @@
+---
+title: System fields
+meta_description: All default, and custom content types come with some managed system fields. These fields reflect certain states of your content.
+---
+import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+
+All default, and custom content types come with some managed system fields. These fields reflect certain states of your content, such as when it was last updated, or published at.
+
+## Default model fields
+
+These fields are included with all content models you create within Hygraph.
+
+| Field              | Type        | Description                                        |
+| ------------------ | ----------- | -------------------------------------------------- |
+| `id`               | `ID!`       | Unique for each content entry                      |
+| `createdAt`        | `DateTime!` | Timestamp for when the content entry was created   |
+| `createdBy`        | `User`      | The user who created the content entry             |
+| `updatedAt`        | `DateTime!` | Timestamp for when the content entry was updated   |
+| `updatedBy`        | `User`      | The user who last updated the content entry        |
+| `publishedAt`      | `DateTime!` | Timestamp for when the content entry was published |
+| `publishedBy`      | `User`      | The user who last published the content entry      |
+| `documentInStages` | `[model]`   | Query the current document in other stages         |
+
+## User fields
+
+Since the User model is included with every project, it also comes with some predefined fields, as well as all of the system fields above (but not `createdBy`, `updatedBy`, and `publishedBy`).
+
+The User model is part of "user attribution", and is connected with content entries. This connection allows you to see who created, updated, and published content entries.
+
+| Field         | Type        | Description                                            |
+| ------------- | ----------- | ------------------------------------------------------ |
+| `id`          | `ID!`       | The ID of the user                                     |
+| `name`        | `String!`   | The name of the user                                   |
+| `picture`     | `String`    | The profile picture URL                                |
+| `kind`        | `UserKind!` | The type of user - either `MEMBER`, `PAT`, or `PUBLIC` |
+| `createdAt`   | `DateTime!` | The created at date and time of the user               |
+| `updatedAt`   | `DateTime!` | The last updated at date and time of the user          |
+| `publishedAt` | `DateTime`  | The last published at date and time of the user        |
+
+- If content is mutated with a [Permanent Auth Token](/docs/api-reference/basics/authorization#permanent-auth-tokens) then `kind` will return `PAT`.
+- If [Public API Permissions](/docs/api-reference/basics/authorization#public-api-permissions) are enabled, and content is mutated, `kind` will return `PUBLIC`.
+
+<Card theme="warning">
+
+All users will currently be members of your project. In the future they can be external users, part of a user authentication API.
+
+</Card>
+
+<Tabs panelHeight={270}>
+  <TabItem label="Created by">
+
+```graphql
+{
+  posts {
+    createdBy {
+      id
+      name
+      picture
+      kind
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Updated by">
+
+```graphql
+{
+  posts {
+    updatedBy {
+      id
+      name
+      picture
+      kind
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Published by">
+
+```graphql
+{
+  posts {
+    publishedBy {
+      id
+      name
+      picture
+      kind
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Asset fields
+
+Since the Asset model is included with every project, it also comes with some predefined fields, as well as all of the system fields above.
+
+The Asset field type has all of the [default model fields](#default-model-fields), as well as:
+
+| Field           | Type        | Description                                                                                               |
+| --------------- | ----------- | --------------------------------------------------------------------------------------------------------- |
+| `url`           | `String!`   | The URL of the asset, with any [transformations](/docs/api-reference/content-api/assets#transformations). |
+| `handle`        | `String!`   | The file handle.                                                                                          |
+| `fileName`      | `String!`   | The document file name that was uploaded.                                                                 |
+| `height`        | `Float`     | The height of the file (for images only).                                                                 |
+| `width`         | `Float`     | The width of the file (for images only).                                                                  |
+| `size`          | `Float`     | The total file size.                                                                                      |
+| `mimeType`      | `String`    | The mime type of the file.                                                                                |
+| `locale`        | `Locale!`   | The system locale enumeration for your projects locales. E.g. `en`, `de`.                                 |
+| `localizations` | `[Asset!]!` | An array of localized assets for the asset you are querying.                                              |
+
+Asset fields are localized by default, and always include the localization fields described below.
+
+<Card title="Pro Tip" theme="info">
+
+While the Assets model is a system model that comes with every project by default and contains some predefined fields, you can still edit it to add fields for things like **alt text** and **captions** to your image assets.
+
+Click [here](/docs/getting-started/add-fields) to learn more about adding fields to a model.
+
+</Card>
+
+## Localization fields
+
+When you localize fields within Hygraph, the model will be updated to contain the following fields:
+
+| Field           | Type            | Description                                                               |
+| --------------- | --------------- | ------------------------------------------------------------------------- |
+| `locale`        | `Locale!`       | The system locale enumeration for your projects locales. E.g. `en`, `de`. |
+| `localizations` | `[modelName!]!` | An array of localized entries for the model you are querying.             |
+
+Learn more about working with [Localization](/docs/api-reference/content-api/localization).
+
+## Version history fields
+
+One of the [auto-generated queries](/docs/api-reference/content-api/queries#auto-generated-queries) Hygraph will create is around versioning. Each time you publish content to a stage, a version is saved.
+
+You can fetch the version history of a content entry by using the `history` field on a model. This field is managed automatically by Hygraph.
+
+| Field       | Type        | Description                                                             |
+| ----------- | ----------- | ----------------------------------------------------------------------- |
+| `id`        | `ID!`       | The `id` of the content entry you are querying.                         |
+| `stage`     | `Stage!`    | The content stage the content entry was published to. E.g. `PUBLISHED`. |
+| `revision`  | `Int!`      | The revision number. Auto incrementing from `1`.                        |
+| `createdAt` | `DateTime!` | The timestamp when the version was created.                             |
+
+<Tabs>
+  <TabItem label="Query">
+
+```graphql
+{
+  posts {
+    id
+    title
+    history {
+      id
+      stage
+      revision
+      createdAt
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Connection type fields
+
+Since Hygraph implements the Relay specification, when [fetching with Relay](/docs/api-reference/content-api/queries#fetching-with-relay) you will have some fields made available to you automatically.
+
+For example, let's imagine we have the model `Post`. The `postsConnection` would look a little something like:
+
+| Field       | Type           | Description                                       |
+| ----------- | -------------- | ------------------------------------------------- |
+| `edges`     | `[PostEdge!]!` | A list of edges, containing cursor, and the node. |
+| `pageInfo`  | `PageInfo!`    | Information used for paginating nodes.            |
+| `aggregate` | `Aggregate!`   | The count of records, relative to any filters.    |
+
+### [PostEdge!]!
+
+| Field    | Type      | Description                                                   |
+| -------- | --------- | ------------------------------------------------------------- |
+| `cursor` | `String!` | The edge cursor, used for paginating records.                 |
+| `node`   | `Post!`   | The actual entry of the record, for example the `Post` entry. |
+
+<Tabs>
+  <TabItem label="Query">
+
+```graphql
+{
+  postsConnection {
+    edges {
+      cursor
+      node {
+        id
+        title
+      }
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+### PageInfo!
+
+Hygraph exposes the `PageInfo` type on the field `pageInfo` for connection queries. This is useful with cursor based pagination.
+
+| Field             | Type       | Description                                       |
+| ----------------- | ---------- | ------------------------------------------------- |
+| `hasNextPage`     | `Boolean!` | When paginating forwards, are there more items?   |
+| `hasPreviousPage` | `Boolean!` | When paginating backwards, are there more items?  |
+| `startCursor`     | `String`   | When paginating backwards, the cursor to continue |
+| `endCursor`       | `String`   | When paginating forwards, the cursor to continue  |
+| `pageSize`        | `Int`      | The number of items in the current page           |
+
+<Tabs>
+  <TabItem label="Query">
+
+```graphql
+{
+  postsConnection {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+      pageSize
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+Learn more about [Relay cursor pagination](/docs/api-reference/content-api/pagination#relay-cursor-connections).
+
+### Aggregate!
+
+It is possible using the connection type query to perform an aggregate count.
+
+| Field   | Type   | Description                                           |
+| ------- | ------ | ----------------------------------------------------- |
+| `count` | `Int!` | The count of results matching the query, and filters. |
+
+<Tabs>
+  <TabItem label="Query">
+
+```graphql
+{
+  postsConnection {
+    aggregate {
+      count
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>

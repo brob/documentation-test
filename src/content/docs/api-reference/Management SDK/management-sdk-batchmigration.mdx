@@ -1,0 +1,101 @@
+---
+title: Management SDK method for running batch migrations
+meta_description: Learn how to use the Management SDK to run batch migrations while working with multiple environments so you never lose data. Learn how to use the Management SDK method to get the diff and apply schema changes.
+---
+import { Card } from '@astrojs/starlight/components';
+
+## Overview
+
+When working with multiple environments, you can use batch migrations to apply changes on production directly.
+
+This workflow will use `Client.getEnvironmentDiff` to get the diff, then run a set of changes as a migration, which will either succeed or fail as a whole rather than individually. This means less risk of ending up in a broken state, because if anything fails in one of the events along the process, everything is rolled back automatically.
+
+<Card theme="warning">
+
+This is the workflow you should follow if you're on the **Pro plan**, as you only get two environments in total, including **master**.
+
+Please note that, while this workflow is absolutely fine, it doesn't provide a 100% guarantee against encountering issues because you are applying a new schema to updated content.
+
+</Card>
+
+## How it works
+
+### Get the diff
+
+Use the following method to get the diff:
+
+```
+const diff = client.getEnvironmentDiff("development");
+```
+
+<Card theme="warning">
+
+This example considers that you are passing the token of your master environment, and that you are generating a diff comparing it to your development environment. Our [Quickstart](/docs/api-reference/management-sdk/management-sdk-quickstart) shows how tokens are passed.
+
+</Card>
+
+### Apply schema changes
+
+Use the following method to apply the generated diff to the environment:
+
+```
+client.applySchemaChanges(diff);
+```
+
+## Supported schema elements
+
+The following schema elements are supported:
+
+- Models
+- Components
+- Locales
+- Simple fields
+- Relational fields
+- Enumerations
+- Stages
+- Union fields
+- Enumerable fields.
+
+<Card theme="warning">
+
+**Not supported yet:** Remote type definitions, remote fields, remote sources, UI extensions, apps.
+
+</Card>
+
+## Limitations
+
+Please take into account the following limitations when using the Management SDK method.
+
+### Schema changes to your master environment
+
+Using the **Management SDK Method** is not the same as merging in that it's not additive. Instead, it first [gets a diff](/docs/api-reference/management-sdk/management-sdk-batchmigration#get-the-diff) to list all the necessary operations to turn the target environment (master) into the source environment (development). Then schema changes are applied, replacing / overwriting one schema with another. It is important that you are aware of this at the time of applying changes to your target environment to avoid content loss.
+
+Because of this, when you change something in the master environment that causes it not to be coherent with what is in development, the changes will always suggest deleting the piece of information it does not recognize to then create a new one.
+
+<Card theme="warning">
+
+Since a diff is a list of operations that transforms the schema of the target environment into the schema of the source environment, any change to the target that doesn't exist on the source will get replaced / overwritten.
+
+**This applies to any schema changes to your master environment**, such as adding, editing, or deleting models, fields or sidebar widgets.
+
+</Card>
+
+**Example situation:**
+
+- Imagine you cloned your `master` environment last week to create a `development` environment and have spent some time since then working on `development`, making changes to the schema. During that time, you also applied schema changes to your `master` environment, which you did not mirror in `development`. Later on, when using the Management SDK Method to get the diff and apply the suggested schema changes, the diff will find those differences, and suggest deleting the changes you made to the schema in your `master` during the last week. Remember it does not merge, but **replaces / overwrites**.
+
+Once you get the diff, you can apply it as is or, if necessary, edit it manually before applying to avoid content loss in the case of schema changes in the target environment.
+
+It is important that you go over the diff changes one by one before you apply them, to make sure they are what you want to apply. **Be extra cautious with deletions to avoid content loss.**
+
+<Card title="Suggested workarounds:" theme="info">
+
+- Call a content freeze and do not make schema changes to your master.
+- Every time you make a schema change in your master environment, also add the change to your development environment so the schemas remain the same.
+- Go over the diff manually and remove all actions deleting models from the schema.
+
+</Card>
+
+&nbsp;
+
+&nbsp;

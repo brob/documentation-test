@@ -1,0 +1,163 @@
+---
+title: Permissions
+meta_title: Learn about our advanced permissions feature
+meta_description: Learn about our advanced permissions feature, which allows to configure granular permissions to access content from a Hygraph project.
+---
+
+import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+
+
+The advanced permissions feature allows to configure granular permissions to access content from a Hygraph project.
+
+The system allows to setup different kinds of permissions for Public API, individual Permanent Auth Tokens (PATs) and also custom roles, if applicable as part of the Hygraph project's plan. With this functionality, it is possible, for example, to expose only part of the content via Public API, or allow for reading and mutating content for certain models using a particular PAT.
+
+## How does it work?
+
+Content permissions are setup on a per project's environment basis, this means that, for example, a `master` and `development` environments could be setup with different permissions as needed.
+
+As for the permissions themselves, the user can choose to setup permissions that apply to all models or restrict access to specific models. With the latter, an optional condition to restrict access further can be used.
+
+<Card theme="warning">
+
+**Regarding roles & permissions:**
+
+**Content permissions are environment specific**. This means their configuration is applied per environment. Take this into consideration if you're working with a project using more than one environment.
+
+**Management API permissions are global**. This means their configuration is applied per project. For instance, if a role gets a management permission to `read models`, people assigned to that role will be able to do so on all environments for that project.
+
+</Card>
+
+## Actions
+
+The permission system is based on 7 different action types: `Read`, `Read versions`, `Create`, `Update`, `Delete`, `Publish` and `Unpublish`. Setting permissions for each of these actions will grant the target (Public API, PAT or custom role) permission to perform it on all models or a particular content model type as applicable.
+
+<Card theme="info">
+
+The `Read versions` permission action grants the user access to the versions for a given document. Custom roles might require this permission when working with the UI as versioning is shown as part of the content form for documents.
+
+</Card>
+
+Different permission actions might require other actions to fully work, below is a table depicting these relations for mutations in particular:
+
+| Action    | Requires                                                                       |
+| --------- | ------------------------------------------------------------------------------ |
+| Create    | `Read` on `Draft Stage` and `Default Locale` + `Create`                        |
+| Update    | `Read` on `Draft Stage` + `Update`                                             |
+| Delete    | `Read` on `All Stages` + `Delete` + `Unpublish` on `All Stages` (except Draft) |
+| Publish   | `Read` on `Draft Stage` + `Publish` on `Draft and To Stage`                    |
+| Unpublish | `Read` on `All Stages` + `Unpublish` on `From Stage`                           |
+
+## Public API (read only)
+
+A user may choose to expose all data in read only mode to be consumed via Public API, to do this one would have to go through the following steps:
+
+1. Navigate to Project Settings, API Access, Public Content API.
+2. Choose to create a new permission by pressing the `Create Permission` button.
+3. In the `Create Permission` dialog, choose `All` for models and check `Read`, keep defaults of `All` for locales and stages and press the `Create` button.
+4. The Public API should now be accessible with `Read` permissions.
+
+![Public API Read Permissions](/images/docs/api-reference/basics/public-api-read.png)
+
+[Learn more about working with the Public API](/docs/api-reference/basics/authorization).
+
+## Permanent auth tokens (with specific models)
+
+A [Permanent Auth Token (PAT)](/docs/api-reference/basics/authorization#permanent-auth-tokens) can also be used to access content. The permission system allows to setup granular permissions for these tokens as well.
+
+Let's assume that we would like to configure a PAT that allows to read and mutate only documents of a particular model type, the Post model from the Blog Starter template.
+
+1. Navigate to Project Settings, API Access, Permanent Auth Tokens and press the `Create Token` button.
+2. Fill in the new token name and optional description and press the `Create & configure permissions` button.
+3. Under `Content API` in the given token's detail view, press the `Create Permission` button.
+4. In the `Create Permission` dialog, choose the `Post` model and the `Read`, `Create` and `Update` actions keeping defaults for `Locales`, `Stages` and `Condition` and press the `Create` button.
+5. You can now use this sample token to access `Post` documents, as well as creating them and updating them.
+
+Note that with these basic settings it will not be possible to retrieve content for related models (ie: `Author`, `Asset`, `SEO` from the example).
+
+To create posts and connect them to these other model types, specific permissions for those will need to be setup accordingly.
+
+![PAT Post Permissions](/images/docs/api-reference/basics/pat-post-permissions.png)
+
+[Learn more about authenticating with a PAT](/docs/api-reference/basics/authorization).
+
+## Conditions
+
+Custom conditions may be used to further limit the access to content. To build a condition, we recommend using the API playground to build a query with a `where` clause that would return the expected documents. Once this is done, the actual where clause can be stringified and used as a permission condition when creating a permission for the targeted model.
+
+As a follow up example, we can further limit read access to the `Post` model by specifying conditions, here are some examples and what the result would be.
+
+Grant access to posts that contain some `tags` in particular:
+
+```json
+{ "tags_contains_some": ["GraphQL", "SEO"] }
+```
+
+Extend previous setting to also include posts that have no tags setup:
+
+```json
+{ "OR": [{ "tags_contains_some": ["GraphQL", "SEO"] }, { "tags": null }] }
+```
+
+![PAT Post Tag Conditions](/images/docs/api-reference/basics/pat-post-tag-conditions.png)
+
+Setup access so that only the token can only manage `Post` documents that are related to a particular `Author`:
+
+```json
+{ "author": { "id_in": ["ckadqgca800ix011230ailipe"] } }
+```
+
+Note that for this setup to work, read access on the `Author` model is required and could also be restricted to that particular document based on it's id for example.
+
+```json
+{ "id": "ckadqgca800ix011230ailipe" }
+```
+
+![PAT Post Author Conditions](/images/docs/api-reference/basics/pat-post-author-conditions.png)
+
+## Limits and considerations
+
+### Total permissions per Environment
+
+At the moment, for the initial release of the feature, up to `50` custom permissions can be setup in a given project's environment in total.
+
+The user may choose to use these as needed by distributing them across Public API, PATs and Custom Roles if applicable.
+
+[Learn more about working with Environments](/docs/api-reference/basics/environments).
+
+### User system model & user attribution
+
+Depending on what information needs to be exposed, the permissions might need to include read access to the `User` system model in order to display information related to content User Attribution.
+
+This is specially important when setting up custom roles that will be interacting with the project's content via the UI, as User Attribution fields (`createdBy`, `updatedBy` and `publishedBy`) will not display this information if permissions are not granted. Another side effect of these permissions missing can translate into `not allowed` errors while trying to mutate content from the content view form.
+
+[Learn more about the system User model](/docs/api-reference/schema/system-fields#user-fields)
+
+### Custom roles
+
+Custom roles have no permissions by default, as mentioned and in particular to work with the UI, they will need to be setup with `Read` access to the `User` system model as explained above and `Read Versions` for versioning to work as expected.
+
+### Conditions
+
+Conditions need to be manually kept up to date at the moment, this means that, for example, if a condition is based on a value for a given field, and the project's data model changes (ie: field is renamed) the condition sill no longer be valid. The same behavior is expected for related models and in cases were certain document ids are used for values.
+
+Another aspect to consider regarding conditions is that although they can be created from a normal query `where` clause, they cannot be set for localized fields nor make use of `search` capabilities usually exposed as part of some inputs.
+
+### Relations
+
+When setting up permissions on models with relations, a special consideration must be taken, as permissions might be required on both models to perform certain actions.
+
+For example, in a simple schema consisting of two models like the `Post` and `Author`, an update connecting a given `Post` with an `Author` will require also an update permissions on the `Author` model given that an `Author` can refer to many `Post` documents.
+
+[Learn more about relations](/docs/api-reference/schema/field-types#reference).
+
+### Locales
+
+Permissions allow for a granular locale configuration. There are some important aspects to keep in mind when setting up permissions that would restrict access to certain actions on certain locales. In particular, in order perform actions on a base document (ie: create a new document with non localized fields), access to the default locale is required.
+
+## Resources
+
+You might find the following documents useful:
+
+- [Authorization:](/docs/api-reference/basics/authorization) This document contains information on public API permissions, permanent auth tokens, and API endpoints.
+- [Roles and permissions:](/docs/guides/overview/roles-and-permissions) This document contains information on how to work with roles and permissions in the Hygraph app.
+- [API access:](/docs/guides/overview/api-access) This document covers the API access section of the Hygraph app as well as its subsections: Endpoints, Public content API, and Permanent auth tokens.

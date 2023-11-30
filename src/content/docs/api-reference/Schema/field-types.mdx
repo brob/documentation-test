@@ -1,0 +1,774 @@
+---
+title: Field types
+meta_description: Your schema is built up of GraphQL types. If you’re familiar working with GraphQL, you should feel right at home.
+---
+import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+
+Your schema is built up of GraphQL types. If you’re familiar working with GraphQL, you should feel right at home. Hygraph supports all of the common GraphQL types you are used to, as well as some of its own.
+
+You may also be interested in how input types work for filtering, ordering, paginating, and mutating data.
+
+Here you will discover the core field types available when building your Hygraph schema. Since your schema is automatically [generated](/docs/api-reference/content-api/queries#auto-generated-queries), it is recommended you browse the [API Playground](/docs/api-reference/basics/api-playground) to get inspect all available field type definitions.
+
+## String
+
+Hygraph supports a few variations of the String field type. Strings are just strings, but depending on the variation you add to your model, it will reflect how it appears to content editors.
+
+| Variant          | Description                                                                                                                                                                |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Single line text | Most used with headings, page titles, email, etc.                                                                                                                          |
+| Multi line text  | Most used with strings that require no formatting, raw text like HTML, and XML where you control the parsing.                                                              |
+| Markdown         | [Markdown](https://daringfireball.net/projects/markdown/syntax) is most used as an alternative to Rich Text. Enables advanced techniques such as [MDX](https://mdxjs.com). |
+| Slug             | Slug template with automatic initial value generation based off existing fields.                                                                                           |
+
+All 3 variations of the String type are queried in the same way, and return the strings of the field they represent:
+
+<Tabs panelHeight={200}>
+
+<TabItem label="Request">
+
+```graphql
+{
+  products {
+    singleLineTextField
+    multiLineTextField
+    markdownField
+  }
+}
+```
+
+</TabItem>
+
+<TabItem label="Response">
+
+```json
+{
+  "data": {
+    "products": [
+      {
+        "singleLineTextField": "Hygraph Mug",
+        "multiLineTextField": "Welcome to Hygraph",
+        "markdownField": "# Hello"
+      }
+    ]
+  }
+}
+```
+
+</TabItem>
+
+</Tabs>
+
+## Rich text
+
+The `RichText` field type is an advanced String field that returns your content in 4 different formats by default: `raw`, `HTML`, `markdown`, and `text`. `JSON` is also be available when embeds are enabled.
+
+The Rich Text field renders an advanced `textarea` with tools to add headings, links, tables, images, lists, etc.
+
+When a Rich Text field is added to your model, it will automatically generate the following types:
+
+```graphql
+type RichText {
+  raw: RichTextAST!
+  html: String!
+  markdown String!
+  text: String!
+  json: RichTextAST!
+}
+```
+
+<Card theme="info">
+
+If Rich Text Embeds are enabled, `RichText` will include the field `json` in addition to `raw`.
+
+</Card>
+
+Please read our dedicated document on [Rich Text](/docs/api-reference/content-api/rich-text-field) for further information.
+
+## Integer
+
+Integers are whole numbers, and are often used to reference price in cents, stock quantities etc..
+
+For example, here we have products with a Int field for price:
+
+<Tabs panelHeight={180}>
+  <TabItem label="Request">
+
+```graphql
+{
+  products {
+    price
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "products": [
+      {
+        "price": 1000
+      }
+    ]
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Float
+
+Floats are floating point numbers, and often represent fractional values. They are often used to describe values with precision, such as distance, weight, volume, etc.
+
+For example, here we have products with a Float field for rating:
+
+<Tabs panelHeight={180}>
+  <TabItem label="Request">
+
+```graphql
+{
+  products {
+    rating
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "products": [
+      {
+        "rating": 4.5
+      }
+    ]
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Boolean
+
+Booleans default to `null` in Hygraph, and can be `true` or `false`. You may opt to use a Boolean for specifying if a product is on sale, is part of a bundle, or a post accepts comments.
+
+For example, here we have posts with a Boolean field for `acceptsComments`:
+
+<Tabs panelHeight={180}>
+  <TabItem label="Request">
+
+```graphql
+{
+  products {
+    acceptsComments
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "products": [
+      {
+        "acceptsComments": true
+      },
+      {
+        "acceptsComments": false
+      },
+      {
+        "acceptsComments": null
+      }
+    ]
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Date
+
+The Date field type adheres to [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) standard. This means, October 7, 1989 is represented as 1989-10-07.
+
+For example, here we have events with a Date for `start`:
+
+<Tabs panelHeight={180}>
+  <TabItem label="Request">
+
+```graphql
+{
+  events {
+    start
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "events": [
+      {
+        "start": "1989-10-07"
+      }
+    ]
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Date and time
+
+Similar to the date field type, the DateTime field type adheres to [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) standard.
+
+For example, here we have events with a DateTime for `start`:
+
+<Tabs panelHeight={180}>
+  <TabItem label="Request">
+
+```graphql
+{
+  events {
+    start
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "events": [
+      {
+        "start": "1989-10-07T09:30:00+00:00"
+      }
+    ]
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## JSON
+
+Hygraph has native field support for JSON (JavaScript Object Notation). This field is often used for storing large amounts of data from other systems.
+
+For example, here we have products with a JSON field for `metadata`:
+
+<Tabs panelHeight={180}>
+  <TabItem label="Request">
+
+```graphql
+{
+  products {
+    metadata
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "products": [
+      {
+        "metadata": {
+          "values": [10, 20, 30],
+          "analyticsId": "ifuhue398"
+        }
+      }
+    ]
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Asset
+
+Assets are connected to models through a [reference](#reference) field. Assets can be any file type, not just images.
+
+The Asset model comes its own default [asset fields](/docs/api-reference/schema/system-fields#asset-fields).
+
+For example, here we have posts with a the Asset field for `coverImage`, querying those asset fields:
+
+<Tabs panelHeight={320}>
+  <TabItem label="Request">
+
+```graphql
+{
+  posts {
+    coverImage {
+      url
+      handle
+      fileName
+      height
+      width
+      size
+      mimeType
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "posts": [
+      {
+        "coverImage": {
+          "url": "https://media.graphassets.com/bh4xr7efSZyBh4iVeGQq",
+          "handle": "bh4xr7efSZyBh4iVeGQq",
+          "fileName": "Examples - Swag Store.png",
+          "height": 720,
+          "width": 1280,
+          "size": 116893,
+          "mimeType": "image/png"
+        }
+      }
+    ]
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response (PDFs)">
+
+```json
+{
+  "data": {
+    "ebooks": [
+      {
+        "file": {
+          "url": "https://media.graphassets.com/pJOCAOncQO6K7azJbagS",
+          "handle": "pJOCAOncQO6K7azJbagS",
+          "fileName": "Hygraph eBook - Navigating Towards Tomorrow-s Content with a Headless CMS.pdf",
+          "height": null,
+          "width": null,
+          "size": 2345835,
+          "mimeType": "application/pdf"
+        }
+      }
+    ]
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+Learn more about [Assets](/docs/api-reference/content-api/assets).
+
+## Color
+
+The Color field is made up of HEX, [RGBA](<https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#rgb()_and_rgba()>) and css color values.
+
+```graphql
+type Color {
+  hex: Hex!
+  rgba: RGBA!
+  css: String!
+}
+```
+
+| Field  | Type      | Description                                                         |
+| ------ | --------- | ------------------------------------------------------------------- |
+| `hex`  | `Hex!`    | Returns a String in the format of `#ffffff`                         |
+| `rgba` | `RGBA!`   | `r`, `g`, `b`, values as `RGBAHue!`, and `a` as `RGBATransparency!` |
+| `css`  | `String!` | Returns in the format of `rgb(255, 255, 255)`                       |
+
+For example, here is posts with a Color field for `backgroundColor`, in all formats:
+
+<Tabs panelHeight={350}>
+  <TabItem label="Request">
+
+```graphql
+{
+  posts {
+    backgroundColor {
+      hex
+      rgba {
+        r
+        g
+        b
+        a
+      }
+      css
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "posts": [
+      {
+        "backgroundColor": {
+          "hex": "#ffffff",
+          "rgba": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "a": 1
+          },
+          "css": "rgb(255,255,255)"
+        }
+      }
+    ]
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Location
+
+The Location field type returns `latitude`, `longitude`, and `distance` Float values.
+
+```graphql
+type Location {
+  latitude: Float!
+  longitude: Float!
+  distance(from: LocationInput!): Float!
+}
+```
+
+| Field       | Type             | Description                                                |
+| ----------- | ---------------- | ---------------------------------------------------------- |
+| `latitude`  | `Float!`         | Geographic coordinate (north-south position on Earth)      |
+| `longitude` | `Float!`         | Geographic coordinate (east-west position on Earth)        |
+| `distance`  | `LocationInput!` | Distance in meters `from` the given `latitude`/`longitude` |
+
+To query the `distance` field, you must provide `latitude` and `longitude` values for the `from` argument.
+
+For example, here we have all shop locations, with distance from the provided latitude/longitude:
+
+<Tabs panelHeight={300}>
+  <TabItem label="Request">
+
+```graphql
+{
+  shops {
+    location {
+      latitude
+      longitude
+      distance(
+        from: { latitude: 50.58153970000001, longitude: 8.665300199999999 }
+      )
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "shops": [
+      {
+        "location": {
+          "latitude": 48.7…,
+          "longitude": -122.5…,
+          "longitude": 8.66…
+        }
+      }
+    ]
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Enumerations
+
+[Enumerations](/docs/api-reference/schema/enumerations), or enum for short, are predefined list of values. They are defined inside your GraphQL schema, and can be referenced by any of your content models.
+
+For example, here is are products with its commodity type:
+
+<Tabs panelHeight={180}>
+  <TabItem label="Request">
+
+```graphql
+{
+  products {
+    commodity
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "products": [
+      {
+        "commodity": "Digital"
+      }
+    ]
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Reference
+
+References, often referred as relations, are a powerful field type that allows you to connect one or more models together, and even reference multiple models as a single field type with GraphQL Union Types.
+
+For example, here we have an example of querying all products, with categories they belong to.
+
+<Tabs panelHeight={200}>
+  <TabItem label="Request">
+
+```graphql
+{
+  products {
+    name
+    category {
+      name
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "products": [
+      {
+        "name": "ACME Hammer",
+        "category": [
+          {
+            "name": "ACME Products"
+          },
+          {
+            "name": "Shop Tools"
+          }
+        ]
+      },
+      {
+        "name": "ACME Shovel",
+        "category": [
+          {
+            "name": "ACME Products"
+          },
+          {
+            "name": "Garden Tools"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+### One-way references
+
+One-way references - also called unidirectional relations - only exist in one direction. This type of reference is most useful when there is no need to know where a model is being referenced from, such as a model that is used many times. One-way references only show up on the model for which the reference is configured, and can only be queried from that side as well. This also means that for one-way references, no reverse field is configured on the referenced model. With one-way references, the content editor UI is kept clean by not showing irrelevant relations where they are not needed.
+
+One-way references come in two forms:
+
+#### To one
+
+For example, a category that can have only one product.
+
+#### To many
+
+For example, a category that can have multiple products.
+
+### Two-way references
+
+Two-way references - alternatively known as bidirectional relations - exist in two directions. This type of reference is useful for use cases where both sides of the reference are relevant, and need to be edited or queryable. Two-way references are configured and show up on both the _referencing_ and _referenced_ models, and can be queried from either side.
+
+Two-way references come in four forms:
+
+#### One to one
+
+For example, a category can only have one product, and one product can only have one category.
+
+#### One to many
+
+For example, a category can have multiple products, but a product cannot belong to multiple categories.
+
+#### Many to one
+
+For example, a category has one product, but a product can belong to multiple categories.
+
+#### Many to many
+
+For example, a category can have many products, and products can belong to many categories.
+
+### Union
+
+GraphQL Union Types are great for referencing different models as a single field.
+
+For example, here we have a typical GraphQL query for fetching `blocks` on a page.
+
+This field is configured to be either of type `Hero`, `Grid`, and/or `Gallery`:
+
+```graphql
+{
+  pages {
+    blocks {
+      __typename
+      ... on Hero {
+        title
+        ctaLink
+      }
+      ... on Grid {
+        title
+        subtitle {
+          markdown
+        }
+      }
+      ... on Gallery {
+        photos {
+          url
+          handle
+        }
+      }
+    }
+  }
+}
+```
+
+Please note that unions are always two-way references.
+
+## Remote fields
+
+Remote fields connect specific remote data to an entry of that model. Remote fields are always related to a single remote source, and a single custom type. RESTful remote fields are configured with a path to a specific endpoint in the remote source, such as user details from Github, or price & availability from Shopify. GraphQL remote fields allow to select the entrypoint to the schema (query).
+
+### GraphQL remote field
+
+The GraphQL remote field requies a GraphQL Remote Source to be configured on your project. You can find out how to create a Remote Source [here](/docs/guides/schema/remote-sources#adding-a-remote-source-to-your-project).
+
+The Field allows you to make a request (HTTP GET or POST) to a remote GraphQL API and to specify the query entrypoint.
+
+[Learn more about adding a remote field to your model](/docs/guides/schema/remote-sources#adding-a-remote-field-to-your-model)
+
+#### Existing field variable in non-string arguments
+
+![Existing field variable in non-string arguments](/images/docs/api-reference/schema/field-types-cast-int.png)
+
+In order to support existing field variables in non-string arguments, the `{{!cast=<type>}}` syntax can be used to indicate that the resulting data should be forwarded as is.
+
+<Card theme="warning">
+
+Please note that there is no post processing done on the data after filling in the existing field variable.
+
+</Card>
+
+Let's say our remote GraphQL API accepts an `int` argument, which we want to get filled in from an `int` field called `n` that already exists on the model we are creating the remote field on.
+
+When specifying the template, we can add the handlebars comment `{{!cast=<type}}` to specify what type the value resulting from our template is, so the API will forward the raw data value to the remote API.
+
+In this example we use `{{!cast=int}}` to forward the raw `int` value.
+
+```graphql
+query example {
+  assets(first: "{{doc.n}}{{!cast=int}}") {
+    ...EntryPoint
+  }
+}
+```
+
+The resulting query shows what will be sent when we execute the remote field, which is raw `1`.
+
+```graphql
+query example {
+  assets(last: 1) {
+    ...EntryPoint
+  }
+}
+```
+
+The resulting query matches what the remote API expects.
+
+**If we did not use the casting handlebars comment, the remote fields query template would look like this:**
+
+```graphql
+query example {
+  assets(first: "{{doc.n}}") {
+    ...EntryPoint
+  }
+}
+```
+
+When the remote field gets executed, the template gets filled in with the current document's `n` value. The resulting query would look like this:
+
+```graphql
+query example {
+  assets(last: "1") {
+    ...EntryPoint
+  }
+}
+```
+
+We mentioned before that our remote API accepts an `int` for the last argument, but our API now sends it as a `string`. Therefore, we would wrongly pass `"1"` instead of the desired `1`.
+
+### REST remote field
+
+In order to use a REST remote field, a REST Remote Source has to be present on the project. You can find out how to create a Remote Source [here](/docs/guides/schema/remote-sources#adding-a-remote-source-to-your-project).
+
+The REST remote field allows to specify the API path to which a request (GET or POST) should be sent to.
+
+[Learn more about adding a remote field to your model](/docs/guides/schema/remote-sources#adding-a-remote-field-to-your-model)
+
+## Field visibility
+
+Hygraph field types allow for different visibility options via the `Advanced` tab during field creation. Below is a reference for the different options and how they are different.
+
+| Option       | Description                                                                                                                                                                           |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Read / Write | Default option, the field will be accessible for read/write purposes.                                                                                                                 |
+| Read Only    | Field is shown but cannot be edited in the UI, updates can only be done via API.                                                                                                      |
+| Hidden       | The field is not shown in the UI, but can be referenced by other fields such as [Slugs](/docs/api-reference/schema/field-types#string) or from a [UI Extension](/docs/ui-extensions). |
+| API Only     | Field is not shown in the UI, can be read and updated exclusively from the API.                                                                                                       |
+
+Note that these options are available for all field types except for [References](/docs/api-reference/schema/field-types#reference).
+
+<Card theme="info">
+
+Field visibility has no relation with permissions or security and should not be used for those purposes.
+
+</Card>

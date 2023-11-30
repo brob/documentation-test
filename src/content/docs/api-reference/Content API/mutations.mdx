@@ -1,0 +1,847 @@
+---
+title: Mutations
+meta_title: GraphQL Mutations
+meta_description: Your project endpoint exposes GraphQL mutations you can use to modify the contents of your project.
+---
+import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+
+Your project endpoint exposes GraphQL mutations you can use to modify the contents of your project. The mutations API allows you to interact with content ouside of the [Hygraph UI](https://app.hygraph.com) using GraphQL.
+
+<Card theme="warning">
+
+It's not recommended you enable Public API Permissions for mutations, but instead use a [Permanent Auth Token](/docs/api-reference/basics/authorization#permanent-auth-tokens) for mutating data.
+
+</Card>
+
+## Auto-generated mutations
+
+When a new model is added to your project, so are custom GraphQL mutations.
+
+For example, if you created a `Product` model, these mutations would also be generated inside your GraphQL schema:
+
+- `createProduct`
+- `updateProduct`
+- `deleteProduct`
+- `upsertProduct`
+- `publishProduct`
+- `unpublishProduct`
+- `updateManyProductsConnection`
+- `deleteManyProductsConnection`
+- `publishManyProductsConnection`
+- `unpublishManyProductsConnection`
+
+All of these mutations accept input types that are specific to your projects GraphQL schema.
+
+## Create entries
+
+When creating new content entries, the `data` argument will have an associated input type that is specific to your content model.
+
+For example, if your project contains the model `Product`, you will have:
+
+| Mutation        | Argument | Input Type            |
+| --------------- | -------- | --------------------- |
+| `createProduct` | `data`   | `ProductCreateInput!` |
+
+<Tabs panelHeight={220}>
+  <TabItem label="Request">
+
+```graphql
+mutation {
+  createProduct(data: { name: "Face Mask", slug: "face-mask", price: 1000 }) {
+    id
+    name
+    slug
+    price
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "createProduct": {
+      "id": "ckgcd5hzc01wd0a446vd3kqrs",
+      "name": "Face Mask",
+      "slug": "face-mask",
+      "price": 1000
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+The `id` is a [default system field](/docs/api-reference/schema/system-fields#default-fields) that is automatically generated for all new entries.
+
+## Update entries
+
+When updating single content entry, you must specify the unique `where` criteria of which you want to update, as well as the new `data`.
+
+For example, if your project contains the model `Product`, you will have:
+
+| Argument | Input Type                 |
+| -------- | -------------------------- |
+| `where`  | `ProductWhereUniqueInput!` |
+| `data`   | `ProductUpdateInput!`      |
+
+<Tabs panelHeight={260}>
+  <TabItem label="Request">
+
+```graphql
+mutation {
+  updateProduct(
+    where: { id: "ckgcd5hzc01wd0a446vd3kqrs" }
+    data: { price: 100 }
+  ) {
+    id
+    name
+    price
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "updateProduct": {
+      "id": "ckgcd5hzc01wd0a446vd3kqrs",
+      "name": "Face Mask",
+      "price": 100
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+<Card theme="info">
+
+You can also update any unique field on your model.
+
+</Card>
+
+## Upsert entries
+
+The upsert mutation allows you to create, or update a content entry based on whether the unique `where` values exist.
+
+For example, if your project contains the model `Product`, you will have:
+
+| Argument            | Input Type                 |
+| ------------------- | -------------------------- |
+| `where`             | `ProductWhereUniqueInput!` |
+| `upsert`            | `ProductUpsertInput!`      |
+| `upsert` > `create` | `ProductCreateInput!`      |
+| `upsert` > `update` | `ProductUpdateInput!`      |
+
+<Card theme="info">
+
+You must provide both `create`, and `update` to the `upsert` argument.
+
+</Card>
+
+<Tabs panelHeight={340}>
+  <TabItem label="Request">
+
+```graphql
+mutation {
+  upsertProduct(
+    where: { slug: "face-mask" }
+    upsert: {
+      create: { name: "Face Mask", slug: "face-mask", price: 1000 }
+      update: { name: "Face Mask", slug: "face-mask", price: 1000 }
+    }
+  ) {
+    id
+    name
+    slug
+    price
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "upsertProduct": {
+      "id": "ckgcf201401cz0a56wyon4fj8",
+      "name": "Face Mask",
+      "slug": "face-mask",
+      "price": 1000
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Delete entries
+
+Similar to updating, and upserting entries, you can specify using `where` the entries you want to delete.
+
+For example, if your project contains the model `Product`, you will have:
+
+| Argument | Input Type                 |
+| -------- | -------------------------- |
+| `where`  | `ProductWhereUniqueInput!` |
+
+<Tabs panelHeight={220}>
+  <TabItem label="Request">
+
+```graphql
+mutation {
+  deleteProduct(where: { id: "..." }) {
+    id
+    name
+    slug
+    price
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "deleteProduct": {
+      "id": "ckgcf201401cz0a56wyon4fj8",
+      "name": "Face Mask",
+      "slug": "face-mask",
+      "price": 1000
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Nested mutations
+
+- `create`: Create and relate entries
+- `connect`: Connect additional existing entries by unique field
+- `update`: Update the connected entries
+- `upsert`: Create or update connected entries
+- `disconnect`: Disconnect connected relations by unique field
+- `delete`: Delete all connected entries
+- `set`: Override all connected entries
+
+### Create
+
+<Tabs panelHeight={900}>
+  <TabItem label="create">
+
+```graphql
+mutation createOneRelation {
+  createProduct(
+    data: {
+      name: "Test"
+      slug: "test"
+      price: 1000
+      category: { create: { name: "Accessories", slug: "accessories" } }
+    }
+  ) {
+    id
+    name
+    category {
+      name
+    }
+  }
+}
+
+mutation createManyRelations {
+  createProduct(
+    data: {
+      name: "Test"
+      slug: "test"
+      price: 1000
+      category: {
+        create: [
+          { name: "Accessories", slug: "accessories" }
+          { name: "...", slug: "..." }
+        ]
+      }
+    }
+  ) {
+    id
+    name
+    category {
+      name
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="connect">
+
+```graphql
+mutation createAndConnectOne {
+  createProduct(
+    data: {
+      name: "Test"
+      slug: "test"
+      price: 1000
+      category: { connect: { slug: "accessories" } }
+    }
+  ) {
+    id
+    name
+    category {
+      name
+    }
+  }
+}
+
+mutation createAndConnectMany {
+  createProduct(
+    data: {
+      name: "Test"
+      slug: "test"
+      price: 1000
+      categories: { connect: [{ slug: "accessories" }, { id: "..." }] }
+    }
+  ) {
+    id
+    name
+    category {
+      name
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+### Update
+
+<Tabs panelHeight={300}>
+  <TabItem label="create">
+
+```graphql
+mutation {
+  updateProduct(
+    where: { id: "..." }
+    data: { category: { create: { name: "Accessories", slug: "accessories" } } }
+  ) {
+    id
+    category {
+      name
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="update">
+
+```graphql
+mutation {
+  updateProduct(
+    where: { id: "..." }
+    data: {
+      category: {
+        update: {
+          where: { slug: "accessories" }
+          data: { name: "All Accessories" }
+        }
+      }
+    }
+  ) {
+    id
+    category {
+      name
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="upsert">
+
+```graphql
+mutation {
+  updateProduct(
+    where: { id: "..." }
+    data: {
+      category: {
+        upsert: {
+          where: { slug: "accessories" }
+          data: {
+            create: { name: "Accessories", slug: "accessories" }
+            update: { name: "Accessories", slug: "accessories" }
+          }
+        }
+      }
+    }
+  ) {
+    id
+    category {
+      name
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="connect">
+
+```graphql
+mutation updateAndConnectOne {
+  updateProduct(
+    where: { id: "..." }
+    data: { category: { connect: { id: "..." } } }
+  ) {
+    id
+    category {
+      name
+    }
+  }
+}
+
+mutation updateAndConnectMany {
+  updateProduct(
+    where: { id: "..." }
+    data: {
+      categories: {
+        connect: [{ where: { id: "..." } }, { where: { id: "..." } }]
+      }
+    }
+  ) {
+    id
+    category {
+      name
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="disconnect">
+
+```graphql
+mutation disconnectOneSide {
+  updateProduct(
+    where: { id: "..." }
+    data: { category: { disconnect: true } }
+  ) {
+    id
+    category {
+      name
+    }
+  }
+}
+
+mutation disconnectManySide {
+  updateProduct(
+    where: { id: "..." }
+    data: { categories: { disconnect: [{ id: "..." }, { id: "..." }] } }
+  ) {
+    id
+    category {
+      name
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="delete">
+
+```graphql
+mutation {
+  updateProduct(where: { id: "..." }, data: { category: { delete: true } }) {
+    id
+    category {
+      name
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="set">
+
+```graphql
+mutation {
+  updateCategory(
+    where: { id: "..." }
+    data: { products: { set: [{ slug: "..." }, { id: "..." }] } }
+  ) {
+    name
+    products {
+      name
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Insert at position
+
+When inserting related entries, you can `connect` entries at a given position. The position of entries reflects that [fetching relations](/docs/api-reference/content-api/queries#fetching-relations).
+
+The `position` input accepts the following values:
+
+| Field    | Type      | Definition                                       |
+| -------- | --------- | ------------------------------------------------ |
+| `before` | `ID`      | The ID of the entry you want to insert before    |
+| `after`  | `ID`      | The ID of the entry you want to insert after     |
+| `start`  | `Boolean` | Set to `true` if you want to insert at the start |
+| `end`    | `Boolean` | Set to `true` if you want to insert at the end   |
+
+<Card theme="info">
+
+You must only provide one of these values.
+
+</Card>
+
+#### Before
+
+```graphql
+mutation {
+  updateAuthor(
+    where: { id: "..." }
+    data: { posts: { connect: { position: { before: "..." } } } }
+  ) {
+    id
+  }
+}
+```
+
+#### After
+
+```graphql
+mutation {
+  updateAuthor(
+    where: { id: "..." }
+    data: { posts: { connect: { position: { after: "..." } } } }
+  ) {
+    id
+  }
+}
+```
+
+#### Start
+
+```graphql
+mutation {
+  updateAuthor(
+    where: { id: "..." }
+    data: { posts: { connect: { position: { start: true } } } }
+  ) {
+    id
+  }
+}
+```
+
+#### End
+
+```graphql
+mutation {
+  updateAuthor(
+    where: { id: "..." }
+    data: { posts: { connect: { position: { end: true } } } }
+  ) {
+    id
+  }
+}
+```
+
+## Publishing content mutations
+
+Hygraph automatically generates publish, and unpublish mutations for each of your content models, including the asset model.
+
+Learn more about [publishing and unpublishing content](/docs/api-reference/content-api/content-stages).
+
+## Batch mutations
+
+Hygraph supports batch mutations that can be applied to "many" entries at once. You may wish to update, or delete many entries at once that fit given criteria.
+
+Batch mutations comply with the [Relay connection type](/docs/api-reference/content-api/queries#fetching-with-relay) specification.
+
+### Update many
+
+To update many entries at once, you must use the `updateMany[Model]Connection` mutation. You can use [where](/docs/api-reference/content-api/filtering), or [pagination](/docs/api-reference/content-api/pagination) filters to set the criteria you wish to update.
+
+| Argument | Input Type              | Description                                                                                     |
+| -------- | ----------------------- | ----------------------------------------------------------------------------------------------- |
+| `where`  | `ProductManyWhereInput` | [Filtering](/docs/api-reference/content-api/filtering) criteria for entries you want to update. |
+| `data`   | `CreateInput!`          | An object that specifies the data you'd like to update matching entries with.                   |
+| `first`  | `Int`                   | Seek forwards from end of result set.                                                           |
+| `last`   | `Int`                   | Seek backwards from start of result set.                                                        |
+| `skip`   | `Int`                   | Skip result set by given amount.                                                                |
+| `before` | `ID`                    | Seek backwards before specific ID.                                                              |
+| `after`  | `ID`                    | Seeks forwards after specific ID.                                                               |
+
+<Card theme="warning">
+
+If you do not pass any filters, then the first 10 entries will be updated. See [Pagination](/docs/api-reference/content-api/pagination) for updating pages.
+
+</Card>
+
+For example, let's update all products where `featured: true`, to be `featured: false`.
+
+<Tabs panelHeight={300}>
+  <TabItem label="Request">
+
+```graphql
+mutation {
+  updateManyProductsConnection(
+    where: { featured: true }
+    data: { featured: false }
+  ) {
+    edges {
+      node {
+        featured
+      }
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "updateManyProductsConnection": {
+      "edges": [
+        {
+          "node": {
+            "featured": true
+          }
+        },
+        {
+          "node": {
+            "featured": true
+          }
+        },
+        {
+          "node": {
+            "featured": true
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+### Delete many
+
+To delete many entries at once, you must use the `deleteMany[Model]Connection` mutation. You can use [where](/docs/api-reference/content-api/filtering), or [pagination](/docs/api-reference/content-api/pagination) filters to set the criteria you wish to delete.
+
+| Argument | Input Type              | Description                                                                                     |
+| -------- | ----------------------- | ----------------------------------------------------------------------------------------------- |
+| `where`  | `ProductManyWhereInput` | [Filtering](/docs/api-reference/content-api/filtering) criteria for entries you want to delete. |
+| `first`  | `Int`                   | Seek forwards from end of result set.                                                           |
+| `last`   | `Int`                   | Seek backwards from start of result set.                                                        |
+| `skip`   | `Int`                   | Skip result set by given amount.                                                                |
+| `before` | `ID`                    | Seek backwards before specific ID.                                                              |
+| `after`  | `ID`                    | Seeks forwards after specific ID.                                                               |
+
+<Card theme="warning">
+
+If you do not pass any filters, then the first 10 entries will be deleted. See [Pagination](/docs/api-reference/content-api/pagination) for updating pages.
+
+</Card>
+
+<Tabs panelHeight={250}>
+  <TabItem label="Request">
+
+```graphql
+mutation {
+  deleteManyProductsConnection(where: { featured: true }) {
+    edges {
+      node {
+        id
+      }
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "deleteManyProductsConnection": {
+      "edges": [
+        {
+          "node": {
+            "id": "ckdt46o2w029u0156q124e0x4"
+          }
+        },
+        {
+          "node": {
+            "id": "ckdt47uio02al01044grc4ehf"
+          }
+        },
+        {
+          "node": {
+            "id": "ckdt4c9gw02cu01026bzkok1b"
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+### Publish many
+
+Just like you can [publish content](#publishing-content-mutations), you can also batch publish.
+
+| Argument | Input Type                | Description                                                                               |
+| -------- | ------------------------- | ----------------------------------------------------------------------------------------- |
+| `where`  | `ProductManyWhereInput`   | [Filtering](/docs/api-reference/content-api/filtering) criteria finding entries.          |
+| `from`   | `Stage = DRAFT`           | The [content stage](/docs/api-reference/content-api/content-stages) to find entries from. |
+| `to`     | `[Stage!]! = [PUBLISHED]` | The target published [content stage](/docs/api-reference/content-api/content-stages).     |
+| `first`  | `Int`                     | Seek forwards from end of result set.                                                     |
+| `last`   | `Int`                     | Seek backwards from start of result set.                                                  |
+| `skip`   | `Int`                     | Skip result set by given amount.                                                          |
+| `before` | `ID`                      | Seek backwards before specific ID.                                                        |
+| `after`  | `ID`                      | Seeks forwards after specific ID.                                                         |
+
+For example, we could publish the first 5 products to the `PUBLISHED` stage.
+
+<Tabs panelHeight={250}>
+  <TabItem label="Request">
+
+```graphql
+mutation {
+  publishManyProductsConnection(first: 5, to: PUBLISHED) {
+    edges {
+      node {
+        id
+      }
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "publishManyProductsConnection": {
+      "edges": [
+        {
+          "node": {
+            "id": "ckdt46o2w029u0156q124e0x4"
+          }
+        },
+        {
+          "node": {
+            "id": "ckdt47uio02al01044grc4ehf"
+          }
+        },
+        {
+          "node": {
+            "id": "ckdt4c9gw02cu01026bzkok1b"
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+### Unpublish many
+
+Just like you can batch publish, you can also batch unpublish.
+
+| Argument | Input Type                | Description                                                                                   |
+| -------- | ------------------------- | --------------------------------------------------------------------------------------------- |
+| `where`  | `ProductManyWhereInput`   | [Filtering](/docs/api-reference/content-api/filtering) criteria for entries you want to find. |
+| `stage`  | `Stage = DRAFT`           | The [content stage](/docs/api-reference/content-api/content-stages) to find entries in.       |
+| `to`     | `[Stage!]! = [PUBLISHED]` | The target published [content stage](/docs/api-reference/content-api/content-stages).         |
+| `first`  | `Int`                     | Seek forwards from end of result set.                                                         |
+| `last`   | `Int`                     | Seek backwards from start of result set.                                                      |
+| `skip`   | `Int`                     | Skip result set by given amount.                                                              |
+| `before` | `ID`                      | Seek backwards before specific ID.                                                            |
+| `after`  | `ID`                      | Seeks forwards after specific ID.                                                             |
+
+<Tabs panelHeight={250}>
+  <TabItem label="Request">
+
+```graphql
+mutation {
+  unpublishManyProductsConnection(stage: PUBLISHED) {
+    edges {
+      node {
+        id
+      }
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "unpublishManyProductsConnection": {
+      "edges": [
+        {
+          "node": {
+            "id": "ckdt46o2w029u0156q124e0x4"
+          }
+        },
+        {
+          "node": {
+            "id": "ckdt47uio02al01044grc4ehf"
+          }
+        },
+        {
+          "node": {
+            "id": "ckdt4c9gw02cu01026bzkok1b"
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Localized content mutations
+
+Depending on whether or not you have localized fields in your schema, you will be able to mutate each of the localized content entries.
+
+Learn more about [mutating localized content](/docs/api-reference/content-api/localization#mutating-localized-content).

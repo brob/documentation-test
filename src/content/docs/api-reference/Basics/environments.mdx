@@ -1,0 +1,55 @@
+---
+title: Environments
+meta_description: Safely work on isolated instances of your project with environments.
+---
+
+Safely work on isolated instances of your project with environments. Environments are for making changes to your GraphQL schema, and testing out new content types without breaking your production implementation, not to be used for editorial workflows.
+
+Depending on your current user role, and payment plan, you can manage your environments from your project settings.
+
+[Learn more about working with multiple environments](/docs/guides/overview/multiple-environments)
+
+## Create environments
+
+You can create environments using our UI by following [these steps](/docs/guides/overview/manage-project-environments#create-an-environment).
+
+## Switching environments
+
+You can switch environments using our UI by following [these steps](/docs/guides/overview/manage-project-environments#switch-environments).
+
+## Environment endpoints
+
+Each environment has its own API endpoint, with the `alias` of the environment appended to the URL.
+
+API endpoints for both `master` and `dev` environments would follow the format of:
+
+<Tabs>
+  <TabItem label="master">
+
+```bash
+https://[region].hygraph.com/v2/[projectId]/master
+```
+
+  </TabItem>
+  <TabItem label="dev">
+
+```bash
+https://[region].hygraph.com/v2/[projectId]/dev
+```
+
+  </TabItem>
+</Tabs>
+
+## Promoting environments
+
+When you have made the necessary changes to a schema you want to promote to the master environment, you can do this by renaming the newly created environment to be `master`, overriting the existing `master` to be named something else.
+
+Since environments contain their own content, and webhooks, you will want to make sure you clone a new environment right before you apply the changes and promote, this ensures no loss of data.
+
+For projects with multiple users managing content at the same time you make changes to the schema inside an environment, you will probably want to use the [Management SDK](https://github.com/hygraph/management-sdk).
+
+Click [here](/docs/guides/overview/manage-project-environments#promote-environments-to-master) for some extra information on how to use our UI to promote an environment to master.
+
+## Delete an environment
+
+You can delete environments using our UI by following [these steps](/docs/guides/overview/manage-project-environments#delete-environments).

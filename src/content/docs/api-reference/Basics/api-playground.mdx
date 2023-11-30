@@ -1,0 +1,39 @@
+---
+title: API Playground
+meta_description: The API playground is a great way to experiment with querying, and mutating data.
+meta_title: Hygraph GraphQL API Playground
+---
+
+The API playground is a great way to experiment with querying, and mutating data. You can find the API Playground from the sidebar once logged into your project.
+
+![API Playground](/images/docs/api-reference/basics/playground.png)
+
+When you first open the API Playground, you will see some initial comments introducing GraphQL, followed by a query based on the model you have in your project. If the project has more than one model, the sample query will be provided using the first one.
+
+Under the demo query you will find some additional comments on keyboard shortcuts.
+
+The API Playground is also great for:
+
+- Testing authorization and access control with API keys.
+- Working with, and testing multiple environments.
+- Working with, and testing localized content.
+- Explore previously ran queries, and mutations.
+- Run previous queries in a single click
+- Explore queries, mutations, arguments, and more with explorer view.
+- Browse auto-generated schema documentation
+- Work with variables, and named queries
+
+Each tab of the API playground has four buttons:
+
+- **Prettify:** Cleans up the format and indentation of your typed query.
+- **Environment:** Allows you to select one of your configured environments, as well as the Management API.
+- **Stage:** Allows you to select one of your configured stages.
+- **Locale:** Allows you to select one of your configured locales. If you select `No Locale`, it will fetch all the content.
+
+By Default, the API Playground explorer located to the left of the screen will have the items of the demo query selected. You can modify the query manually, or use the checkboxes to do it instead.
+
+You can also add a new query by clicking on the **+** button next to the query tabs.
+
+You can find all your queries in the `My Queries` tab, located next to the `Explorer` tab. There, you can select which of your queries you wish to display, and edit the name by clicking on the pencil icon.
+
+At the bottom of the screen you will find two sections: Query variables, and HTTP headers. In the **Query variables** section you can provide the variables, if necessary for your query to work. If you're working with GraphQL APIs that require you to pass custom headers, you can do that in the **HTTP headers** section.

@@ -1,0 +1,100 @@
+---
+title: Authorization
+meta_description: Hygraph allows you to configure access to each stage, environment, and whether or not you permit mutations.
+meta_title: API Access Authorization and Permanent Auth Tokens (PATs)
+---
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+By default, queries and mutations require a [Permanent Auth Token](#permanent-auth-tokens) token, but you can configure the [Public API Permissions](#public-api-permissions) to allow unauthenticated requests.
+
+Hygraph allows you to configure access for each model, stage, environment, locale, and whether or not you permit mutations.
+
+## Public API permissions
+
+By default all new projects disable public API access.
+
+<Card theme="warning">
+
+Enabling public access to your project means that anybody with your API endpoint can query sensitive data, and perform destructive actions if configured incorrectly.
+
+</Card>
+
+You can configure custom permissions, or initialize the defaults.
+
+For example, here you can see how to configure the Public API to allow access to READ the `Post` model on stages `Published` and `QA` with the locale `en`.
+
+![Create API permission](/images/docs/api-reference/basics/create-permission.png)
+
+You can also specify an optional condition that restricts access even further. For example, you could specify the condition `{ "id": "ckoimwlu80ck20a88z6i754cw" }`. This would then only allow you to fetch the `Post` with `id` `ckoimwlu80ck20a88z6i754cw`.
+
+[Learn more about Public API permissions](/docs/api-reference/basics/permissions#public-api-read-only)
+
+### Default public stage
+
+If no stage parameter is set on the GraphQL query, or via a HTTP header, the content from the default set content stage will be served.
+
+![Default Content Stage](/images/docs/api-reference/basics/default-content-stage.png)
+
+The default public stage is set to `PUBLISHED` for all new projects.
+
+## Permanent auth tokens
+
+Permanent Auth Tokens are used for controlling access to querying, mutating content, and come in the form of Bearer token authentication.
+
+Similar to Public API permissions, you can create individual PATs for specific API actions.
+
+Some users create PATs for only querying data from the draft stage, for creating previews in staging environments. You may also opt to create a PAT for mutations, so you can perform changes to your content models server-side.
+
+If you are mutating data from the frontend, you should hide this token at the server level, and not expose your PAT client-side.
+
+The Permanent Auth Token must be passed via the `Authorization` header on HTTP requests in the format of a Bearer token:
+
+```
+Authorization: Bearer PERMANENT_AUTH_TOKEN
+```
+
+[Learn more about PAT permissions](/docs/api-reference/basics/permissions#permanent-auth-tokens-with-specific-models)
+
+## API endpoints
+
+![API Endpoints](/images/docs/api-reference/basics/api-endpoints.png)
+
+### Regular read & write endpoint
+
+Each Hygraph project you create, or are invited to, has a unique GraphQL API endpoint (per environment). This endpoint permits you to both query, and mutate data within your project. You will find it as **Content API** endpoint in your project's **API Access** settings.
+
+GraphQL introspection is enabled by default, so anybody with access to your endpoint can traverse the graph to see your content types, as well as all queries and mutations.
+
+This API endpoint also contains the current schema [environment](/docs/api-reference/basics/environments), by default this will be `master`.
+
+The API endpoint has the following composition:
+
+```
+https://[region].hygraph.com/v2/[projectId]/[environment]
+```
+
+Click [here](/docs/api-reference/basics/caching#regular-read-and-write-endpoint) to learn more about this endpoint.
+
+### High performance endpoint
+
+This high performance endpoint is ideal for delivering content around the globe with low latency and high read-throughput.
+
+The API endpoint has the following composition:
+
+```
+https://[region].cdn.hygraph.com/content/[projectId]/[environment]
+```
+
+Click [here](/docs/api-reference/basics/caching#high-performance-endpoint) to learn more about this endpoint.
+
+## Resources
+
+You might find the following documents useful:
+
+- [Permissions:](/docs/api-reference/basics/permissions) This document contains information on permissions, how they work, and their limits.
+- [Roles and permissions:](/docs/guides/overview/roles-and-permissions) This document contains information on how to work with roles and permissions in the Hygraph app.
+- [API access:](/docs/guides/overview/api-access) This document covers the API access section of the Hygraph app as well as its subsections: Endpoints, Public content API, and Permanent auth tokens.
+
+&nbsp;
+
+&nbsp;

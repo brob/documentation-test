@@ -1,0 +1,260 @@
+---
+title: Variables
+meta_title: GraphQL variables
+meta_description: Learn how to use variables to create dynamic queries and mutations.
+---
+import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+import Video from '@components/Video.astro'
+
+A **GraphQL** request is made up of two parts, one containing the query or mutation, and another - declared after it - containing variables. Variables can be used to create dynamic queries and mutations, as they allow you to pass dynamic values as a separate dictionary.
+
+In other words, variables in GraphQL are passed like arguments to a function allowing said arguments to be extracted as variables from queries and mutations, simplifying them.
+
+## Variable definitions
+
+Variable definitions list all the variables starting with the `$` symbol, followed by the argument type. They can be optional or required. Required variable definitions carry an `!` next to the type.
+
+So, `($slug: String!)` defines a variable with name slug, of type String, that is required.
+
+<Card theme="info">
+
+If the field you're passing the variable into requires a non-null argument, you need to make the variable required as well.
+
+</Card>
+
+If you want to define more than one variable, you need to write one next to the other in the query. You can separate them with a comma, but it's not necessary. Here's an example that fetches posts that have either the `title` or `slug` provided in the query variables:
+
+<Tabs panelHeight={200}>
+ <TabItem label="Query">
+
+```graphql
+query name($title: String, $slug: String) {
+  posts(where: { OR: [{ title: $title }, { slug: $slug }] }) {
+    id
+    title
+    slug
+  }
+}
+```
+
+ </TabItem>
+ <TabItem label="Variables">
+
+```json
+{
+  "title": "test",
+  "slug": "test"
+}
+```
+
+ </TabItem>
+ <TabItem label="Result">
+
+```json
+{
+  "data": {
+    "posts": [
+      {
+        "id": "clbdn2fjithnl0amxwm8wtell",
+        "title": "Test",
+        "slug": "test"
+      }
+    ]
+  }
+}
+```
+
+ </TabItem>
+</Tabs>
+
+### Define a default
+
+When you define a variable, you can also define the default that it will fall back to when you're not passing a value.
+
+To assign a default value to a variable in the query, add it after the type declaration, as follows:
+
+<Tabs panelHeight={180}>
+ <TabItem label="Query">
+
+```graphql
+query GetPostBySlug($slug: String = "test") {
+  post(where: { slug: $slug }) {
+    id
+    title
+  }
+}
+```
+
+ </TabItem>
+ <TabItem label="Result">
+
+```json
+{
+  "data": {
+    "post": {
+      "id": "clbdn2fjithnl0amxwm8wtell",
+      "title": "Test"
+    }
+  }
+}
+```
+
+ </TabItem>
+</Tabs>
+
+In the above example, we set the string `test` as the default for `$slug`. So, if we're not passing any variable values, it uses its default and returns posts where the `slug` is `test`.
+
+## Input types
+
+If you variabilize filters or mutations, you need to use the correct input types. The auto generated documentation in our API Playground contains this information:
+
+<Video>
+  <source
+    src="https://media.graphassets.com/C3kbJJfVTTqCY54A40DG"
+    type="video/mp4"
+  />
+</Video>
+
+<Card theme="info">
+
+Hover over your query parameters and:
+
+<b>Command + Click</b> on Mac.
+
+<b>Control + Click</b> on Windows.
+
+This opens the documentation explorer, allowing you to look through the API and find the correct input type you need to use. The documentation explorer will also show you the parameters you can pass in your query.
+
+</Card>
+
+## Queries
+
+The following example query fetches a post by slug. In order to do this we have defined the query name and the arguments with the type, and passed that along to the query itself.
+
+<Tabs panelHeight={180}>
+ <TabItem label="Query">
+
+```graphql
+query GetPostBySlug($slug: String!) {
+  post(where: { slug: $slug }) {
+    id
+    title
+  }
+}
+```
+
+ </TabItem>
+ <TabItem label="Variables">
+
+```json
+{
+  "slug": "title-slug"
+}
+```
+
+ </TabItem>
+ <TabItem label="Result">
+
+```json
+{
+  "data": {
+    "post": {
+      "id": "clb5blvzekcnh0altbyxx220a",
+      "title": "Title slug"
+    }
+  }
+}
+```
+
+ </TabItem>
+</Tabs>
+
+## Filters
+
+You can variabilize the filtering of your query, making it more flexible.
+
+The following query contains dynamic filters with values you can define with the variables you pass:
+
+<Tabs panelHeight={190}>
+ <TabItem label="Query">
+
+```graphql
+query name($where: PostWhereInput) {
+  posts(where: $where) {
+    id
+    title
+    slug
+  }
+}
+```
+
+ </TabItem>
+ <TabItem label="Variables">
+
+```json
+{
+  "where": { "slug": "test" }
+}
+```
+
+ </TabItem>
+ <TabItem label="Result">
+
+```json
+{
+  "data": {
+    "posts": [
+      {
+        "id": "clbdn2fjithnl0amxwm8wtell",
+        "title": "Test",
+        "slug": "test"
+      }
+    ]
+  }
+}
+```
+
+ </TabItem>
+</Tabs>
+
+This way your query can stay the same and instead of creating a new query from scratch every time, you can simply change the values passed with the variables.
+
+## Mutations
+
+Just like with filters, if you variabilize mutations, you don't need to write a static mutation every time. Instead, you will keep the same query and only alter the variables.
+
+<Tabs panelHeight={180}>
+ <TabItem label="Mutation">
+
+```graphql
+mutation name($data: PostCreateInput!) {
+  createPost(data: $data) {
+    id
+  }
+}
+```
+
+ </TabItem>
+ <TabItem label="Variables">
+
+```json
+{
+  "data": { "title": "post", "slug": "post" }
+}
+```
+
+ </TabItem>
+ <TabItem label="Result">
+
+```json
+{
+  "data": {
+    "createPost": {
+      "id": "clbdo25sbtqei0bn1tuovkf8t"
+    }
+  }
+}
+```
+
+ </TabItem>
+</Tabs>

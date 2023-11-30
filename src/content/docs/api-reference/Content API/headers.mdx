@@ -1,0 +1,170 @@
+---
+title: Headers
+meta_description: Learn how to use headers as a global way to send more specific requests to our API
+---
+import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+
+You can use headers as a global way to send more specific requests to our API.
+
+## `gcms-locales`
+
+This header works in the same way as [using the query input for locales](/docs/api-reference/content-api/localization#fallback-locales).
+
+You can pass the `gcms-locales` header for localized content with your required locales. It is just another way besides the query param to decide which locales a query should return. Basically, the placement is different - header vs. query - but the result is the same. Using one or the other mostly comes down to the developer's preference.
+
+**Why use `gmcs-locales` instead of the query param then?**
+
+To keep queries exactly the same across different environments - production, development, etc. - and then instead of passing the param to the query, you use the header.
+
+In some specific cases passing headers could be easier than putting the params in the query itself.
+
+Example usage `'gcms-locales': 'rb, de, en'`:
+
+```js
+const fetch = require('cross-fetch');
+
+const headers = {
+  'Content-Type': 'application/json',
+  'gcms-locales': 'rb, de, en',
+};
+
+const body = JSON.stringify({ query: '{ products { name } }' });
+
+const { products } = await fetch('<your-hygraph-endpoint>', {
+  method: 'POST',
+  headers,
+  body,
+});
+```
+
+You can also pass an array of locales to `gcms-locales` to define your fallback preference.
+
+## `gcms-stage`
+
+This header works in the same way as [using the stage input on a query](/docs/api-reference/content-api/queries#fetching-stages).
+
+You can pass the `gcms-stage` header to specify the stage of your content. It is just another way besides the query param to decide which stage a query should return. Basically, the placement is different - header vs. query - but the result is the same. Using one or the other mostly comes down to the developer's preference.
+
+**Why use `gcms-stage` instead of the query param then?**
+
+To keep queries exactly the same across different environments - production, development, etc. - and then instead of passing the param to the query, you use the header.
+
+In some specific cases passing headers could be easier than putting the params in the query itself.
+
+Example usage `'gcms-stage': 'DRAFT'`:
+
+```js
+const fetch = require('cross-fetch');
+
+const headers = {
+  'Content-Type': 'application/json',
+  'gcms-stage': 'DRAFT',
+};
+
+const body = JSON.stringify({ query: '{ products { name } }' });
+
+const { products } = await fetch('<your-hygraph-endpoint>', {
+  method: 'POST',
+  headers,
+  body,
+});
+```
+
+## `hyg-stale-if-error` 
+
+This header for the [High performance endpoint](/docs/api-reference/basics/caching#stale-if-error) lets you set `stale-if-error` on a per query basis.
+
+This cache header can be used to fine-tune our default caching behavior. For instance, we could use it to make sure we return stale data on errors for much longer.
+
+The need to use this header highly depends on the use-cases and whether it's important to always get fresh data or to always get data, no matter if stale or new.
+
+Example usage `'hyg-stale-if-error': '21600'`:
+
+```js
+const fetch = require('cross-fetch');
+
+const headers = {
+  'Content-Type': 'application/json',
+  'hyg-stale-if-error': '21600',
+};
+
+const body = JSON.stringify({ query: '{ products { name } }' });
+
+const { products } = await fetch('<your-hygraph-endpoint>', {
+  method: 'POST',
+  headers,
+  body,
+});
+```
+
+The values are in seconds.
+
+<Card theme= "info" title="Pro Tip">
+
+This is only available on the <b>High performance</b> endpoint.
+
+The default `Stale-if-error` for all shared clusters is 86400s (1 day).
+
+</Card>
+
+## `hyg-stale-while-revalidate`
+
+This header for the [High performance endpoint](/docs/api-reference/basics/caching#stale-while-revalidate) lets you set `stale-while-revalidate` on a per query basis.
+
+This cache header can be used to fine-tune our default caching behavior. For instance, we could use it to make sure we return stale data while the cache is revalidating.
+
+The need to use this header highly depends on the use-cases and whether it's important to always get fresh data or to always get data, no matter if stale or new.
+
+Example usage `'hyg-stale-while-revalidate': '27'`:
+
+```js
+const fetch = require('cross-fetch');
+
+const headers = {
+  'Content-Type': 'application/json',
+  'hyg-stale-while-revalidate': '27',
+};
+
+const body = JSON.stringify({ query: '{ products { name } }' });
+
+const { products } = await fetch('<your-hygraph-endpoint>', {
+  method: 'POST',
+  headers,
+  body,
+});
+```
+
+The values are in seconds.
+
+<Card theme= "info" title="Pro Tip">
+
+This is only available on the <b>High performance</b> endpoint.
+
+The default `stale-while-revalidate` for our shared clusters is `0`.
+
+</Card>
+
+## `x-debug-complexity`
+
+You can use this header to enable complexity debugging, so the compexity tree is returned.
+
+The possible values are `true` & `false`.
+
+Example usage `'x-debug-complexity': 'true'`:
+
+```js
+const fetch = require('cross-fetch');
+
+const headers = {
+  'Content-Type': 'application/json',
+  'x-debug-complexity': 'true',
+};
+
+const body = JSON.stringify({ query: '{ products { name } }' });
+
+const { products } = await fetch('<your-hygraph-endpoint>', {
+  method: 'POST',
+  headers,
+  body,
+});
+```

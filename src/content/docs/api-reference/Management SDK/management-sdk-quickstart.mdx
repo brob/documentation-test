@@ -1,0 +1,100 @@
+---
+title: Management SDK Quickstart
+meta_title: Hygraph's Management SDK quickstart.
+meta_description: Learn about how to install and use Hygraph's Management SDK with our quickstart. Also learn how to run a migration, dry run a migration, and about supported operations.
+---
+import { Card } from '@astrojs/starlight/components';
+
+```ts
+import { Client } from '@hygraph/management-sdk';
+
+const client = new Client({
+  authToken: '...',
+  endpoint: '...',
+});
+
+const run = async () => {
+  client.createModel({
+    apiId: 'Post',
+    apiIdPlural: 'Posts',
+    displayName: 'Post',
+  });
+  const result = await client.run(true);
+  if (result.errors) {
+    throw new Error(result.errors);
+  }
+  return result;
+};
+
+run()
+  .then((result) => console.log(`Finished migration at: ${result.finishedAt}`))
+  .catch((err) => console.error('Error: ', err));
+```
+
+## Installation
+
+Use the following command to install the package:
+
+```sh
+npm install @hygraph/management-sdk
+```
+
+## Usage
+
+To use the Management SDK you need to instantiate a client.
+
+### Creating the client
+
+To create the Management SDK client you need to pass the following parameters:
+
+```ts
+const { Client } = require('@hygraph/management-sdk');
+
+const client = new Client({
+  authToken,
+  endpoint,
+  name, // optional
+});
+```
+
+- **Authentication Token `authToken`:** This can be retrieved from your [Hygraph project](https://app.hygraph.com/) in `Settings > API Access > Permanent Auth Tokens`. Make sure the token has proper management permissions depending on what you plan to execute via the SDK.
+- **Hygraph Content API Endpoint `endpoint`:** Endpoint of the Content API that belongs to the environment that you plan to interact with. The URL can be retrieved from your [Hygraph project](https://app.hygraph.com/) in `Settings > Environments > Endpoints`.
+- **Migration Name `name` [optional]:** Every migration has a unique name within an environment. If unspecified, a name will be generated and will be part of the response of a successful migration. Subsequent migrations with the same name in the same environment will fail.
+
+<Card theme="warning">
+
+At the moment, Hygraph only stores metadata for the last 30 migrations for each environment.
+
+Every single time a new migration is applied to an environment, metadata regarding older migrations exceeding 30 - sorted by time of creation - are deleted. This means changes performed by older migrations do stay in place, however, the name and other information related to this migration will no longer be available.
+
+</Card>
+
+### Running a migration
+
+The `run` method runs the migration.
+
+```ts
+const result = await client.run(foreground);
+
+if (result.errors) {
+  console.log(result.errors);
+} else {
+  console.log(result.name);
+}
+```
+
+By default, migrations run in the foreground, meaning that the SDK client will return the results of all actions that were executed. Passing an optional boolean argument as false configures the migration to run in the background. A successful result here only means that the actions were successfully scheduled, but not executed.
+
+### Dry run a migration
+
+A migration can be dry run to preview what changes would be applied.
+
+```ts
+const changes = client.dryRun();
+
+console.log(changes);
+```
+
+### Supported operations
+
+All operations that can be executed by the SDK can be found [in the TypeScript Type Definitions (`Client.d.ts`).](https://unpkg.com/@hygraph/management-sdk@1.1.1/dist/Client.d.ts)

@@ -1,0 +1,158 @@
+---
+title: Field configuration
+meta_description: Configure field types for your model with validations, visibility options, and more.
+---
+import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Settings
+
+Each field must have the following settings configured to be added to a model:
+
+| Property     | Description                                                          |
+| ------------ | -------------------------------------------------------------------- |
+| Display name | This is what is shown to content editors throughout the application  |
+| API ID       | This is what is exposed within the API as a field within your model. |
+| Description  | Displays a hint for content editors and API users.                   |
+
+## Options
+
+Not all options are available for all [field types](/docs/api-reference/schema/field-types).
+
+### Use as a title field
+
+You can set multiple fields as titles to appear within the relational picker instead of IDs.
+
+<Card theme="info">
+
+You cannot use this when the field visibility is set to hidden, API only or read only.
+
+</Card>
+
+### Allow multiple values
+
+You should select this if you wish to accept multiple values, and return an array to the API for this field.
+
+<Card theme="info">
+
+You cannot use the title field with this option.
+
+</Card>
+
+### Localize field
+
+Enabling this field allows translations per locale configured on your project.
+
+<Card theme="info">
+
+You cannot use "Set initial value" with this option.
+
+</Card>
+
+### Embed options
+
+This setting is only available for Rich text fields.
+
+**Rich text embeds need to enabled per field**. You can do this from inside the Field Settings when adding a new, or editing a Rich Text field. Click _Enable embedding_ and select the models that should be embeddable in your Rich text field.
+
+![Rich Text Options](/images/docs/api-reference/schema/rich-text-embed-options.png)
+
+## Validations
+
+Not all validation options are available for all [field types](/docs/api-reference/schema/field-types).
+
+### Make field required
+
+Marking this prevents content from being saved if it is left empty. The API will mark this field as non nullable.
+
+<Card theme="info">
+
+You cannot use this when the field visibility is set to hidden, API only or read only.
+
+</Card>
+
+### Set field as unique
+
+Enabling this ensures content cannot be saved if the same value exists within another entry for this field. Uniqueness is checked per **Content stage**.
+
+### Limit character count
+
+This validation allows you to specify the minimum/maximum character counts. You can set At least, Between, and No more than, with a custom error message.
+
+### Match a specific pattern
+
+This validation allows you to only accept a specific regular expression.
+
+#### Common patterns
+
+You can use an existing common pattern from the web app, or provide your own.
+
+**URL**
+
+```
+(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)
+```
+
+**Phone**
+
+```
+^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$
+```
+
+**Email**
+
+```
+^([a-z0-9_\.\+-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$
+```
+
+**Slug**
+
+```
+^[a-z0-9]+(?:-[a-z0-9]+)*$
+```
+
+#### Unicode characters
+
+Hygraph field validations support unicode (non-latin) characters. You can add Unicode character classes - which typically correspond to specific alphabets - to a custom Regular Expression field validation.
+
+You can read about the syntax [here](https://github.com/google/re2/wiki/Syntax).
+
+### Restrict a specific pattern
+
+This validation option allows you to _not_ accept specific regular expression.
+
+<Card theme="info">
+
+Both Match and Restricting patterns are defined by standard Regular Expressions (RegExp) and do not need to be wrapped in opening or closing slashes.
+
+You can modify these pattern searches with additional flags such as ignoring case, enabling multi-line search, single-line search or both.
+
+</Card>
+
+## Advanced
+
+Not all advanced settings are available for all [field types](/docs/api-reference/schema/field-types).
+
+### Set initial value
+
+You can define an initial value for content editors. This doesn't have any effect on the API when performing mutations.
+
+<Card theme="info">
+
+You cannot use this when the field visibility is set to hidden, API only or read only.
+
+</Card>
+
+### Field visibility
+
+| Option       | Description                                                                                                                                                                           |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Read / Write | The field will be accessible for read/write operations. Default.                                                                                                                      |
+| Read Only    | The field will be shown, but cannot be edited in the UI. You can update via the API if required.                                                                                      |
+| Hidden       | The field will not be shown in the UI, but can be referenced by other fields such as [Slugs](/docs/api-reference/schema/field-types#string), or [UI Extensions](/docs/ui-extensions). |
+| API Only     | Field is not shown in the UI, but can be used via the API using mutations.                                                                                                            |
+
+<Card theme="info">
+
+Field visibility has no relation with permissions or security.
+
+</Card>

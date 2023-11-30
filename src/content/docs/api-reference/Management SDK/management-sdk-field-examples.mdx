@@ -1,0 +1,1100 @@
+---
+title: Management SDK field examples
+meta_description: Learn about how to use different field types with the Management SDK.
+---
+import { Card } from '@astrojs/starlight/components';
+
+<Card theme="warning">
+
+Please note that a lot of the examples shown here rely on a previously created schema and cannot be used as standalone information. This document merely aims at offering users easy access to examples on how to create different field types using the Management SDK.
+
+All the examples shown here use example values, which you need to replace with your own. For instance, <code>\<your_model\></code> could be replaced with any model name of your choice, like <code>Author</code>.
+
+All `Create`, `Update`, and `Delete` actions require **Update and Delete Existing Fields** permissions set in the auth token.
+
+</Card>
+
+## Models
+
+### Create models
+
+```ts
+client.createModel({
+  apiId: '<your_api_id>',
+  apiIdPlural: '<your_api_id_plural>',
+  description: `<your_model_description>`,
+  displayName: '<Your model name>',
+});
+```
+
+- `apiId`: **String**. The model `apiId`.
+- `apiIdPlural`: **String**. The models plural `apiId`. This is used for lists.
+- `description`: **Optional - String**. Description of the model.
+- `displayName`: **String**. Display name that is used to render the model in the webapp.
+
+### Update models
+
+```ts
+client.updateModel({
+  apiId: '<your_api_id>',
+  apiIdPlural: '<your_api_id_plural>',
+  description: `<your_model_description>`,
+  displayName: '<Your model name>',
+  newApiId: `<your_new_api_id>`,
+});
+```
+
+- `apiId`: **String**. The model `apiId`.
+- `apiIdPlural`: **Optional - String**. The model's plural `apiId`. This is used for lists.
+- `description`: **Optional - String**. Description of the model.
+- `displayName`: **Optional - String**. Display name that is used to render the model in the webapp.
+- `newApiId`: **Optional - String**. The model's new `apiId`.
+
+### Delete models
+
+```ts
+client.deleteModel({
+  apiId: '<your_api_id>',
+});
+```
+
+- `apiId`: **String**. The `apiId` of the model you wish to delete.
+
+## Simple fields
+
+### Create simple fields
+
+```ts
+client.createSimpleField({
+  apiId: `<your_api_id>`,
+  description: `<your_description>`,
+  displayName: `<your_display_name>`,
+  embeddableModels: `<embeddable_models>`,
+  embedsEnabled: `<boolean>`,
+  formConfig: `<form_config_json>`,
+  formExtension: `<form_extension>`,
+  formRenderer: `<form_renderer>`,
+  isHidden: `<boolean>`,
+  isList: `<boolean>`,
+  isLocalized: `<boolean>`,
+  isRequired: `<boolean>`,
+  isTitle: `<boolean>`,
+  isUnique: `<boolean>`,
+  migrationValue: `<migration_value>`,
+  modelApiId: `<model_api_id>`,
+  parentApiId: `<parent_api_id>`,
+  position: `<int>`,
+  tableConfig: `<table_config_json>`,
+  tableExtension: `<table_extension>`,
+  tableRenderer: `<table_renderer>`,
+  type: SimpleFieldType,
+  validations: `<SimpleFieldValidationsInput>`,
+  visibility: `<VisibilityTypes>`,
+});
+```
+
+- `apiId`: **String** Your simple field `apiId`.
+- `description`: **Optional - String**. Simple field description.
+- `displayName`: **String**. Display name that is used to render the field in the webapp.
+- `embeddableModels`: **Optional - String**.
+- `embedsEnabled`: **Optional - Boolean**.
+- `formConfig`: **Optional - JSON**.
+- `formExtension`: **Optional - String**.
+- `formRenderer`: **Optional - String**.
+- `isHidden`: **Optional - Boolean**. Makes the field hidden if true.
+- `isList`: **Optional - Boolean**.
+- `isLocalized`: **Optional - Boolean**.
+- `isRequired`: **Optional - Boolean**. Makes the field required if true.
+- `isTitle`: **Optional - Boolean**. Makes the field a title if true.
+- `isUnique`: **Optional - Boolean**. Makes the field unique if true.
+- `migrationValue`: **Optional - String**. Value which will go in place of `null` if the field is later made `required`.
+- `modelApiId`: **Optional - String**. Model `apiId`.
+- `parentApiId`: **Optional - String**. Parent `apiId`.
+- `position`: **Optional - Integer**.
+- `tableConfig`: **Optional - JSON**.
+- `tableExtension`: **Optional - String**.
+- `tableRenderer`: **Optional - String**.
+- `type`: SimpleFieldType,
+- `validations`: Field validations.
+- `visibility`: Field visibility, for example `VisibilityTypes.ReadWrite`.
+
+### Update simple field
+
+```ts
+client.updateSimpleField({
+  apiId: `<your_api_id>`,
+  description: `<your_description>`,
+  displayName: `<your_display_name>`,
+  embeddableModels: `<embeddable_models>`,
+  embedsEnabled: `<boolean>`,
+  formConfig: `<form_config_json>`,
+  formExtension: `<form_extension>`,
+  formRenderer: `<form_renderer>`,
+  initialValue: `<initial_value>`,
+  isHidden: `<boolean>`,
+  isList: `<boolean>`,
+  isLocalized: `<boolean>`,
+  isRequired: `<boolean>`,
+  isTitle: `<boolean>`,
+  isUnique: `<boolean>`,
+  migrationValue: `<migration_value>`,
+  modelApiId: `<model_api_id>`,
+  newApiId: `<new_api_id>`,
+  parentApiId: `<parent_api_id>`,
+  position: `<int>`,
+  tableConfig: `<table_config_json>`,
+  tableExtension: `<table_extension>`,
+  tableRenderer: `<table_renderer>`,
+  validations: `<SimpleFieldValidationsInput>`,
+  visibility: `<VisibilityTypes>`,
+});
+```
+
+- `apiId`: **String** Your simple field `apiId`.
+- `description`: **Optional - String**. Simple field description.
+- `displayName`: **String**. Display name that is used to render the field in the webapp.
+- `embeddableModels`: **Optional - String**.
+- `embedsEnabled`: **Optional - Boolean**.
+- `formConfig`: **Optional - JSON**.
+- `formExtension`: **Optional - String**.
+- `formRenderer`: **Optional - String**.
+- `initialValue`: **Optional - String**.
+- `isHidden`: **Optional - Boolean**. Makes the field hidden if true.
+- `isList`: **Optional - Boolean**.
+- `isLocalized`: **Optional - Boolean**.
+- `isRequired`: **Optional - Boolean**. Makes the field required if true.
+- `isTitle`: **Optional - Boolean**. Makes the field a title if true.
+- `isUnique`: **Optional - Boolean**. Makes the field unique if true.
+- `migrationValue`: **Optional - String**. Value which will go in place of `null` if the field is later made `required`.
+- `modelApiId`: **Optional - String**. Model `apiId`.
+- `newApiId`: **Optional - String**. New `apiId`.
+- `parentApiId`: **Optional - String**. Parent `apiId`.
+- `position`: **Optional - Integer**.
+- `tableConfig`: **Optional - JSON**.
+- `tableExtension`: **Optional - String**.
+- `tableRenderer`: **Optional - String**.
+- `validations`: Field validations.
+- `visibility`: Field visibility, for example `VisibilityTypes.ReadWrite`.
+
+### Delete field
+
+```ts
+client.deleteField({
+  apiId: `<your_api_id>`,
+  modelApiId: `<model_api_id>`,
+  parentApiId: `<parent_api_id>`,
+});
+```
+
+- `apiId`: **String**. Thr `apiId` of the field you wish to delete.
+- `modelApiId`: **Optional - String**. The `modelApiId` of the field you wish to delete.
+- `parentApiId`: **Optional - String**. The `parentApiId` of the field you wish to delete.
+
+### Specific examples
+
+#### Title field of type string
+
+```ts
+client.createSimpleField({
+  parentApiId: '<parent_api_id>',
+  type: SimpleFieldType.String,
+  apiId: '<your_title>',
+  displayName: '<Your Title>',
+  isTitle: true,
+  isRequired: true,
+  visibility: VisibilityTypes.ReadWrite,
+});
+```
+
+#### Simple field of type string
+
+```ts
+client.createSimpleField({
+  parentApiId: '<parent_api_id>',
+  type: SimpleFieldType.String,
+  apiId: '<your_api_id>',
+  displayName: '<Your Display Name>',
+  isRequired: true,
+  visibility: VisibilityTypes.ReadWrite,
+});
+```
+
+#### Slug field
+
+```ts
+client.createSimpleField({
+  parentApiId: '<parent_api_id>',
+  type: SimpleFieldType.String,
+  apiId: '<your_api_id>',
+  displayName: '<Your Display Name>',
+  description:
+    '<Enter the slug for this page, such as about, blog, or contact>',
+  isRequired: true,
+  isUnique: true,
+  tableRenderer: 'GCMS_SLUG',
+  formRenderer: 'GCMS_SLUG',
+});
+```
+
+#### Hidden integer field with custom field validation
+
+```ts
+client.createSimpleField({
+  parentApiId: '<parent_api_id>',
+  type: SimpleFieldType.Int,
+  apiId: '<api_id>',
+  displayName: '<Your Display Name>',
+  visibility: VisibilityTypes.Hidden,
+  validations: {
+    Int: {
+      range: {
+        max: 1000,
+        min: 0,
+        errorMessage: '<Counter has to be between 0 and 1000>',
+      },
+    },
+  },
+});
+```
+
+#### Required & unique string field with custom regex validation for emails
+
+```ts
+client.createSimpleField({
+  parentApiId: '<parent_api_id>',
+  type: SimpleFieldType.String,
+  apiId: '<email>',
+  displayName: '<Email>',
+  isRequired: true,
+  isUnique: true,
+  validations: {
+    String: {
+      matches: {
+        regex: '^([a-z0-9_\\.\\+-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$',
+      },
+    },
+  },
+});
+```
+
+#### Richtext field
+
+```ts
+client.createSimpleField({
+  parentApiId: '<parent_api_id>',
+  type: SimpleFieldType.Richtext,
+  apiId: '<api_id>',
+  displayName: '<Your Display Name>',
+  description:
+    '<Enter the content for this page. The content uses the rich-text editor, giving you a better visual representation.>',
+  isRequired: true,
+});
+```
+
+#### Richtext with embeds and single allowed embeddable model
+
+```ts
+client.createSimpleField({
+  parentApiId: '<parent_api_id>',
+  type: SimpleFieldType.Richtext,
+  apiId: '<api_id>',
+  displayName: '<Your Display Name>',
+  embedsEnabled: true,
+  embeddableModels: ['<model>'],
+});
+```
+
+#### List of date times
+
+```ts
+client.createSimpleField({
+  parentApiId: '<parent_api_id>',
+  type: SimpleFieldType.Datetime,
+  apiId: '<api_id>',
+  displayName: '<Your Display Name>',
+  isRequired: true,
+  isList: true,
+});
+```
+
+## Relational fields
+
+### Create relational field
+
+```ts
+client.createRelationalField({
+  apiId: '<api_id>',
+  description: `<your_description>`,
+  displayName: '<Your Display Name>',
+  formExtension: `<form_extension>`,
+  formRenderer: `<form_renderer>`,
+  isHidden: `<boolean>`,
+  isList: `<boolean>`,
+  isRequired: `<boolean>`,
+  modelApiId: `<model_api_id>`,
+  parentApiId: '<parent_api_id>',
+  reverseField: {
+    apiId: '<api_id>',
+    description: `<description>`,
+    displayName: '<Your Display Name>',
+    isHidden: `<boolean>`,
+    isList: `<boolean>`,
+    isUnidirectional: `<boolean>`,
+    modelApiId: '<model_api_id>',
+    visibility: `<visibility_types>`,
+  },
+  tableExtension: `<table_extension>`,
+  tableRenderer: `<table_renderer>`,
+  type: `<relational_field_type>`,
+  visibility: `<visibility_types>`,
+});
+```
+
+- `apiId`: **String**. Your relational field `apiId`.
+- `description`: **Optional - String**. Relational field description.
+- `displayName`: **String**. Display name that is used to render the relational field in the webapp.
+- `formExtension`: **Optional - String**.
+- `formRenderer`: **Optional - String**.
+- `isHidden`: **Optional - Boolean**. The relational field is hidden if true.
+- `isList`: **Optional - Boolean**.
+- `isRequired`: **Optional - Boolean**. The relational field is required if true. Only supported for `RelationalFieldType.Asset`.
+- `modelApiId`: **Optional - String**. Model `apiId`.
+- `parentApiId`: **Optional - String**. Parent `apiId`.
+- `reverseField`: Reverse relational field input.
+  - `apiId`: **String**. Your reverse relational field `apiId`.
+  - `description`: **Optional - String**. Description.
+  - `displayName`: **String**. Reverse field display name.
+  - `isHidden`: **Optional - Boolean**. The field is hidden if true.
+  - `isList`: **Optional - Boolean**.
+  - `isUnidirectional`: **Optional - Boolean**. The field is unidirectional if true.
+  - `modelApiId`: **String**. Reverse field model `apiId`.
+  - `visibility`: Visibility types.
+- `tableExtension`: **Optional - String**.
+- `tableRenderer`: **Optional - String**.
+- `type`: Relational field type. For example `RelationalFieldType.Asset`.
+- `visibility`: **Optional**. Visibility types.
+
+### Update relational field
+
+```ts
+client.updateRelationalField({
+  apiId: '<api_id>',
+  description: `<your_description>`,
+  displayName: '<Your Display Name>',
+  formExtension: `<form_extension>`,
+  formRenderer: `<form_renderer>`,
+  isHidden: `<boolean>`,
+  isList: `<boolean>`,
+  isRequired: `<boolean>`,
+  modelApiId: `<model_api_id>`,
+  parentApiId: '<parent_api_id>',
+  reverseField: {
+    apiId: '<api_id>',
+    description: `<description>`,
+    displayName: '<Your Display Name>',
+    isHidden: `<boolean>`,
+    isList: `<boolean>`,
+    isUnidirectional: `<boolean>`,
+    modelApiId: '<model_api_id>',
+    visibility: `<visibility_types>`,
+  },
+  tableExtension: `<table_extension>`,
+  tableRenderer: `<table_renderer>`,
+  type: `<relational_field_type>`,
+  visibility: `<visibility_types>`,
+});
+```
+
+- `apiId`: **String**. Your relational field `apiId`.
+- `description`: **Optional - String**. Relational field description.
+- `displayName`: **String**. Display name that is used to render the relational field in the webapp.
+- `formExtension`: **Optional - String**.
+- `formRenderer`: **Optional - String**.
+- `isHidden`: **Optional - Boolean**. The relational field is hidden if true.
+- `isList`: **Optional - Boolean**.
+- `isRequired`: **Optional - Boolean**. The relational field is required if true. Only supported for `RelationalFieldType.Asset`.
+- `modelApiId`: **Optional - String**. Model `apiId`.
+- `parentApiId`: **Optional - String**. Parent `apiId`.
+- `reverseField`: Reverse relational field input.
+  - `apiId`: **String**. Your reverse relational field `apiId`.
+  - `description`: **Optional - String**. Description.
+  - `displayName`: **String**. Reverse field display name.
+  - `isHidden`: **Optional - Boolean**. The field is hidden if true.
+  - `isList`: **Optional - Boolean**.
+  - `isUnidirectional`: **Optional - Boolean**. The field is unidirectional if true.
+  - `modelApiId`: **String**. Reverse field model `apiId`.
+  - `visibility`: Visibility types.
+- `tableExtension`: **Optional - String**.
+- `tableRenderer`: **Optional - String**.
+- `type`: Relational field type. For example `RelationalFieldType.Asset`.
+- `visibility`: **Optional**. Visibility types.
+
+### Delete relational field
+
+Use [deleteField](/docs/api-reference/management-sdk/management-sdk-field-examples#delete-field) method.
+
+### Specific examples
+
+#### Required uni-directional asset field
+
+```ts
+client.createRelationalField({
+  parentApiId: '<parent_api_id>',
+  apiId: '<api_id>',
+  displayName: '<Your Display Name>',
+  type: RelationalFieldType.Asset,
+  isRequired: true,
+  reverseField: {
+    isUnidirectional: true,
+    apiId: '<api_id>',
+    displayName: '<Your Display Name>',
+    modelApiId: '<model_api_id>',
+  },
+});
+```
+
+#### M-n relation
+
+```ts
+client.createRelationalField({
+  parentApiId: '<parent_api_id>',
+  apiId: '<api_id>',
+  displayName: '<Your Display Name>',
+  type: RelationalFieldType.Relation,
+  isList: true,
+  reverseField: {
+    modelApiId: '<model_api_id>',
+    apiId: '<api_id>',
+    displayName: '<Your Display Name>',
+    isList: true,
+  },
+});
+```
+
+## Union fields
+
+### Create union field
+
+```ts
+client.createUnionField({
+  apiId: '<api_id>',
+  description: `<description>`,
+  displayName: '<Your Display Name>',
+  formExtension: `<form_extension>`,
+  formRenderer: `<form_renderer>`,
+  isHidden: `<boolean>`,
+  isList: `<boolean>`,
+  modelApiId: `<model_api_id>`,
+  parentApiId: '<parent_api_id>',
+  reverseField: {
+    apiId: '<api_id>',
+    description: `<description>`,
+    displayName: '<Your Display Name>',
+    isHidden: `<boolean>`,
+    isList: `<boolean>`,
+    modelApiIds: ['<model_api_id_1>', '<model_api_id_2>'],
+    visibility: `<visibility_types>`,
+  },
+  tableExtension: `<table_extension>`,
+  tableRenderer: `<table_renderer>`,
+  visibility: `<visibility_types>`,
+});
+```
+
+- `apiId`: **String**. Union field `apiId`.
+- `description`: **Optional - String**. Union field description.
+- `displayName`: **String**. Display name that is used to render the union field in the webapp.
+- `formExtension`: **Optional - String**.
+- `formRenderer`: **Optional - String**.
+- `isHidden`: **Optional - Boolean**. The relational field is hidden if true.
+- `isList`: **Optional - Boolean**.
+- `modelApiId`: **Optional - String**. Model `apiId`.
+- `parentApiId`: **Optional - String**. Parent `apiId`.
+- `reverseField`: Reverse union field input.
+  - `apiId`: **Optional - String**.
+  - `description`: **Optional - String**.
+  - `displayName`: **Optional - String**.
+  - `isHidden`: **Optional - Boolean**. The reverse relational field is hidden if true.
+  - `isList`: **Optional - Boolean**.
+  - `modelApiIds`: **String**. Model `apiIds`.
+  - `visibility`: Visibility types.
+- `tableExtension`: **Optional - String**.
+- `tableRenderer`: **Optional - String**.
+- `visibility`: Visibility types.
+
+### Update union field
+
+```ts
+client.updateUnionField({
+  apiId: '<api_id>',
+  description: `<description>`,
+  displayName: '<Your Display Name>',
+  modelApiId: `<model_api_id>`,
+  parentApiId: '<parent_api_id>',
+  reverseField: {
+    modelApiIds: ['<model_api_id_1>', '<model_api_id_2>'],
+  },
+  visibility: `<visibility_types>`,
+});
+```
+
+- `apiId`: **String**. Union field `apiId`.
+- `description`: **Optional - String**. Union field description.
+- `displayName`: **String**. Display name that is used to render the union field in the webapp.
+- `modelApiId`: **Optional - String**. Model `apiId`.
+- `parentApiId`: **Optional - String**. Parent `apiId`.
+- `reverseField`: `updateReverseUnionField`. Update reverse union field input.
+  - `modelApiIds`: **String**. Model `apiIds`.
+- `visibility`: Visibility types.
+
+### Delete union field
+
+Use [deleteField](/docs/api-reference/management-sdk/management-sdk-field-examples#delete-field) method.
+
+## Components
+
+### Create component
+
+```ts
+client.createComponent({
+  apiId: '<api_id>',
+  apiIdPlural: '<api_id_plural>',
+  description: `<your_description>`,
+  displayName: '<Your Display Name>',
+});
+```
+
+- `apiId`: **String**. Your component `apiId`.
+- `apiIdPlural`: **String**. The component's plural `apiId`. This is used for lists.
+- `description`: **Optional - String**. Your component description.
+- `displayName`: **String**. Display name that is used to render the component in the webapp.
+
+### Update component
+
+```ts
+client.updateComponent({
+  apiId: '<api_id>',
+  apiIdPlural: '<api_id_plural>',
+  description: `<your_description>`,
+  displayName: '<Your Display Name>',
+  newApiId: `<new_api_id>`,
+});
+```
+
+- `apiId`: **String**. Your component `apiId`.
+- `apiIdPlural`: **Optional - String**. The component's plural `apiId`. This is used for lists.
+- `description`: **Optional - String**. Your component description.
+- `displayName`: **Optional - String**. Display name that is used to render the component in the webapp.
+- `newApiId`: **Optional - String**. New `apiId`.
+
+### Delete component
+
+```ts
+client.deleteComponent({
+  apiId: '<api_id>',
+});
+```
+
+- `apiId`: **String**. The `apiId` of the component you wish to delete.
+
+### Create component field
+
+```ts
+client.createComponentField({
+  apiId: '<api_id>',
+  componentApiId: `<component_api_id>`,
+  description: `<your_component_field_description>`,
+  displayName: '<Your Display Name>',
+  formExtension: `<form_extension>`,
+  formRenderer: `<form_renderer>`,
+  isList: `<boolean>`,
+  isRequired: `<boolean>`,
+  parentApiId: `<parent_api_id>`,
+  position: `<int>`,
+  tableExtension: `<table_extension>`,
+  tableRenderer: `<table_renderer>`,
+  visibility: `<visibility_types>`,
+});
+```
+
+- `apiId`: **String**. Your component field `apiId`.
+- `componentApiId`: **String**. Your component `apiId`.
+- `description`: **Optional - String**. Your component field description.
+- `displayName`: **String**. Display name that is used to render the component field in the webapp.
+- `formExtension`: **Optional - String**.
+- `formRenderer`: **Optional - String**.
+- `isList`: **Optional - Boolean**.
+- `isRequired`: **Optional - Boolean**. If true, the component field is required.
+- `parentApiId`: **String**. Parent `apiId`.
+- `position`: **Optional - Integer**.
+- `tableExtension`: **Optional - String**.
+- `tableRenderer`: **Optional - String**.
+- `visibility`: **Optional**. Visibiity types.
+
+### Update component field
+
+```ts
+client.updateComponentField({
+  apiId: '<api_id>',
+  description: `<your_component_field_description>`,
+  displayName: '<Your Display Name>',
+  isList: `<boolean>`,
+  isRequired: `<boolean>`,
+  newApiId: `<new_api_id>`,
+  parentApiId: `<parent_api_id>`,
+  visibility: `<visibility_types>`,
+});
+```
+
+- `apiId`: **String**. Your component field `apiId`.
+- `description`: **Optional - String**. Your component field description.
+- `displayName`: **Optional - String**. Display name that is used to render the component field in the webapp.
+- `isList`: **Optional - Boolean**.
+- `isRequired`: **Optional - Boolean**. If true, the component field is required.
+- `newApiId`: **Optional - String**. New `apiId`.
+- `parentApiId`: **String**. Parent `apiId`.
+- `visibility`: **Optional**. Visibiity types.
+
+### Delete component field
+
+Use [deleteField](/docs/api-reference/management-sdk/management-sdk-field-examples#delete-field) method.
+
+### Specific examples
+
+#### Add a field to a component
+
+```ts
+client.createSimpleField({
+  parentApiId: '<parent_api_id>',
+  type: SimpleFieldType.String,
+  apiId: '<api_id>',
+  displayName: '<Your Display Name>',
+});
+```
+
+#### Create basic component field
+
+```ts
+client.createComponentField({
+  parentApiId: '<parent_api_id>',
+  apiId: '<api_id>',
+  displayName: '<Your Display Name>',
+  description: '<Your description>',
+  componentApiId: '<component_api_id>',
+});
+```
+
+#### Create a component union field
+
+```ts
+client.createComponentUnionField({
+  parentApiId: '<parent_api_id>',
+  apiId: '<api_id>',
+  displayName: '<Your Display Name>',
+  componentApiIds: ['<component_api_id_1>', '<component_api_id_2>'],
+});
+```
+
+#### Remove VideoBlock from a component union field
+
+```ts
+client.createComponentUnionField({
+  parentApiId: '<parent_api_id>',
+  apiId: '<api_id>',
+  displayName: '<Your Display Name>',
+  componentApiIds: [
+    '<contributor_component_api_id>',
+    '<videoblock_component_api_id>',
+  ],
+});
+```
+
+## Remote sources
+
+### Create GraphQL remote sources
+
+```ts
+client.createGraphQlRemoteSource({
+  debugEnabled: `<boolean>`,
+  description: `<your_description>`,
+  displayName: `<Your Display Name>`,
+  headers: `<json>`,
+  introspectionHeaders: `<json>`,
+  introspectionMethod: `<get_or_post>`,
+  introspectionUrl: `<introspection_url>`,
+  prefix: `<prefix>`,
+  remoteTypeDefinitions: {
+    sdl: `<CreateRemoteTypeDefinition>`,
+  },
+  url: `<url>`,
+});
+```
+
+- `debugEnabled`: **Optional - Boolean**.
+- `description`: **Optional - String**. GraphQL remote source description.
+- `displayName`: **String**. Display name that is used to render the GraphQL remote source in the webapp.
+- `headers`: **Optional - JSON**.
+- `introspectionHeaders`: **Optional - JSON**. HTTP headers that will be used for introspection.
+- `introspectionMethod`: `GraphQlRemoteSourceIntrospectionMethod`. HTTP method that will be used for introspection.
+- `introspectionUrl`: **Optional - String**. Specific URL that will be used for introspection if the introspection is available on a URL other than the regular URL. Can be ignored if the introspection URL is the same as the URL of the remote source.
+- `prefix`: **String**.
+- `remoteTypeDefinitions`: **Optional**. `CreateRemoteTypeDefinition`. Custom GraphQL input types that can be used as arguments in remote fields that belong to this `remoteSource`.
+  - `sdl`: **String**
+- `url`: **String**
+
+### Update GraphQL remote sources
+
+```ts
+client.createGraphQlRemoteSource({
+  debugEnabled: `<boolean>`,
+  description: `<your_description>`,
+  displayName: `<Your Display Name>`,
+  headers: `<json>`,
+  introspectionHeaders: `<json>`,
+  introspectionMethod: `<get_or_post>`,
+  introspectionUrl: `<introspection_url>`,
+  prefix: `<prefix>`,
+  remoteTypeDefinitionsToUpsert: {
+    remoteTypeDefinitionsToCreate: `<remote_type_definitions_to_create>`,
+    remoteTypeDefinitionsToDelete: `<remote_type_definitions_to_delete>`,
+    remoteTypeDefinitionsToUpdate: `<remote_type_definitions_to_update>`,
+  },
+  url: `<url>`,
+});
+```
+
+- `debugEnabled`: **Optional - Boolean**.
+- `description`: **Optional - String**. GraphQL remote source description.
+- `displayName`: **Optional - String**. Display name that is used to render the GraphQL remote source in the webapp.
+- `headers`: **Optional - JSON**.
+- `introspectionHeaders`: **Optional - JSON**. HTTP headers that will be used for introspection.
+- `introspectionMethod`: `GraphQlRemoteSourceIntrospectionMethod`. HTTP method that will be used for introspection.
+- `introspectionUrl`: **Optional - String**. Specific URL that will be used for introspection if the introspection is available on a URL other than the regular URL. Can be ignored if the introspection URL is the same as the URL of the remote source.
+- `prefix`: **String**. Unique prefix that will be prepended to all of the remote types. This value cannot be changed.
+- `remoteTypeDefinitionsToUpsert`: **Optional**. `CreateRemoteTypeDefinition`. Custom GraphQL input types that can be used as arguments in remote fields that belong to this `remoteSource`.
+  - `remoteTypeDefinitionsToCreate`: **Optional** Remote type definitions to create.
+  - `remoteTypeDefinitionsToDelete`: **Optional** Remote type definitions to delete.
+  - `remoteTypeDefinitionsToUpdate`: **Optional** Remote type definitions to update.
+- `url`: **Optional - String**
+
+### Create REST remote sources
+
+```ts
+client.createRestRemoteSource({
+  debugEnabled: `<boolean>`,
+  description: `<your_description>`,
+  displayName: `<Your Display Name>`,
+  headers: `<json>`,
+  prefix: `<prefix>`,
+  remoteTypeDefinitions: {
+    sdl: `<CreateRemoteTypeDefinition>`,
+  },
+  url: `<url>`,
+});
+```
+
+- `debugEnabled`: **Optional - Boolean**.
+- `description`: **Optional - String**. REST remote source description.
+- `displayName`: **String**. Display name that is used to render the REST remote source in the webapp.
+- `headers`: **Optional - JSON**.
+- `prefix`: **String**. Unique prefix that will be prepended to all of the remote types. This value cannot be changed.
+- `remoteTypeDefinitions`: **Optional**. `CreateRemoteTypeDefinition`. Remote type definitions that the remote source supports, or input types that can be used by any remote field of this remote source.
+  - `sdl`: **String**
+- `url`: **String**
+
+### Update REST remote sources
+
+```ts
+client.updateRestRemoteSource({
+  debugEnabled: `<boolean>`,
+  description: `<your_description>`,
+  displayName: `<Your Display Name>`,
+  headers: `<json>`,
+  prefix: `<prefix>`,
+  remoteTypeDefinitionsToUpsert: {
+    remoteTypeDefinitionsToCreate: `<remote_type_definitions_to_create>`,
+    remoteTypeDefinitionsToDelete: `<remote_type_definitions_to_delete>`,
+    remoteTypeDefinitionsToUpdate: `<remote_type_definitions_to_update>`,
+  },
+  url: `<url>`,
+});
+```
+
+- `debugEnabled`: **Optional - Boolean**.
+- `description`: **Optional - String**. REST remote source description.
+- `displayName`: **String**. Display name that is used to render the REST remote source in the webapp.
+- `headers`: **Optional - JSON**.
+- `prefix`: **String**. Unique prefix that will be prepended to all of the remote types. This value cannot be changed.
+- `remoteTypeDefinitionsToUpsert`: **Optional**. `CreateRemoteTypeDefinition`. Remote type definitions that the remote source supports, or input types that can be used by any remote field of this remote source.
+  - `remoteTypeDefinitionsToCreate`: **Optional** Remote type definitions to create.
+  - `remoteTypeDefinitionsToDelete`: **Optional** Remote type definitions to delete.
+  - `remoteTypeDefinitionsToUpdate`: **Optional** Remote type definitions to update.
+- `url`: **String**
+
+### Delete remote source
+
+```ts
+client.deleteRemoteSource({
+  prefix: `<prefix>`,
+});
+```
+
+- `prefix`: **String**. The prefix of the remote source you wish to delete.
+
+## Custom sidebar element
+
+### Create custom sidebar element
+
+```ts
+client.createCustomSidebarElement({
+  appApiId: `<your_app_id>`,
+  appElementApiId: `<your_app_element_id>`,
+  config: `<JSON>`,
+  description: `<your_description>`,
+  displayName: `<Your Display Name>`,
+  modelApiId: `<model_api_id>`,
+});
+```
+
+- `appApiId`: **String**. Your App's `apiId`.
+- `appElementApiId`: **String**. `apiId` of the App element to create custom sidebar element with.
+- `config`: **Optional - JSON**. JSON metadata associated with the sidebar element.
+- `description`: **Optional - String**. Description for the sidebar element.
+- `displayName`: **String**. Display name that is used to render the sidebar element in the webapp.
+- `modelApiId`: **String**. `apiId` of the model associated with the custom sidebar element.
+
+### Delete custom sidebar element
+
+```ts
+client.deleteCustomSidebarElement({
+  appApiId: `<your_app_id>`,
+  appElementApiId: `<your_app_element_id>`,
+  modelApiId: `<model_api_id>`,
+});
+```
+
+- `appApiId`: **String**. Your App's `apiId`.
+- `appElementApiId`: **String**. `apiId` of the App element associated with the custom sidebar element.
+- `modelApiId`: **String**. `apiId` of the model associated with the custom sidebar element.
+
+## Enumerations
+
+### Create enumeration
+
+```ts
+client.createEnumeration({
+  apiId: `<your_app_id>`,
+  description: `<description>`,
+  displayName: `<display_name>`,
+  values: {
+    apiId: `<api_id>`,
+    displayName: `<display_name>`,
+  },
+});
+```
+
+- `apiId`: **String**. Enumeration `apiId`.
+- `description`: **Optional - String**. Enumeration description.
+- `displayName`: **String**. Display name that is used to render the enumeration in the webapp.
+- `values`: `CreateEnumerationValue`. Enumeration values.
+  - `apiId`: **String**. Enumeration value `apiId`.
+  - `displayName`: **String**. Display name that is used to render the enumeration value in the webapp.
+
+### Update enumeration
+
+```ts
+client.updateEnumeration({
+  apiId: `<your_app_id>`,
+  description: `<description>`,
+  displayName: `<display_name>`,
+  newApiId: `<new_api_id>`,
+  valuesToCreate: {
+    apiId: `<api_id>`,
+    displayName: `<display_name>`,
+  },
+  valuesToDelete: [`<value_1>`, `<value_2>`],
+  valuesToUpdate: {
+    apiId: `<api_id>`,
+    displayName: `<display_name>`,
+    newApiId: `<new_api_id>`,
+  },
+});
+```
+
+- `apiId`: **String**. Enumeration `apiId`.
+- `description`: **Optional - String**. Enumeration description.
+- `displayName`: **String**. Display name that is used to render the enumeration in the webapp.
+- `newApiId`: **Optional - String**. New `apiId`.
+- `valuesToCreate`: **Optional - String**. `createEnumerationValue`. Enumeration values to be created.
+  - `apiId`: **String**. Enumeration value `apiId`.
+  - `displayName`: **String**. Display name that is used to render the enumeration value in the webapp.
+- `valuesToDelete`: **Optional - String**. Values to delete.
+- `valuesToUpdate`: **Optional - String**. `updateEnumerationValue`. Enumeration values to be updated..
+
+  - `apiId`: **String**. Enumeration value `apiId`.
+  - `displayName`: **Optional - String**. Display name that is used to render the enumeration value in the webapp.
+  - `newApiId`: **Optional - String**. New `apiId`.
+
+### Delete enumeration
+
+```ts
+client.deleteEnumeration({
+  apiId: `<your_app_id>`,
+});
+```
+
+- `apiId`: **String**. `apiId` of the enumeration you wish to delete.
+
+### Create enumerable field
+
+```ts
+client.createEnumerableField({
+  apiId: 'enumField',
+  description: 'Description',
+  displayName: 'Enum Field',
+  parentApiId: 'Post',
+  enumerationApiId: 'Variation',
+});
+```
+
+- `apiId`: **String**. Enumerable field `apiId`.
+- `description`: **Optional - String**. Enumerable field description.
+- `displayName`: **String**. Display name that is used to render the enumerable field in the webapp.
+- `parentApiId`: **String**. Parent `apiId`.
+- `enumerationApiId`: **String**. Enumeration `apiId`.
+
+### Update enumerable field
+
+```ts
+client.updateEnumerableField({
+  apiId: 'enumField', // required
+  parentApiId: 'Test', // required
+  description: 'Description',
+  displayName: 'Enum Field Update',
+  initialValue: 'Value 1',
+  isHidden: false,
+  isList: false,
+  isLocalized: false,
+  isRequired: false,
+  isTitle: false,
+  isUnique: false,
+  migrationValue: 'Value 1',
+  position: 0,
+  visibility: 'READ_WRITE',
+});
+```
+
+- `apiId`: **Required - String**. Enumerable field `apiId`.
+- `parentApiId`: **Required - String**. Parent `apiId`.
+- `description`: **Optional - String**. Enumerable field description.
+- `displayName`: **String**. Display name that is used to render the enumerable field in the webapp.
+- `initialValue`: **String**. Initial value of the field.
+- `isHidden`: **Optional - Boolean**. Makes the field hidden if true.
+- `isList`: **Optional - Boolean**.
+- `isLocalized`: **Optional - Boolean**.
+- `isRequired`: **Optional - Boolean**. Makes the field required if true.
+- `isTitle`: **Optional - Boolean**.
+- `isUnique`: **Optional - Boolean**.
+- `migrationValue`: **String**. Migration value of the enumerable field.
+- `position`: **Optional - Integer**.
+- `visibility`: Field visibility, for example `VisibilityTypes.ReadWrite`.
+
+### Delete enumerable field
+
+Use [deleteField](/docs/api-reference/management-sdk/management-sdk-field-examples#delete-field) method.
+
+## Locales
+
+### Create locale
+
+```ts
+client.createLocale({
+  apiId: `<your_app_id>`,
+  description: `<description>`,
+  displayName: `<Display Name>`,
+});
+```
+
+- `apiId`: **String**. Locale `apiId`.
+- `description`: **Optional - String**. Locale description.
+- `displayName`: **String**. Display name associated with the locale.
+
+### Update locale
+
+```ts
+client.updateLocale({
+  apiId: `<your_app_id>`,
+  description: `<description>`,
+  displayName: `<Display Name>`,
+  isDefault: `<boolean>`,
+  newApiId: `<new_api_id>`,
+});
+```
+
+- `apiId`: **String**. Locale `apiId`.
+- `description`: **Optional - String**. Locale description.
+- `displayName`: **Optional - String**. Display name associated with the locale.
+- `isDefault`: **Optional - Boolean**. If true, this is the default locale.
+- `newApiId`: **Optional - String**. New `apiId`.
+
+### Delete locale
+
+```ts
+client.deleteLocale({
+  apiId: `<your_app_id>`,
+  force: `<boolean>`,
+});
+```
+
+- `apiId`: **String**. Locale `apiId`.
+- `force`: **Optional - Boolean**. If true, deletion is forced.
+
+## Stages
+
+### Create stage
+
+```ts
+client.createStage({
+  apiId: `<your_app_id>`,
+  color: `<color>`,
+  description: `<description>`,
+  displayName: `<Display Name>`,
+  position: `<int>`,
+});
+```
+
+- `apiId`: **String**. Your stage `apiId`.
+- `color`: Select from `ColorPalette`.
+- `description`: **Optional - String**. Your stage description.
+- `displayName`: **String**. Display name associated with the stage.
+- `position`: **Optional - Integer**.
+
+### Update stage
+
+```ts
+client.updateStage({
+  apiId: `<your_app_id>`,
+  color: `<color>`,
+  description: `<description>`,
+  displaye: `<Display Name>`,
+  newApiId: `<new_api_id>`,
+  position: `<int>`,
+});
+```
+
+- `apiId`: **String**. Your stage `apiId`.
+- `color`: **Optional**. Select from `ColorPalette`.
+- `description`: **Optional - String**. Your stage description.
+- `display`: **Optional - String**. Display name associated with the stage.
+- `newApiId`: **Optional - String**. New `apiId`.
+- `position`: **Optional - Integer**.
+
+### Delete stage
+
+```ts
+client.deleteStage({
+  apiId: `<your_app_id>`,
+});
+```
+
+- `apiId`: **String**. `apiId` of the stage you wish to delete.

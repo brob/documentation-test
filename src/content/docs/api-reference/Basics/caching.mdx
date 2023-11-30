@@ -1,0 +1,173 @@
+---
+title: Caching
+meta_description: All Content APIs are served via our globally distributed edge cache, with responses cached across 190 Edge POPs.
+---
+import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+
+All Content APIs are served via our globally distributed edge cache. Whenever a query is sent to the content API, its response is cached in multiple [POP](https://www.fastly.com/network-map/) (data centers) around the globe.
+
+![Hygraph CDN Map](/images/docs/api-reference/basics/cdn-map.svg)
+
+<Card theme="info">
+
+Hygraph handles all cache management for you! For faster queries, use `GET` requests, so browsers can leverage advanced caching abilities available in the headers.
+
+</Card>
+
+Hygraph comes with two different content API endpoints, served by 2 different CDN providers. To understand which endpoint you should use, look at the following table.
+
+| Endpoint name                 | Endpoint                                                                  | Consistency                            | Access       |
+| ----------------------------- | ------------------------------------------------------------------------- | -------------------------------------- | ------------ |
+| Regular read & write endpoint | `https://${region}.hygraph.com/v2/`<br/>`${projectId}/${environment}`     | Eventual (Read-after-write within POP) | Read & Write |
+| High performance endpoint     | `https://${region}.cdn.hygraph.com/v2/`<br/>`${projectId}/${environment}` | Eventual                               | Read & Write |
+
+<Card theme="warning">
+
+<b>CDN =</b> Content-Delivery-Network
+
+You can see the endpoints in your project settings <b>(Settings->API Access->Endpoints)</b>.
+
+</Card>
+
+## Regular read & write endpoint
+
+The **Regular read & write endpoint** allows for reads and writes. All your requests are cached, and any mutation will invalidate the cache for your project.
+
+Even though this endpoint is eventually consistent, within a single region you will get read-after-write consistency.
+
+<Card theme="warning">
+
+This endpoint can take up to 30s to update all caching nodes worldwide.
+
+</Card>
+
+This endpoint is ideal for delivering content around the globe with one endpoint, but it only has basic caching logic.
+
+## High performance endpoint
+
+We use a state-of-the-art caching approach, and we have developed a high-performance edge service on the [Fastly Compute Edge platform](https://www.fastly.com/products/edge-compute/serverless). The service is deployed [close](https://www.fastly.com/network-map/) to your users around the world.
+
+<Card theme="warning">
+
+You will benefit from continual improvements on the cache invalidation logic without any code changes on your part.
+
+</Card>
+
+This endpoint is ideal for delivering content around the globe with low latency and high read-throughput.
+
+<Card theme="success">
+
+This endpoint has **model + stage based invalidation**. This means that instead of invalidating the complete cache for content and schema changes, we only invalidate the models that were changed based on the mutations used. The rest will stay cached and, therefore, fast. Click [here](/docs/api-reference/basics/caching#model-stage-based-invalidation) to learn more.
+
+</Card>
+
+## Consistency
+
+To understand both endpoints better, you should have a basic knowledge of cache consistency modes. You can be sure that any changes have persisted at Hygraph if your response was successful.
+
+### Eventual consistency
+
+Some changes are not visible immediately after the update. For example, if you `create`, `delete` or `update` content the update is distributed around the globe with a short delay. Theoretically, if you read content right after a mutation, you may receive stale content.
+
+### Read-after-write consistency
+
+In contrast, [read-after-write consistency](https://avikdas.com/2020/04/13/scalability-concepts-read-after-write-consistency.html) guarantees that a subsequent read after an update, delete, or create can see those changes immediately. This is only valid for operations hitting the same POP (point-of-presence).
+
+## Model + stage based invalidation
+
+**Model + stage based invalidation**, which is only available for our [High performance endpoint](/docs/api-reference/basics/caching#smart-cache-invalidation), allows invalidating only the models that were changed based on the mutations used for content and schema changes, rather than invalidate the complete cache.
+
+Regarding queries that fetch related content that needs to be invalidated: We analyze query responses and invalidate only the cached queries that contain the changed model.
+
+For example:
+
+<Tabs panelHeight={230}>
+<TabItem label="Query">
+```graphql
+{
+	posts {
+    title
+    author {
+      id
+    }
+  }
+}
+```
+</TabItem>
+<TabItem label="Response">
+```graphql
+{
+  "data": {
+    "posts": [
+      {
+        "title": "Post",
+        "author": {
+          "name": "Fabian"
+        }
+      }
+    ]
+  }
+}
+```
+</TabItem>
+</Tabs>
+
+Considering invalidation after a **schema change**, if a user were to update the `Author` model shown in the example above, this cached query would be invalidated, as it also returned the `Author` model.
+
+For **content changes**, we also take the stage into account, meaning that updating an `Author` entry, and not publishing it, would invalidate all cached queries that returned the `DRAFT` stage and the `Author` model. Queries that returned the `PUBLISHED` stage will remain cached.
+
+## Smart cache invalidation
+
+Our System understands if mutations are flowing through the cache and invalidates the affected resources with an eventual consistency guarantee.
+
+## stale-if-error
+
+In case of an outage of our APIs - this includes remote field origin errors as well- we will fall back for at least 24h to the latest cached content on our edge servers. This adds an additional reliability layer.
+
+<Card theme= "info" title="Pro Tip">
+
+This is only available on the <b>High performance</b> endpoint.
+
+The default `Stale-if-error` for all shared clusters is 86400s (1 day).
+
+</Card>
+
+You can use a header for the **High performance endpoint** that lets you set `stale-if-error` on a per query basis.
+
+```graphql
+{
+  "hyg-stale-if-error": "21600"
+}
+```
+
+The values are in seconds.
+
+## stale-while-revalidate
+
+With the **High performance endpoint** you will get cached responses directly, while we update the content in the background. This means your content is always served on the edge, with low latency for your users.
+
+_Staleness_ refers to how long we deliver stale data while we revalidate the cache in the background if the cache was invalidated.
+
+<Card theme= "info" title="Pro Tip">
+
+This is only available on the <b>High performance</b> endpoint.
+
+The default `stale-while-revalidate` for our shared clusters is `0`.
+
+</Card>
+
+You can use a header for the **High performance endpoint** that lets you set `stale-while-revalidate` on a per query basis.
+
+```graphql
+{
+  "hyg-stale-while-revalidate": "27"
+}
+```
+
+The values are in seconds.
+
+## Remote fields
+
+GraphQL queries that contain remote fields are cached differently. By default, a response is marked as cacheable when all remote field responses are cacheable according to [rfc7234](https://datatracker.ietf.org/doc/rfc7234/). You can control the TTL (Time-to-Live) cache by returning the `Cache-Control` response header.
+
+By default, we will set a TTL of `900s`, you can set a minimum TTL of `60s`. While it is also possible to respond with a `no-store` cache directive to disable the cache, this is not recommended, as it marks the entire response as not cacheable and will increase the load on your origin.

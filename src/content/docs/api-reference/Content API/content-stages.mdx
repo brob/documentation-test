@@ -1,0 +1,325 @@
+---
+title: Content stages
+meta_description: You can create your own content stages inside the Hygraph UI, and query content from these stages, as well as publish to.
+---
+import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+
+You can create your own content stages inside the Hygraph UI, and query content from these stages, as well as publish to.
+
+By default all content is served from the `DRAFT` stage, unless configured otherwise via a Permanent Auth Token, or by filtering.
+
+You can [create custom content stages](/docs/guides/content/content-stages#creating-custom-content-stages) to publish to from `DRAFT`. Each project comes with stages `DRAFT`, and `PUBLISHED`.
+
+<Card theme="warning">
+
+Custom content stages are available to paid plans. [Upgrade your plan](/pricing).
+
+**Content stages are environment specific**. This means their configuration is applied per environment. Take this into consideration if you're working with a project using more than one environment.
+
+</Card>
+
+## Create a content stage
+
+1. Navigate to your project settings.
+2. Open the Content Stages tab.
+3. Press "Add Stage" at the bottom of the list of stages.
+4. Provide the Display name, API ID, a Color for the label and Description in the modal.
+5. Press create.
+
+<Card theme="info">
+
+Creating content stages besides the two offered by default - `DRAFT` & `PUBLISHED` - is available to paid plans. [Upgrade your plan](/pricing).
+
+</Card>
+
+## Edit a content stage
+
+1. Navigate to the content stage you want to edit.
+2. Press "edit" in the lower left corner of the stage card.
+3. Press "update" in the lower right corner of the card.
+
+<Card theme="info">
+
+System content stages - `DRAFT` & `PUBLISHED` - cannot be edited.
+
+</Card>
+
+## Delete a content stage
+
+1. Navigate to the content stage card you want to delete.
+2. Press "delete" and confirm your choice.
+
+<Card theme="info">
+
+System content stages - `DRAFT` & `PUBLISHED` - cannot be deleted.
+
+</Card>
+
+## Publishing content
+
+Hygraph automatically generates a publish mutation for each of your content models, including the asset model.
+
+If the models have localized fields, you can greater control the `locales` you want to publish, and if you want to publish the base entry.
+
+Each time you publish to a content stage, you will create a snapshot of the data as a [version](#versioning).
+
+For example, if we have a product model, the mutation `publishProduct` will exist. You can use this mutation to publish content to a content stage.
+
+| Argument            | Input Tpye                | Description                                                                                         |
+| ------------------- | ------------------------- | --------------------------------------------------------------------------------------------------- |
+| `where`             | `ProductWhereUniqueInput` | The content entry you want to publish, using a [filter](/docs/api-reference/content-api/filtering). |
+| `to`                | `[Stage!]! = [PUBLISHED]` | The target published content stage.                                                                 |
+| `locales`           | `[Locale!]`               | Optional locales to publish.                                                                        |
+| `publishBase`       | `Boolean = true`          | Whether to publish the base content entry.                                                          |
+| `withDefaultLocale` | `Boolean = true`          |                                                                                                     |
+
+<Tabs panelHeight={180}>
+  <TabItem label="Without locales">
+
+```graphql
+mutation {
+  publishProduct(where: { id: "..." }, to: PUBLISHED) {
+    id
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="With locales">
+
+```graphql
+mutation {
+  publishProduct(
+    where: { id: "..." }
+    to: PUBLISHED
+    publishBase: true
+    locales: [en]
+    withDefaultLocale: true
+  ) {
+    id
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+<Card theme="info" title="Pro Tip">
+
+Every mutation besides `publish` and `unpublish`, will only update the `DRAFT` version.
+
+For instance, when you update an entry in the UI, you are doing an `updateMutation`, which changes the `DRAFT` version.
+
+To update the published version, you would need to publish that `DRAFT`.
+
+</Card>
+
+## Unpublishing content
+
+Similar to publishing content, you can unpublish from a selected content stage.
+
+For example, if we have a product model, the mutation `unpublishProduct` will exist. You can use this mutation to unpublish content from a content stage.
+
+| Argument        | Input Tpye                | Description                                                                                           |
+| --------------- | ------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `where`         | `ProductWhereUniqueInput` | The content entry you want to unpublish, using a [filter](/docs/api-reference/content-api/filtering). |
+| `from`          | `[Stage!]! = [PUBLISHED]` | The target [content stage](/docs/api-reference/content-api/content-stages) to unpublish from.         |
+| `locales`       | `[Locale!]`               | Optional locales to unpublish.                                                                        |
+| `unpublishBase` | `Boolean = true`          | Whether to unpublish the base content entry or not.                                                   |
+
+<Tabs panelHeight={180}>
+  <TabItem label="Without locales">
+
+```graphql
+mutation {
+  unpublishProduct(where: { id: "..." }, from: PUBLISHED) {
+    id
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="With locales">
+
+```graphql
+mutation {
+  unpublishProduct(
+    where: { id: "..." }
+    from: PUBLISHED
+    unpublishBase: true
+    locales: [en]
+  ) {
+    id
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Versioning
+
+Versioning allows you to work non-destructively with content. Make changes, and recover previous versions with Hygraph.
+
+Each time you publish to a content stage, history is written.
+
+<Card theme="warning">
+
+Versions of documents are kept for a minimum of 30 days, for paid plans. [Upgrade your plan](/pricing) for longer history retention.
+
+</Card>
+
+### Fetching version history
+
+You can fetch all of the history by `stage`. `history` is a [system field](/docs/api-reference/schema/system-fields#version-history-fields).
+
+For example, let's get all of the `history` for `products`.
+
+<Tabs panelHeight={270}>
+  <TabItem label="Request">
+
+```graphql
+{
+  products(stage: PUBLISHED) {
+    history {
+      id
+      stage
+      revision
+      createdAt
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "products": [
+      {
+        "history": [
+          {
+            "id": "ckdt47uio02al01044grc4ehf",
+            "stage": "PUBLISHED",
+            "revision": 4,
+            "createdAt": "2020-11-02T10:28:24.273413+00:00"
+          },
+          {
+            "id": "ckdt47uio02al01044grc4ehf",
+            "stage": "PUBLISHED",
+            "revision": 3,
+            "createdAt": "2020-11-02T10:01:40.453523+00:00"
+          },
+          {
+            "id": "ckdt47uio02al01044grc4ehf",
+            "stage": "PUBLISHED",
+            "revision": 2,
+            "createdAt": "2020-11-02T10:01:36.351916+00:00"
+          },
+          {
+            "id": "ckdt47uio02al01044grc4ehf",
+            "stage": "PUBLISHED",
+            "revision": 1,
+            "createdAt": "2020-11-02T10:00:22.14774+00:00"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+<Card theme="info">
+
+Replace `stage: PUBLISHED` with `stage: QA` to get history from custom stage `QA`.
+
+</Card>
+
+### Fetching a single version
+
+You can use a the generated `[model]Version` query to fetch a single version of a content entry.
+
+Since models can be complex, and change over time. The `data` field is a JSON field that returns a snapshot of the content entry at that time.
+
+Using the `id`, and `revision` from the previous query, we can fetch the `data` of the version, including the relations metadata.
+
+<Tabs panelHeight={270}>
+  <TabItem label="Request">
+
+```graphql
+{
+  productVersion(
+    where: { id: "ckdt47uio02al01044grc4ehf", revision: 4, stage: PUBLISHED }
+  ) {
+    id
+    stage
+    revision
+    data
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "productVersion": {
+      "id": "ckdt47uio02al01044grc4ehf",
+      "stage": "PUBLISHED",
+      "revision": 4,
+      "data": {
+        "id": "ckdt47uio02al01044grc4ehf",
+        "name": "Snapback",
+        "slug": "snapback",
+        "image": {
+          "id": "ckdt47ocg02af0104ek5dinsj",
+          "__typename": "Asset"
+        },
+        "stage": "PUBLISHED",
+        "prices": [
+          {
+            "id": "cke1f4fow022h0151b46dd64d",
+            "__typename": "Price"
+          },
+          {
+            "id": "cke1f4pq0022f0146btokysn8",
+            "__typename": "Price"
+          }
+        ],
+        "category": {
+          "id": "cke1erm9s01ov0151p2h1k6bw",
+          "__typename": "Category"
+        },
+        "createdAt": "2020-08-13T18:07:36.201803+00:00",
+        "updatedAt": "2020-08-19T13:35:19.916504+00:00",
+        "description": {
+          "raw": {
+            "children": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ]
+          },
+          "__typename": "RichText"
+        },
+        "publishedAt": "2020-11-02T10:28:24.273413+00:00"
+      }
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>

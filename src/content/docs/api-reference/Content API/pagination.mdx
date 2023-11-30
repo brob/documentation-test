@@ -1,0 +1,152 @@
+---
+title: Pagination
+meta_description: Hygraph supports various arguments for paginating content entries.
+---
+import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+
+
+## Paginate query results
+
+Hygraph supports various arguments for paginating content entries:
+
+| Argument | Type     | Definition                              |
+| -------- | -------- | --------------------------------------- |
+| `first`  | `Int`    | Seek forwards from start of result set. |
+| `last`   | `Int`    | Seek backwards from end of result set.  |
+| `skip`   | `Int`    | Skip result set by given amount.        |
+| `before` | `String` | Seek backwards before specific ID.      |
+| `after`  | `String` | Seeks forwards after specific ID.       |
+
+<Tabs panelHeight={180}>
+  <TabItem label="first">
+
+```graphql
+{
+  posts(first: 6) {
+    id
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="last">
+
+```graphql
+{
+  posts(last: 6) {
+    id
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="skip">
+
+```graphql
+{
+  posts(first: 6, skip: 6) {
+    id
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="before">
+
+```graphql
+{
+  posts(last: 6, before: "...") {
+    id
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="after">
+
+```graphql
+{
+  posts(first: 6, after: "...") {
+    id
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+<Card theme="warning">
+
+You cannot combine `first` with `before`, or `last` with `after`.
+
+</Card>
+
+<Card theme="info">
+
+The default result size of results returned by queries fetching multiple entries is `10`. You can provide a maximum of `100` to the `first`, or `last` arguments.
+
+The limit of 10/100 applies to projects created after 14-06-2022. Projects created before that date have a limit of 100/1000.
+
+</Card>
+
+## Pagination limits
+
+To fetch the pagination limits of your projects, you need to access the [API Playground](/docs/api-reference/basics/api-playground) section of your Hygraph project, select `Management API` from the `Environment` dropdown located at the top of the screen, and run the following query:
+
+```graphql
+{
+  viewer {
+    project(id: "<PROJECTID>") {
+      defaultPaginationSize
+      maxPaginationSize
+    }
+  }
+}
+```
+
+## Nested pagination
+
+You can also use `first`, `last`, `skip`, `before`, and `after` arguments with any nested relations. For example, let's imagine our post has comments:
+
+```graphql
+{
+  posts {
+    id
+    comments(first: 6, skip: 6) {
+      id
+      createdAt
+    }
+  }
+}
+```
+
+## Relay cursor connections
+
+Hygraph follows the Relay cursor connection specification. Each of your project models also contain a connection type, automatically managed by Hygraph.
+
+The example below shows us how we can query for the first `3` posts, `after` the `cursor` (ID) `abc`. We can also query `pageInfo` to check whether there are more pages using `hasNextPage`.
+
+The [`PageInfo`](/docs/api-reference/schema/system-fields#pageinfo) is useful when paginating.
+
+```graphql
+{
+  postsConnection(first: 3, after: "abc") {
+    edges {
+      cursor
+      node {
+        id
+        title
+      }
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+      pageSize
+    }
+  }
+}
+```
+
+Learn more about [fetching with Relay](/docs/api-reference/content-api/queries#fetching-with-relay).

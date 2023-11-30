@@ -1,0 +1,575 @@
+---
+title: Query complexity
+meta_description: This document shows how to split GQL queries due to query complexity, how to optimize union fields, and how to use complexityTree JSON to learn about the cost of your queries
+---
+import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+
+
+## Overview
+
+When working with GraphQL (GQL) queries, it's important to manage the complexity of your queries to ensure efficient and effective data retrieval.
+
+In the context of GQL, **query complexity** refers to the computational resources needed to fulfill a query. The complexity of a query increases with the number of fields and the depth of the query.
+
+- **Scalar fields**: Each scalar field in a query contributes one point to the query complexity.
+- **Relations / Unions**: Relations multiply their complexity times the level of nesting in the query.
+
+For example, if a query retrieves a list of posts and each post has multiple comments, the complexity of the query increases with each nested comment.
+
+This guide will help you with the following:
+
+- [How to split up your GQL queries to manage complexity](/docs/api-reference/basics/query-complexity#splitting-gql-queries)
+- [How to optimize union queries](/docs/api-reference/basics/query-complexity#union-queries)
+- [How to use the complexity tree JSON output to calculate the cost of your queries](/docs/api-reference/basics/query-complexity#complexity-tree-json-output)
+
+## Splitting GQL queries
+
+To manage query complexity, you can split your GQL queries into smaller, more manageable parts:
+
+| Suggestion                                                                                                          | Description                                                                                                                                                                             |
+| ------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Limit the depth of your queries](/docs/api-reference/basics/query-complexity#example-1-limiting-query-depth)       | Avoid deeply nested queries. Instead, break them up into multiple smaller queries. This can help reduce the complexity and make your queries more efficient.                            |
+| [Fetch only necessary fields](/docs/api-reference/basics/query-complexity#example-2-fetching-only-necessary-fields) | Minimize the number of fields you're retrieving in each query. Only fetch the fields that are necessary for your current operation.                                                     |
+| [Use pagination](/docs/api-reference/basics/query-complexity#example-3-using-pagination)                            | Hygraph supports various arguments for paginating content entries. By using these features, you can manage the amount of data retrieved in each query, thereby reducing the complexity. |
+
+Remember that the goal is to **reduce the complexity of your queries to ensure efficient and effective data retrieval**. By limiting the depth of your queries, fetching only necessary fields, and using pagination, you can manage the complexity of your GQL queries effectively.
+
+The following examples show you how you can split your GQL queries:
+
+### Example 1: Limiting query depth
+
+Instead of a deeply nested query like this:
+
+```graphql
+{
+  posts {
+    id
+    comments {
+      id
+      author
+      replies {
+        id
+        text
+        user {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+```
+
+You can split it into two separate queries:
+
+<Tabs panelHeight={230}>
+  <TabItem label="Query 1">
+
+```graphql
+{
+  posts {
+    id
+    comments {
+      id
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Query 2">
+
+```graphql
+{
+  comments(id: "...") {
+    id
+    author
+    replies {
+      id
+      text
+      user {
+        id
+        name
+      }
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+### Example 2: Fetching only necessary fields
+
+Intead of retrieving all fields, like this:
+
+```graphql
+{
+  post(where: { id: "..." }) {
+    id
+    title
+    body
+    author
+    comments
+  }
+}
+```
+
+You can retrieve only the necessary fields, like this:
+
+```graphql
+{
+  post(where: { id: "..." }) {
+    id
+    title
+  }
+}
+```
+
+### Example 3: Using pagination
+
+Hygraph supports various arguments for paginating content entries:
+
+- **`first`**: Seek forwards from the start of the result set.
+- **`last`**: Seek backwards from the end of the result set.
+- **`skip`**: Skip result set by a given amount.
+- **`before`**: Seek backwards before a specific ID.
+- **`after`**: Seeks forwards after a specific ID.
+
+<Card theme="warning">
+  You cannot combine **`first`** with **`before`**, or **`last`** with
+  **`after`**.
+</Card>
+
+The default result size of results returned by queries fetching multiple entries is 10. You can provide a maximum of 100 to the **`first`**, or **`last`** arguments.
+
+<Card theme="info" title="Pro Tip">
+
+- The limit of 10/100 applies to projects created after 14-06-2022.
+- Projects created before that date have a limit of 100/1000.
+- To learn more about this, check out our document on [Pagination](/docs/api-reference/content-api/pagination).
+
+</Card>
+
+You can use **`first`**, **`last`**, **`skip`**, **`before`**, and **`after`** arguments with any nested relations. In the following example, the `posts` model has `comments`:
+
+```graphql
+{
+  posts {
+    id
+    comments(first: 6, skip: 6) {
+      id
+      createdAt
+    }
+  }
+}
+```
+
+## Union queries
+
+[Union types](/docs/api-reference/schema/field-types#union) allow to setup relational fields that point to different model types, while this feature allows for very flexible modelling of content, it can also open the door to queries that might not perform as well and could use some optimizations. Below we document means to optimize querying for content that is backed by a Union relation.
+
+Unions are typically queried like so:
+
+```graphql
+{
+  page(where: { id: "ckrks0ge0334m0b52onduq7r2" }) {
+    id
+    title
+    blocks {
+      __typename
+      ... on Hero {
+        title
+        ctaLink
+      }
+      ... on Grid {
+        title
+        subtitle {
+          markdown
+        }
+      }
+      ... on Gallery {
+        photos {
+          url
+          handle
+        }
+      }
+    }
+  }
+}
+```
+
+As schemas evolve and Union relations expand to many models, querying unions this way can become problematic. Particularly when every single possible type is queried with this format within the same query.
+
+## Optimizing union queries
+
+We offer two ways of optimizing your union queries:
+- Enhanced Query Splitting with Entity Type **(Preferred solution)**
+- Optimizing union queries using Node
+
+### Enhanced query splitting with Entity type
+
+<Card theme="success" title="Please note">
+
+This is the preferred solution, as it offers significantly better performance.
+
+</Card>
+
+Hygraph has introduced an improved query splitting feature using the `Entity` type and `entities` query entrypoint.
+
+This approach is particularly beneficial for handling complex union relationships and modular components.
+
+<Card theme="info">
+
+This new feature reflects Hygraph's commitment to providing advanced solutions for handling complex GraphQL queries with ease and efficiency.
+
+</Card>
+
+#### Implementation
+
+The `Entity` type provides a more streamlined approach compared to the traditional Node interface. It makes use of the typename to substantially increase performance.
+
+To do this, follow these two steps:
+
+**Step 1: Initial query using Entity type**
+
+This initial query fetches `id` and `__typename` for each block within a page, preparing for the detailed query in the next step.
+
+```graphql
+query {
+  page {
+    id
+    blocks {
+      __typename
+      ... on Entity {
+        id
+      }
+    }
+  }
+}
+```
+
+**Step 2: Detailed query for specific types**
+
+The second query specifically targets `Hero`, `Grid`, and `Gallery` entities based on the `id` and `__typename` obtained from the first query. Results are returned in the order of the `where` input. 
+
+```graphql
+query {
+  entities(where: [{id: "ckrks0ge0334m0b52ienf67ag", typename: "Hero", stage: "DRAFT"},
+                   {id: "ckrks0ge0334m0b52firha74a", typename: "Grid", stage: "DRAFT"},
+                   {id: "ckrks0ge0334m0b52ifh2sd6a", typename: "Gallery", stage: "DRAFT"}]) {
+    ... on Hero {
+      id
+      title
+    }
+    ... on Grid {
+      id
+      layout
+    }
+    ... on Gallery {
+      id
+      images
+    }
+  }
+}
+```
+
+#### Benefits
+
+|Benefit                  |Description                                                              |
+|-------------------------|-------------------------------------------------------------------------|
+|Reduced Query Complexity |Simplifies queries by splitting them into manageable parts.              |
+|Enhanced Performance     |Improves efficiency by reducing the load in fetching complex data types. |
+|Flexible Data Fetching   |Offers more control and precision in querying specific content types.    |
+
+#### Example Use Case
+
+Consider a website with a dynamic layout consisting of `Hero`, `Grid`, and `Gallery` sections.  **Enhanced query splitting with Entity type** would allow for efficient identification and retrieval of specific content types, ensuring high performance and flexibility in data handling.
+
+### Optimizing union queries using Node
+
+In order to avoid performance impacts due to a large number of Union types in a relation, it is possible to change the way the content is queried so that it is done in a 2 step approach.
+
+Below we will be using the same query from the previous section as an example:
+
+**Step 1: Find out which documents are in fact connected**
+
+        We will get the `__typename` and the `id` for all the connected documents in the union relation by using the Node interface like so:
+
+        <Tabs panelHeight={300}>
+
+    <TabItem label="Query">
+
+        ```graphql
+        {
+          page(where: { id: "ckrks0ge0334m0b52onduq7r2" }) {
+            id
+            title
+            blocks {
+              __typename
+              ... on Node {
+                id
+              }
+            }
+          }
+        }
+        ```
+
+        </TabItem>
+
+    <TabItem label="Response">
+
+        ```graphql
+        {
+        "data": {
+            "page": {
+                "id": "ckrks0ge0334m0b52onduq7r2",
+                "title": "Sample Page 1",
+                "blocks": [
+                {
+                    "id": "cks8t3o943h1l0d099v8xd072",
+                    "__typename": "Hero"
+                },
+                {
+                    "id": "cksj3dxww0o2r0c57savzceub",
+                    "__typename": "Grid"
+                },
+                {
+                    "id": "cksrocxds3mwa0a07rdtj7qvx",
+                    "__typename": "Grid"
+                },
+                {
+                    "id": "cks8t36i83iq70b6035caxp6n",
+                    "__typename": "Gallery"
+                }
+                ]
+            }
+        }
+        }
+        ```
+
+        </TabItem>
+
+    </Tabs>
+
+**Step 2: Query the connected types by `id`**
+
+    With the retrieved information we can construct queries dynamically to fetch the affected documents. Considering the response we received from the previous query in **Step 1**, we will now go over the response and generate another query that will in fact get only the connected documents by `id`:
+
+    ```graphql
+    query heroBlocks {
+      heros(where: { id_in: ["cks8t3o943h1l0d099v8xd072"] }) {
+        title
+        ctaLink
+      }
+    }
+
+    query gridBlocks {
+      grids(
+        where: {
+          id_in: ["cksj3dxww0o2r0c57savzceub", "cksrocxds3mwa0a07rdtj7qvx"]
+        }
+      ) {
+        title
+        subtitle {
+          markdown
+        }
+      }
+    }
+
+    query galleryBlocks {
+      galleries(where: { id_in: ["cks8t36i83iq70b6035caxp6n"] }) {
+        photos {
+          url
+          handle
+        }
+      }
+    }
+    ```
+
+    Alternatively, you can combine these into a single query by using aliasing:
+
+    ```graphql
+    query blocks {
+      heroBlocks: heros(where: { id_in: ["cks8t3o943h1l0d099v8xd072"] }) {
+        title
+        ctaLink
+      }
+      gridBlocks: grids(
+        where: {
+          id_in: ["cksj3dxww0o2r0c57savzceub", "cksrocxds3mwa0a07rdtj7qvx"]
+        }
+      ) {
+        title
+        subtitle {
+          markdown
+        }
+      }
+      galleryBlocks: galleries(
+        where: { id_in: ["cks8t36i83iq70b6035caxp6n"] }
+      ) {
+        photos {
+          url
+          handle
+        }
+      }
+    }
+    ```
+
+## Complexity tree JSON output
+
+The complexity tree JSON output provides a detailed breakdown of the estimated and actual costs of your GraphQL query. This information can help you understand the computational resources required to fulfill your query and guide you in optimizing your queries for better performance.
+
+<Card title="Pro Tip" theme="info">
+  To get the complexity tree JSON for your query, you need to add the
+  `"x-inspect-complexity": true` header to the playground.
+</Card>
+
+### JSON Output
+
+Here is a brief explanation of the keys in the JSON output:
+
+- **`total_estimated_docs`:** The total number of documents estimated to be fetched by the query.
+- **`total_actual_docs`:** The total number of documents actually fetched by the query.
+- **`total_estimated_cost`:** The total estimated cost of the query. This includes the cost of fetching documents and any additional costs.
+- **`total_actual_cost`:** The total actual cost of the query.
+- **`complexityTree`:** A nested structure that breaks down the cost of each field in the query.
+
+Each node in the `complexityTree` has the following keys:
+
+- **`field_name`:** The name of the field in the query.
+- **`xpath`:** The path to the field in the query.
+- **`estimated_no_of_docs`:** The estimated number of documents fetched by this field.
+- **`additional_cost`:** Any additional cost associated with this field.
+- **`estimated_cost`:** The total estimated cost of this field (the sum of `estimated_no_of_docs` and `additional_cost`).
+- **`actual_no_of_docs`:** The actual number of documents fetched by this field.
+- **`actual_cost`:** The actual cost of this field.
+- **`children`:** Any nested fields within this field. Each child is also a node with the same structure.
+
+<Card title="Pro Tip" theme="info">
+
+Nested objects multiply the estimated complexity by the pagination size default 10 (max 100).
+
+This is important to keep in mind when dealing with nested queries, as they can significantly increase the complexity of your query.
+
+</Card>
+
+### JSON Output Example
+
+Consider the following query and its related complexity tree `JSON` output:
+
+<Tabs panelHeight={280}>
+  <TabItem label="Query">
+
+```graphql
+query Example {
+  posts {
+    title
+    comments {
+      text
+      authors {
+        name
+      }
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Query 2">
+
+```JSON
+{
+  "complexity": {
+    "total_estimated_docs": 1110,
+    "total_actual_docs": 0,
+    "total_estimated_cost": 1116,
+    "total_actual_cost": 0,
+    "complexityTree": {
+      "field_name": "Root",
+      "estimated_no_of_docs": 0,
+      "additional_cost": 0,
+      "estimated_cost": 0,
+      "actual_no_of_docs": 0,
+      "actual_cost": 0,
+      "children": [
+        {
+          "field_name": "posts",
+          "xpath": "posts.#",
+          "estimated_no_of_docs": 10,
+          "additional_cost": 2,
+          "estimated_cost": 12,
+          "actual_no_of_docs": 0,
+          "actual_cost": 0,
+          "children": [
+            {
+              "field_name": "title",
+              "estimated_no_of_docs": 0,
+              "additional_cost": 0,
+              "estimated_cost": 0,
+              "actual_no_of_docs": 0,
+              "actual_cost": 0
+            },
+            {
+              "field_name": "comments",
+              "xpath": "posts.#.comments.#",
+              "estimated_no_of_docs": 100,
+              "additional_cost": 2,
+              "estimated_cost": 102,
+              "actual_no_of_docs": 0,
+              "actual_cost": 0,
+              "children": [
+                {
+                  "field_name": "text",
+                  "estimated_no_of_docs
+
+": 0,
+                  "additional_cost": 0,
+                  "estimated_cost": 0,
+                  "actual_no_of_docs": 0,
+                  "actual_cost": 0
+                },
+                {
+                  "field_name": "authors",
+                  "xpath": "posts.#.comments.#.authors.#",
+                  "estimated_no_of_docs": 1000,
+                  "additional_cost": 2,
+                  "estimated_cost": 1002,
+                  "actual_no_of_docs": 0,
+                  "actual_cost": 0,
+                  "children": [
+                    {
+                      "field_name": "name",
+                      "estimated_no_of_docs": 0,
+                      "additional_cost": 0,
+                      "estimated_cost": 0,
+                      "actual_no_of_docs": 0,
+                      "actual_cost": 0
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+
+```
+
+  </TabItem>
+</Tabs>
+
+This JSON output shows us that the total estimated cost of the query is 1116, which includes fetching 1110 documents and additional costs. However, since the query did not return any content for this example(there was no real content in the project), the actual costs and documents fetched are 0. Despite this, the query is still costly due to the nested structure, hence the high estimated cost.
+
+The `complexityTree` provides a breakdown of the costs for each field in the query. For example, the `posts` field is estimated to fetch 10 documents with an additional cost of 2, resulting in an estimated cost of 12. Within the `posts` field, the `comments` field is estimated to fetch 100 documents with an additional cost of 2, resulting in an estimated cost of 102. The `authors` field within `comments` is estimated to fetch 1000 documents with an additional cost of 2, resulting in an estimated cost of 1002. This is because of the multiplication of nested fields that we mentioned before.
+
+<Card title="Pro Tip" theme="info">
+
+By examining the `complexityTree`, you can identify which fields contribute the most to the complexity of your query and optimize accordingly.
+
+Keep in mind that nested objects multiply the estimated complexity by the pagination size, so be mindful of this when structuring your queries.
+
+</Card>

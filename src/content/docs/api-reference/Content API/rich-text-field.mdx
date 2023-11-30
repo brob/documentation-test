@@ -1,0 +1,516 @@
+---
+title: Rich Text field
+meta_description: Learn more about Hygraph's Rich Text field.
+---
+import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+
+The `RichText` field type is an advanced String field that returns your content in 4 different formats by default: `raw`, `HTML`, `markdown`, and `text`. `JSON` is also available when embeds are enabled.
+
+The Rich Text field renders an advanced `textarea` with tools to add headings, links, tables, images, lists, etc.
+
+When a Rich Text field is added to your model, it will automatically generate the following types:
+
+```graphql
+type RichText {
+  raw: RichTextAST!
+  html: String!
+  markdown: String!
+  text: String!
+  json: RichTextAST!
+}
+```
+
+## Rich Text data
+
+Let's talk about Rich Text data in more detail.
+
+- **Raw:** `raw` AST (Slate Nodes) offers complete control over how nodes are presented to the user.
+- **JSON:** `JSON` representations of RTE allows as much control as `raw` does, but offers the possibility of creating embeds.
+
+  <Card theme="info">
+
+  `RichText` will include the field `JSON` in addition to `raw` only if Rich Text Embeds are enabled. Both `JSON` and `raw` are aliases, but if you have embeds enabled you should ideally use `JSON`.
+
+  </Card>
+
+- **HTML:** `HTML` can be used with a Rich Text renderer for customization purposes. While rendering the HTML of your rich text is simple, it doesn't offer great customization.
+- **Markdown:** `Markdown` - like `HTML` - can be used for customization. While `markdown` is easier to read and write - specially for users without a technical background - it's not as expressive as `HTML`. To present `markdown` on a page, you'll need a `markdown` parser that will convert `markdown` to `HTML`.
+- **Text:** `text` is mostly used for excerpts, as links, images, and even line breaks are removed.
+
+### Use Cases
+
+- **Raw:** Use `raw` when you want to control the rendered output using our render libraries.
+- **JSON:** Use `JSON` for the same as `raw` but when you also need embeds.
+- **HTML / Markdown:** Use these when you need to make customizations and want to insert pre-built `HTML` or `markdown` into an app.
+- **Text:** Use `text` when you want to provide the text as data to a script, such as making full-text search.
+
+### Examples
+
+This section takes a simple Rich Text piece with a title, a paragraph, a link, and bold text, and offers its `JSON`, `HTML`, `Markdown`, and `Text` representations.
+
+<Tabs panelHeight={900}>
+  <TabItem label="JSON">
+
+```
+"json": {
+          "children": [
+            {
+              "type": "heading-one",
+              "children": [
+                {
+                  "text": "Example Rich Text Copy"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "This is a regular paragraph, including a "
+                },
+                {
+                  "href": "https://hygraph.com/docs",
+                  "type": "link",
+                  "children": [
+                    {
+                      "text": "hyperlink"
+                    }
+                  ]
+                },
+                {
+                  "text": " and "
+                },
+                {
+                  "bold": true,
+                  "text": "bold text"
+                },
+                {
+                  "text": "."
+                }
+              ]
+            }
+          ]
+        }
+```
+
+  </TabItem>
+  <TabItem label="HTML">
+
+```
+"html": "<h1>Example Rich Text Copy</h1><p>This is a regular paragraph, including a <a title=\"https://hygraph.com/docs\" href=\"https://hygraph.com/docs\">hyperlink</a> and <strong>bold text</strong>.</p>"
+```
+
+  </TabItem>
+  <TabItem label="Markdown">
+
+```markdown
+"markdown": "# Example Rich Text Copy\n\nThis is a regular paragraph, including a [hyperlink](https://hygraph.com/docs \"https://hygraph.com/docs\") and **bold text**.\n"
+```
+
+  </TabItem>
+  <TabItem label="Text">
+
+```text
+"text": "Example Rich Text Copy\\nThis is a regular paragraph, including a \\nhyperlink\\n and \\nbold text\\n."
+```
+
+  </TabItem>
+</Tabs>
+
+## Rich Text embeds
+
+<Card theme="info">
+
+If Rich Text Embeds are enabled, `RichText` will include the field `JSON` in addition to `raw`.
+
+</Card>
+
+For example, we can query all of those on our `RichText` field type `content`:
+
+<Tabs panelHeight={250}>
+  <TabItem label="Request">
+
+```graphql
+{
+  posts {
+    content {
+      raw
+      html
+      markdown
+      text
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "posts": [
+      {
+        "content": {
+          "raw": {
+            "children": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "GraphQL CMS"
+                  }
+                ]
+              }
+            ]
+          },
+          "html": "<p>GraphQL CMS</p>",
+          "markdown": "GraphQL CMS\n",
+          "text": "GraphQL CMS"
+        }
+      }
+    ]
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+### Embed assets
+
+You can also embed [Assets](/docs/api-reference/content-api/assets) and other models inside Rich Text as **block, inline or link embeds**.
+
+![Rich Text Asset Embeds UI](/images/docs/api-reference/schema/rich-text-embeds.png)
+
+<Card theme="info">
+
+You can find out how to enable Rich Text embeds in our [field configuration](/docs/api-reference/schema/field-configuration#embeds-options) docs.
+
+</Card>
+
+### Rich Text embeds & API types
+
+With Rich Text Embeds enabled, your API will have some new types added. The name of your field will be now a type appended by `RichText`, and `RichTextEmbeddedTypes` inside your schema.
+
+For example, if you had the model `Post` and field `content`, the types generates would be `PostContentRichText`, and `PostContentRichTextEmbeddedTypes` respectively.
+
+The `PostContentRichText` type will look like the following:
+
+```graphql
+type RichText {
+  json: RichTextAST!
+  html: String!
+  markdown: String!
+  text: String!
+  references: [PostContentRichTextEmbeddedTypes!]!
+}
+```
+
+The `references` field will be a union relation to the types you embedded, for example `Asset`.
+
+You should use the `references` field when querying `JSON` to get the `URL` (with any [transformations](/docs/api-reference/content-api/assets#transformations), `handle`, or any of the [Asset fields](/docs/api-reference/schema/system-fields#asset-fields).
+
+<Tabs panelHeight={420}>
+  <TabItem label="Query">
+
+```graphql
+{
+  posts {
+    content {
+      json
+      html
+      markdown
+      text
+      references {
+        __typename
+        ... on Asset {
+          url
+          handle
+        }
+      }
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Response">
+
+```json
+{
+  "data": {
+    "posts": [
+      {
+        "content": {
+          "json": {
+            "children": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Hygraph Rich Text Embeds"
+                  }
+                ]
+              },
+              {
+                "type": "embed",
+                "nodeId": "cko2lq2u0031r0844xnvurz05",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ],
+                "nodeType": "Asset"
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ]
+          },
+          "html": "<p>Hygraph Rich Text Embeds</p><div data-gcms-embed-type=\"Asset\" data-gcms-embed-id=\"cko2lq2u0031r0844xnvurz05\"></div><p></p>",
+          "markdown": "Hygraph Rich Text Embeds\n\n\n",
+          "text": "Hygraph Rich Text Embeds\\n\\n",
+          "references": [
+            {
+              "__typename": "Asset",
+              "url": "https://media.graphassets.com/xSIoGkATQybd8S2SgA5Q",
+              "handle": "xSIoGkATQybd8S2SgA5Q"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+The `HTML` response will return `gcms-embed-type` and `gcms-embed-id` data attributes for the embedded types. A block embed is returned as `div` and an inline embed as `span` with a `data-gcms-embed-inline` attribute. A link embed is returned as an `a`-tag with a `data-gcms-embed-id` and `data-gcms-embed-type` attribute.
+
+<Tabs panelHeight={130}>
+  <TabItem label="Block">
+    ```html
+    <div
+      data-gcms-embed-type="Asset"
+      data-gcms-embed-id="cko2lq2u0031r0844xnvurz05"
+    ></div>
+    ```
+  </TabItem>
+  <TabItem label="Inline">
+    ```html
+    <span
+      data-gcms-embed-type="Author"
+      data-gcms-embed-id="ckwyytv5k003s0791zitq6alu"
+      data-gcms-embed-inline
+    ></span>
+    ```
+  </TabItem>
+  <TabItem label="Link">
+    ```html
+    <a
+      data-gcms-embed-id="cl0sa2kc50sb80axsu0kcaeaa"
+      data-gcms-embed-type="Post"
+    >
+      link text
+    </a>
+    ```
+  </TabItem>
+</Tabs>
+
+Hygraph uses [Slate 0.5](https://docs.slatejs.org) for `RichTextAST`.
+
+<Card theme="info">
+
+If you are programmatically creating content entries with Rich Text, you should use the [`@graphcms/html-to-slate-ast`](https://github.com/hygraph/rich-text/tree/main/packages/html-to-slate-ast) package.
+
+</Card>
+
+## Use JSON representation of RTE for customization
+
+You can work with the **Rich Text field** to take the data that the editors put in Hygraph, and manipulate it for display in the front end.
+
+The following example shows data available on a blog post, with the Rich Text content in `HTML` and `markdown`:
+
+<Tabs panelHeight={280}>
+ <TabItem label="Query">
+
+```graphql
+query MyQuery($id: ID, $slug: String) {
+  values: post(where: { id: $id, slug: $slug }) {
+    title
+    slug
+    id
+    content {
+      html
+      markdown
+    }
+  }
+}
+```
+
+ </TabItem>
+ <TabItem label="Variables">
+
+```json
+{
+  "id": "clbdn2fjithnl0amxwm8wtell"
+}
+```
+
+ </TabItem>
+ <TabItem label="Result">
+
+```json
+{
+  "data": {
+    "values": {
+      "title": "Test",
+      "slug": "test",
+      "id": "clbdn2fjithnl0amxwm8wtell",
+      "content": {
+        "html": "<h1>Lorem Ipsum</h1><h4>&quot;Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...&quot;</h4><h5>&quot;There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain...&quot;</h5><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc interdum mauris libero. Aliquam in iaculis nibh. Duis sagittis, orci sit amet hendrerit pellentesque, velit felis lobortis purus, vitae finibus libero risus quis ipsum. Curabitur in malesuada odio. Quisque quis metus quis augue lacinia euismod vel quis orci. Fusce condimentum ultricies mollis. Morbi et ultricies augue. Integer massa libero, elementum nec ante at, blandit auctor risus. Nulla et dignissim turpis. Vivamus pharetra turpis eu sem maximus egestas. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In a pulvinar dui. Etiam varius justo quis purus hendrerit, sed tristique ex pulvinar. Integer vel lobortis magna. Suspendisse potenti. Morbi faucibus sem eget enim posuere, vitae vestibulum felis sodales.</p><p>Fusce suscipit sed dolor eu convallis. Nulla et velit ut lacus ullamcorper varius vel sit amet justo. Nullam condimentum dolor a ligula placerat, vitae sagittis elit efficitur. Donec ac elit fermentum, vehicula dui eget, condimentum ante. Aenean in nisl faucibus neque feugiat suscipit. Aenean sit amet facilisis ante, sed semper ipsum. Proin id nulla odio. Maecenas condimentum placerat laoreet. Aliquam at sodales tortor. Nam tortor dui, maximus nec imperdiet ut, bibendum vel felis. Duis hendrerit vulputate finibus. In hac habitasse platea dictumst. Pellentesque sed posuere ex. Nullam metus erat, finibus nec ultricies nec, egestas sed ipsum.</p><p>Nulla varius mauris sed justo egestas, eu dictum urna dictum. Aenean varius dui convallis vehicula suscipit. In hac habitasse platea dictumst. Nullam euismod vel dui ac blandit. Suspendisse potenti. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed vitae lorem lacinia, mollis risus volutpat, malesuada risus. Maecenas lacinia sem in odio vestibulum, at dictum metus finibus. Morbi turpis tellus, egestas eu molestie nec, sagittis ac enim. Morbi facilisis finibus odio, eget consequat ipsum porttitor non. Nunc risus ipsum, congue blandit lacus eu, lacinia hendrerit nulla. Donec congue suscipit velit, a aliquet dolor venenatis nec. In eget ullamcorper massa. Ut efficitur felis vel rhoncus sollicitudin.</p>",
+        "markdown": "# Lorem Ipsum\n\n#### \"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...\"\n\n##### \"There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain...\"\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc interdum mauris libero. Aliquam in iaculis nibh. Duis sagittis, orci sit amet hendrerit pellentesque, velit felis lobortis purus, vitae finibus libero risus quis ipsum. Curabitur in malesuada odio. Quisque quis metus quis augue lacinia euismod vel quis orci. Fusce condimentum ultricies mollis. Morbi et ultricies augue. Integer massa libero, elementum nec ante at, blandit auctor risus. Nulla et dignissim turpis. Vivamus pharetra turpis eu sem maximus egestas. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In a pulvinar dui. Etiam varius justo quis purus hendrerit, sed tristique ex pulvinar. Integer vel lobortis magna. Suspendisse potenti. Morbi faucibus sem eget enim posuere, vitae vestibulum felis sodales.\n\nFusce suscipit sed dolor eu convallis. Nulla et velit ut lacus ullamcorper varius vel sit amet justo. Nullam condimentum dolor a ligula placerat, vitae sagittis elit efficitur. Donec ac elit fermentum, vehicula dui eget, condimentum ante. Aenean in nisl faucibus neque feugiat suscipit. Aenean sit amet facilisis ante, sed semper ipsum. Proin id nulla odio. Maecenas condimentum placerat laoreet. Aliquam at sodales tortor. Nam tortor dui, maximus nec imperdiet ut, bibendum vel felis. Duis hendrerit vulputate finibus. In hac habitasse platea dictumst. Pellentesque sed posuere ex. Nullam metus erat, finibus nec ultricies nec, egestas sed ipsum.\n\nNulla varius mauris sed justo egestas, eu dictum urna dictum. Aenean varius dui convallis vehicula suscipit. In hac habitasse platea dictumst. Nullam euismod vel dui ac blandit. Suspendisse potenti. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed vitae lorem lacinia, mollis risus volutpat, malesuada risus. Maecenas lacinia sem in odio vestibulum, at dictum metus finibus. Morbi turpis tellus, egestas eu molestie nec, sagittis ac enim. Morbi facilisis finibus odio, eget consequat ipsum porttitor non. Nunc risus ipsum, congue blandit lacus eu, lacinia hendrerit nulla. Donec congue suscipit velit, a aliquet dolor venenatis nec. In eget ullamcorper massa. Ut efficitur felis vel rhoncus sollicitudin.\n"
+      }
+    }
+  }
+}
+```
+
+ </TabItem>
+</Tabs>
+
+Hygraph automatically serializes the content into `HTML` and/or `markdown` that the front end can simply display. **This does not allow customization**.
+
+Instead of these two things, you can get the JSON representation, which will display as `JSON AST` in a tree with nested levels.
+
+<Tabs panelHeight={250}>
+ <TabItem label="Query">
+
+```graphql
+query MyQuery($id: ID, $slug: String) {
+  values: post(where: { id: $id, slug: $slug }) {
+    title
+    slug
+    id
+    content {
+      json
+    }
+  }
+}
+```
+
+ </TabItem>
+ <TabItem label="Variables">
+
+```json
+{
+  "id": "clbdn2fjithnl0amxwm8wtell"
+}
+```
+
+ </TabItem>
+ <TabItem label="Result">
+
+```json
+{
+  "data": {
+    "values": {
+      "title": "Test",
+      "slug": "test",
+      "id": "clbdn2fjithnl0amxwm8wtell",
+      "content": {
+        "json": {
+          "children": [
+            {
+              "type": "heading-one",
+              "children": [
+                {
+                  "text": "Lorem Ipsum"
+                }
+              ]
+            },
+            {
+              "type": "heading-four",
+              "children": [
+                {
+                  "text": "\"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...\""
+                }
+              ]
+            },
+            {
+              "type": "heading-five",
+              "children": [
+                {
+                  "text": "\"There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain...\""
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc interdum mauris libero. Aliquam in iaculis nibh. Duis sagittis, orci sit amet hendrerit pellentesque, velit felis lobortis purus, vitae finibus libero risus quis ipsum. Curabitur in malesuada odio. Quisque quis metus quis augue lacinia euismod vel quis orci. Fusce condimentum ultricies mollis. Morbi et ultricies augue. Integer massa libero, elementum nec ante at, blandit auctor risus. Nulla et dignissim turpis. Vivamus pharetra turpis eu sem maximus egestas. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In a pulvinar dui. Etiam varius justo quis purus hendrerit, sed tristique ex pulvinar. Integer vel lobortis magna. Suspendisse potenti. Morbi faucibus sem eget enim posuere, vitae vestibulum felis sodales."
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "Fusce suscipit sed dolor eu convallis. Nulla et velit ut lacus ullamcorper varius vel sit amet justo. Nullam condimentum dolor a ligula placerat, vitae sagittis elit efficitur. Donec ac elit fermentum, vehicula dui eget, condimentum ante. Aenean in nisl faucibus neque feugiat suscipit. Aenean sit amet facilisis ante, sed semper ipsum. Proin id nulla odio. Maecenas condimentum placerat laoreet. Aliquam at sodales tortor. Nam tortor dui, maximus nec imperdiet ut, bibendum vel felis. Duis hendrerit vulputate finibus. In hac habitasse platea dictumst. Pellentesque sed posuere ex. Nullam metus erat, finibus nec ultricies nec, egestas sed ipsum."
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "Nulla varius mauris sed justo egestas, eu dictum urna dictum. Aenean varius dui convallis vehicula suscipit. In hac habitasse platea dictumst. Nullam euismod vel dui ac blandit. Suspendisse potenti. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed vitae lorem lacinia, mollis risus volutpat, malesuada risus. Maecenas lacinia sem in odio vestibulum, at dictum metus finibus. Morbi turpis tellus, egestas eu molestie nec, sagittis ac enim. Morbi facilisis finibus odio, eget consequat ipsum porttitor non. Nunc risus ipsum, congue blandit lacus eu, lacinia hendrerit nulla. Donec congue suscipit velit, a aliquet dolor venenatis nec. In eget ullamcorper massa. Ut efficitur felis vel rhoncus sollicitudin."
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}
+```
+
+ </TabItem>
+</Tabs>
+
+<Card theme="warning">
+
+Remember that `Richtext` will only include the field `JSON` if Rich Text embeds are enabled for the model you're using.
+
+</Card>
+
+As you can see in the `results` tab of the above query, this breaks up the initial data into a `JSON` representation that a renderer can understand.
+
+This allows you to take that data and manipulate it in order to override any default renderer or add renderers for custom elements, creating a custom display logic for your front end.
+
+You will do this by creating an `HTML` element containing the manipulated data, which will then be rendered via the `astToHtmlString` method that's available on our [Rich Text HTML renderer](https://github.com/hygraph/rich-text/tree/main/packages/html-renderer). We also have a [React version](https://hygraph.com/blog/hygraph-react-rich-text-renderer) of this.
+
+<Card theme="info">
+
+Click <a href="https://hygraph.com/blog/styling-rich-text-tailwindcss" target="_blank">here</a> to access a detailed example on <b>how to style Rich Text using TailwindCSS</b>.
+
+</Card>
+
+By styling your Rich Text fields, you can either customize how your Rich Text will display throughout your website, or even have multiple types of Rich Text fields that do different things.
+
+## Resources
+
+- [Hygraph's Rich Text editor:](/features/edit#rich-text-editor) Hygraph's UI Rich Text field feature walkthrough.
+- [Styling Rich Text with TailwindCSS:](https://hygraph.com/blog/styling-rich-text-tailwindcss) Detailed tutorial on how to use the `JSON` representation from the RTE to create custom elements for each text-based element of Rich Text.
+- [Introducing the Hygraph React Rich Text Renderer:](https://hygraph.com/blog/hygraph-react-rich-text-renderer) Blog post on how to render Hygraph documents using Rich Text in your application easily using our available packages.
+- [Rich Text editor UI guide:](/docs/guides/content/rich-text-editor) Guide on how to use Hygraph's Rich Text editor in the content editor of your project.

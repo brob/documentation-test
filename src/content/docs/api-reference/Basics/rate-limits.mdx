@@ -1,0 +1,163 @@
+---
+title: Rate limits
+meta_description: Learn how to handle API rate limits.
+---
+import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+
+To ensure delivery of optimal experiences to all customers, a **rate limit** is enforced on all GraphQL queries for the shared regions. This means there are limits to the number of uncached requests you can make to your content API.
+
+When you exceed the rate limits, you'll get a [`429 error`](/docs/api-reference/basics/errors#429-too-many-requests).
+
+<Card theme="warning">
+
+Please note that **there are no limits enforced on requests that hit our CDN cache**, and such requests don't count towards your rate limits either.
+
+Cached requests are not rate limited. Uncached requests that fetch content from the database are rate limited on the different tiers by default, as follows:
+
+- **Community:** 5req/sec
+- **Professional:** 25req/sec
+- **Scale:** 35req/sec
+- **Enterprise:** >50req/sec
+
+</Card>
+
+<Card theme="info">
+
+The rate limiting depends on the current load of the shared region and the subscription plan. These limits can be lifted on dedicated clusters and enterprise plans. You can [contact sales](/contact) to request a custom plan.
+
+</Card>
+
+This document will go over how to handle API rate limits with **Next.js**, **Gatsby**, and **Nuxt**.
+
+## Next.js
+
+### Next.js thread limiting
+
+You can use this experimental setting in **Next.js** for disabling multithreading:
+
+```js
+// Your Next.js config file (next.config.js)
+...
+experimental: {
+  workerThreads: false,
+  cpus: 1
+},
+...
+```
+
+This setting will force the build to be single-threaded, which limits the speed at which requests are made within the `getStaticProps`.
+
+As a result, the build runs slower but completes without errors.
+
+### Next.js throttling
+
+The following **Next.js** example uses `pThrottle`, and allows you to control the limit of API calls per interval.
+
+```js
+import React from 'react';
+import { allProducts } from '../../utils/getProducts';
+import { gql } from '../../utils/hygraph-client';
+import { throttledFetch } from '../../utils/throttle';
+
+// Singular query used in getStaticProps
+const query = gql`
+  query GetSingleItem($slug: String!) {
+    product(where: { slug: $slug }) {
+      name
+      slug
+    }
+  }
+`;
+export async function getStaticPaths() {
+  // One call to get all paths
+  // No need to throttle this
+  // Unless you have a LOT of these calls
+  const products = await allProducts();
+  const paths = products.map((product) => ({
+    params: { slug: product?.slug },
+  }));
+  return { paths, fallback: false };
+}
+
+export async function getStaticProps({ params }) {
+  // For each path, there will be an API call
+  // We need to throttle this
+  // We need to throttle it on a global throttle, so we need to set that externally
+
+  // throttleFetch comes from a utility area and is shared among all dynamic route files
+  /*
+    import pThrottle from 'p-throttle'
+    import hygraphClient from './hygraph-client'
+
+    // Set the limit of # of calls per interval in ms (5 per second)
+    const throttle = pThrottle({limit: 5, interval: 1000})
+    export const throttledFetch = throttle(async (...args) => {
+        const [query, vars] = args
+
+        const data = await hygraphClient.request(query, vars)
+
+        return data
+    })
+  */
+  const product = await throttledFetch(query, { slug: params.slug });
+  return {
+    props: product,
+  };
+}
+
+export default function Page({ product }) {
+  // Each page produced by paths and props
+  return (
+    <>
+      <h1>{product.name}</h1>
+    </>
+  );
+}
+```
+
+## Gatsby
+
+### Gatsby concurrency override
+
+You can use `queryConcurrency` with our official [Gatsby source plugin for Hygraph projects](https://github.com/hygraph/gatsby-source-graphcms#options).
+
+This key indicates the number of promises ran at once when executing queries. Its default value is set to 10.
+
+<Card theme="warning">
+
+This plugin has been deprecated and no longer receives support. However, if you are already using it and have encountered a problem with rate limits, then we suggest you use the `queryConcurrency` solution.
+
+</Card>
+
+### Gatsby throttling
+
+The following **Gatsby** example uses `pThrottle`, and allows you to fetch 1 concurrent request maximum, with a minimum delay of 0.5 seconds.
+
+```js
+import { createHttpLink } from "apollo-link-http";
+ import pThrottle from "p-throttle";
+// Throttle fetches to max 1 concurrent request and
+  //  min. delay of 0.5 seconds.
+const throttledFetch = pThrottle( (...args) => {
+    return fetch(...args);
+  }, 1, 500);
+const link = createHttpLink({ uri: "/graphql" fetch: throttledFetch });
+```
+
+## Nuxt
+
+### Nuxt thread limiting
+
+You can add the following to your `nuxt.config.js` to avoid getting a [429 error](/docs/api-reference/basics/errors#429-too-many-requests). It will stop GraphQL requests from overloading Hygraph's API limits when building.
+
+```js
+// Your Nuxt config file (nuxt.config.js)
+generate: {
+concurrency: 250, //maximum number of requests per thread. This will only build 250 at a time based on the api rate limit
+interval: 200, //delay by 0.2s. You can adjust this to be higher if you still run into issues
+},
+```
+
+&nbsp;
+
+&nbsp;

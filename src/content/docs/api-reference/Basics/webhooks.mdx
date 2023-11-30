@@ -1,0 +1,341 @@
+---
+title: Webhooks
+meta_description: Hygraph webhooks are a fundamental method for observing changes that happen to content within your project.
+---
+import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+
+Hygraph webhooks are a fundamental method for observing changes that happen to content within your project.
+
+Whether new content is published, or existing is updated, subscribe to these events, and get notified via a `POST`, `DELETE`, `PUT`, or `GET` request to perform your own custom business logic.
+
+For example, you could use webhooks for:
+
+- Syncing data to external search engine,
+- Syncing data with external PIM,
+- Redeploying your static website when content or assets change,
+- Triggering email campaigns based on new content added.
+- Push messages into Slack.
+
+<Card theme="warning">
+
+**Webhooks are environment specific**. This means their configuration is applied per environment. Take this into consideration if you're working with a project using more than one environment.
+
+</Card>
+
+## Triggers
+
+Triggers can be configured to listen to one or more content model, stage, and action events.
+It is also possible to specify a trigger source, which allows triggering only when content is changed by the specified source: a [Permanent Auth Token (PAT)](/docs/api-reference/basics/authorization#permanent-auth-tokens), a project member editing content via the webapp or via public API.
+
+| Trigger       |                                                                                                                    |
+| ------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Content Model | All models, including `Asset`                                                                                      |
+| Stage         | Draft, Published, and [custom content stages](/docs/api-reference/content-api/content-stages)                      |
+| Action        | Create, Update, Delete, Publish, and Unpublish                                                                     |
+| Source        | [Permanent Auth Token](/docs/api-reference/basics/authorization#permanent-auth-tokens), Project Member, Public API |
+
+<Card theme="warning">
+
+- Webhook requests time out after 3000 ms.
+- The current retry policy is 4 retries on top of the initial request, that is, 5 requests in total.
+
+</Card>
+
+## Receiving a webhook
+
+<Card theme="info">
+
+Once events occur, a new webhook will be queued. It could be several minutes before a webhook is triggered, so make sure to create your application with this in mind.
+
+</Card>
+
+Once an event occurs, data is sent as JSON in a `POST`, `DELETE`, `PUT`, or `GET` request body to the configured URL. The contents of the request always contain the `operation`, and `data` of the event.
+
+The `data` object will always contain the `__typename`, `id` and `stage` keys.
+
+If the webhook is configured to include entry payloads, the following keys will also be included inside the `data` object:
+
+- All other non-localized fields on the entry.
+- The `id` and `__typename` of any related entries.
+- An optional `localizations` array, containing any localized fields on the entry.
+
+The snapshot of the current stage is only sent in the webhook body. This means that:
+
+- Create, Update, and Delete actions only send the draft version.
+- Publishing, and Unpublishing actions only send the published version.
+
+## Securing webhooks
+
+It is best to protect the endpoints which your webhooks invoke. This prevents unauthorized actions on your server, and better protects your users from any suspicious activity.
+
+You should set a shared `secret key` on your webhook, which can be used to validate the request came from Hygraph.
+
+![Hygraph webhook secret key](/images/docs/api-reference/basics/webhook-secret-key.png)
+
+Hygraph will send the header `gcms-signature` on webhooks with a shared secret key set.
+
+A `gcms-signature` header value looks like this:
+
+```
+sign=x0jU8z7AXAARIDBgsiVyfOG000wb2HhqN/mxl6+RSMk=, env=test, t=1631270481036
+```
+
+## Validating webhook signatures
+
+Using the `gcms-signature` header, you can validate the request came from Hygraph.
+
+You'll need to generate a HMAC with the SHA256 hash function to generate a signature you can use to compare against the `gcms-signature` header.
+
+### Hygraph utils
+
+To make things easier for developers working with Node, we've released a small utility that will construct a new signature for you, with your values.
+
+```bash
+npm install @hygraph/utils
+```
+
+<Tabs>
+  <TabItem label="Node">
+
+```js
+const { verifyWebhookSignature } = require('@hygraph/utils');
+
+const secret = 'rCNwyiloY3oJYYkxgpBXaleIiUv5MYlx';
+
+const body = {}; // Typically req.body
+const signature = '...'; // Typically req.headers['gcms-signature']
+
+const isValid = verifyWebhookSignature({ body, signature, secret });
+```
+
+  </TabItem>
+</Tabs>
+
+You'll need the request body and headers to pass to `verifyWebhookSignature`.
+
+If `isValid` is truthy then you can safely execute your webhook handler code knowing the request is genuine, otherwise you should abort any further action.
+
+### Manual verification
+
+You may also verify webhook signatures manually by generating your own signature using whatever cryptographic library can generate a SHA256 digest.
+
+Let's break the `gcms-signature` header down:
+
+```
+sign=x0jU8z7AXAARIDBgsiVyfOG000wb2HhqN/mxl6+RSMk=, env=master, t=1631270481036
+```
+
+- `sign=` is the signature
+- `env=` is the environment of the Hygraph project
+- `t=` is the timestamp of the event
+
+#### Step 1: Extract the signature and timestamp from the header
+
+First you'll need to get the signature, and timestamp from the header so they can be used to construct a new payload. If you're using JavaScript, it could look something like this:
+
+```jsx
+const [rawSign, rawEnv, rawTimestamp] = signature.split(', ');
+
+const sign = rawSign.replace('sign=', '');
+const EnvironmentName = rawEnv.replace('env=', '');
+const Timestamp = parseInt(rawTimestamp.replace('t=', ''));
+```
+
+#### Step 2: Prepare the payload string
+
+You'll next need to create a string of the payload that will be hashed, using the request body. If you're using JavaScript, it could look something like:
+
+```jsx
+let payload = JSON.stringify({
+  Body: JSON.stringify(body),
+  EnvironmentName,
+  TimeStamp: Timestamp,
+});
+```
+
+#### Step 3: Generate the signature
+
+Next, you'll want to generate the digest for comparison. If you're using JavaScript, it could look something like:
+
+```jsx
+const { createHmac } = require('crypto');
+
+const hash = createHmac('sha256', secret).update(payload).digest('base64');
+```
+
+#### Step 4: Compare the signatures match!
+
+All that's left to do is compare that the `sign=` value and `hash` match. If you're using JavaScript, this may look something like:
+
+```jsx
+const isValid = sign === hash;
+```
+
+## Localizations with webhooks
+
+If the webhook is configured to include entry payloads, all localized fields on the entry will be included in the webhook body under the `localizations` key. See the section below for [some examples](#example-payload).
+
+Webhook events are scoped to the entry and are **not** locale specific. For example, if publishing changes to an `en` entry localization, the webhook will still include any other localized versions of that entry in the payload.
+
+## Example payload
+
+Below are examples of an event on `DRAFT`, `PUBLISHED` and custom a Content Stage, which include the entry payload. There is also an example without the entry payload included.
+
+In the examples below we have a `Post` model.
+
+<Tabs panelHeight={550}>
+  <TabItem label="Draft">
+
+```json
+{
+  "operation": "create",
+  "data": {
+    "__typename": "Post",
+    "content": "Start using webhooks today, for free.",
+    "createdAt": "2020-09-16T13:11:57.345138+00:00",
+    "description": "This is a description",
+    "id": "ckf5emloo021s0161iqos7enp",
+    "image": {
+      "__typename": "Asset",
+      "id": "ckf5em5hc02100157x5n00lwb"
+    },
+    "localizations": [
+      {
+        "locale": "en",
+        "title": "Hygraph Webhook Payload Changes"
+      }
+    ],
+    "publishedAt": null,
+    "stage": "DRAFT",
+    "updatedAt": "2020-09-16T13:11:57.345138+00:00"
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Published">
+
+```json
+{
+  "operation": "publish",
+  "data": {
+    "__typename": "Post",
+    "content": "Start using webhooks today, for free.",
+    "createdAt": "2020-09-16T13:11:57.345138+00:00",
+    "description": "This is a description",
+    "id": "ckf5emloo021s0161iqos7enp",
+    "image": {
+      "__typename": "Asset",
+      "id": "ckf5em5hc02100157x5n00lwb"
+    },
+    "localizations": [
+      {
+        "locale": "en",
+        "title": "Hygraph Webhook Payload Changes!"
+      }
+    ],
+    "publishedAt": "2020-09-16T13:14:12.782833+00:00",
+    "stage": "PUBLISHED",
+    "updatedAt": "2020-09-16T13:13:50.424325+00:00"
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Custom Stage (QA)">
+
+```json
+{
+  "operation": "publish",
+  "data": {
+    "__typename": "Post",
+    "content": "Start using webhooks today, for free.",
+    "createdAt": "2020-09-16T13:11:57.345138+00:00",
+    "description": "This is a description",
+    "id": "ckf5emloo021s0161iqos7enp",
+    "image": {
+      "__typename": "Asset",
+      "id": "ckf5em5hc02100157x5n00lwb"
+    },
+    "localizations": [
+      {
+        "locale": "en",
+        "title": "Hygraph Webhook Payload Changes!"
+      }
+    ],
+    "publishedAt": "2020-09-16T13:14:12.782833+00:00",
+    "stage": "QA",
+    "updatedAt": "2020-09-16T13:13:50.424325+00:00"
+  }
+}
+```
+
+  </TabItem>
+
+  <TabItem label="No payload">
+
+```json
+{
+  "operation": "publish",
+  "data": {
+    "__typename": "Post",
+    "id": "ckf5emloo021s0161iqos7enp",
+    "stage": "PUBLISHED"
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Create a webhook
+
+1. Navigate to Webhooks in the sidebar. Webhooks are in the lower group of icons.
+2. Press "Create" in the upper right corner of the window.
+3. Fill out the configuration for your webhook.
+4. Press "Create"
+
+### Configuration
+
+- A name for organzing and finding your webhooks
+- A short description to inform others what your webhook does
+- Toggle if you want to include the payload or not
+- The URL to be called
+- The content model(s) that will be watched
+- The content stage to be watched
+- The action to be watched
+- Any additional headers to pass along
+
+## Enable / Disable webhooks
+
+1. Navigate to Webhooks in the sidebar.
+2. Move your cursor to the title of the webhook, and click the pencil icon that appears.
+3. Switch the the "Active" toggle in the upper right corner to switch between on or off.
+
+## Delete a webhook
+
+1. Navigate to Webhooks in the sidebar.
+2. Move your cursor to the title of the webhook, and click the trash icon that appears.
+3. Confirm you want to delete the webhook.
+
+## Webhook Logs
+
+Hygraph stores logs for all your webhooks, which can help you debugging webhook calls and checking the returned status codes and responses from your endpoints.
+
+In order to view the logs of a webhook, head into the webhooks view and click the "View Logs" button on the available webhooks.
+
+![Hygraph webhook logs button](/images/docs/api-reference/basics/webhook-logs-button.png)
+
+You will see a list of webhooks being sent to your specified endpoint. The logs include a timestamp, HTTP status code, the content model, the performed action and the duration of the request.
+
+![Hygraph webhook logs overview](/images/docs/api-reference/basics/webhook-log-overview.png)
+
+Clicking on one of the items opens up a detail view, showing you both the request and response payload and the information from the overview. The request and response body is currently truncated at 500kb and 200kb respectively.
+
+![Hygraph webhook logs details](/images/docs/api-reference/basics/webhooks-log-details.png)
+
+<Card theme="info">
+
+Webhook Logs are currently stored with a retention of 7 days.
+
+</Card>

@@ -27,8 +27,14 @@ export default defineConfig({
 				
 				{
 					label: 'Getting Started',
+					collapsed:true,
 					autogenerate: { directory: 'getting-started', collapsed: true },
 				},
+				{
+					label: "API Reference",
+					collapsed: true,
+					autogenerate: { directory: 'api-reference', collapsed: true },
+				}
 	
 			],
 		}),

@@ -1,0 +1,54 @@
+---
+title: Hygraph Management API
+meta_description: Learn about some changes to the Hygraph Management API.
+---
+import { Card } from '@astrojs/starlight/components';
+
+
+This document will walk you through a significant change to the **Hygraph Management API**.
+
+To improve performance and enable full global failover - not only of the content but also the **Management API** and Hygraph webapp - we will move the **Management API** from being a global service to a regional one, co-located with the content clusters.
+
+<Card theme="warning">
+
+We expect this change to roll it out in December, 2023.
+
+</Card>
+
+Below you will find instructions on how to make sure any **Management API** operations you are doing will not be affected. If you are not using the **Management API/SDK**, you can ignore this document.
+
+## If you are using the Management SDK
+
+If you are using the **Management SDK**, the only thing you need to do is make sure you haven't fixed it to a specific - minor - version. The current latest version is `1.2.3`, and it is upwards compatible - meaning that it is compatible with both the current and new situation.
+
+<Card theme="info">
+
+Please make sure the dependency is set to something like `@hygraph/management-sdk`: `^1.2.1` and everything will continue working as normal.
+
+</Card>
+
+## If you are using the Management API directly
+
+If you are using the **Management API** directly - without the SDK - the following will change for you:
+
+- When the new **Management API** is rolled out, the endpoint will change from a globally unique URL - `https://management.hygraph.com/graphql` - to one that corresponds to your project region. The url pattern will be similar to that of the **Content API**.
+  {' '}
+  <Card theme="info">
+    For example, if your **Content API** endpoint is
+    `https://api-eu-central-1.hygraph.com/v2/ckpdr**************/master`, your
+    new management API URL will become
+    `https://management-eu-central-1.hygraph.com/graphql` (`api-` is replaced by
+    `management-`).
+  </Card>
+  There are two ways to deal with this change: 1. When the new **Management API**
+  is rolled out, update your scripts/code to the new URL at your earliest convenience.
+  Please note that the scripts will stop working until the change is made. 2. Update
+  your scripts/code to first attempt to query the new regional endpoint. If that
+  is unsuccessful, the query can be run against the current global endpoint. This
+  change can be made in advance, and will ensure that your **Management API** operations
+  continue to work throughout the rollout of this feature. Once the new service is
+  fully live, you can remove the fallback again.
+- Certain entities that can currently be queried through the **Management API** will be moved into a new global Directory service. Specifically, this concerns any queries done to objects outside the project scope, such as related to the user account or app definitions. **If you are using these in your queries, please reach out to us and we will provide you with more detailed instructions on how to update your scripts.**
+- Because there will no longer be a single **Management API**, it will no longer be possible to run queries or mutations against multiple projects that exist in different regions in a single operation. We don't expect this to be a common use case, but if this does affect you, please reach out to us as well.
+
+&nbsp;
