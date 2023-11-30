@@ -7,6 +7,11 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'Hygraph Documentation',
+			logo: {
+				replacesTitle: true,
+				dark: './src/assets/logo-light.svg',
+				light: './src/assets/logo-dark.svg',
+			  },
 			customCss: [
 				// Relative path to your custom CSS file
 				'./src/styles/custom.css',
@@ -15,7 +20,8 @@ export default defineConfig({
 				maxHeadingLevel: 4,
 			},
 			social: {
-				github: 'https://github.com/withastro/starlight',
+				github: 'https://github.com/hygraph',
+				twitter: 'https://twitter.com/hygraph',
 			},
 			sidebar: [
 				
