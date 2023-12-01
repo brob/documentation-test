@@ -7,30 +7,23 @@ hero:
   image:
     file: ../../assets/houston.webp
   actions:
-    - text: Getting Started
+    - text: Get started now 
       link: /getting-started/
       icon: right-arrow
       variant: primary
-    - text: API Reference (not working)
-      link: https://starlight.astro.build
-      icon: external
+    - text: API Reference
+      link: /api-reference/
+      icon: right-arrow
 ---
 
-import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
 
-## Next steps
+## Looking for something specific?
 
 <CardGrid >
 	<LinkCard href="/getting-started/" title="Getting Started" description="Start from scratch and learn all the basics with our project-based getting started documentation" icon="pencil">
 		
 	</LinkCard>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
-	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
-	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
-	</Card>
+	<LinkCard title="API Reference" description="Get detailed information on the Content API, Management SDK, and Schema creation" icon="add-document" />
+		
 </CardGrid>
