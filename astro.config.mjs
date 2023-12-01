@@ -12,6 +12,11 @@ export default defineConfig({
 				dark: './src/assets/logo-light.svg',
 				light: './src/assets/logo-dark.svg',
 			  },
+			  expressiveCode: {
+				frames: true,
+				themes: ['github-dark', 'github-light']
+			  },
+			
 			customCss: [
 				// Relative path to your custom CSS file
 				'./src/styles/custom.css',
