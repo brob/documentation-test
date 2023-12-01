@@ -56,13 +56,13 @@ A user may choose to expose all data in read only mode to be consumed via Public
 3. In the `Create Permission` dialog, choose `All` for models and check `Read`, keep defaults of `All` for locales and stages and press the `Create` button.
 4. The Public API should now be accessible with `Read` permissions.
 
-![Public API Read Permissions](/images/docs/api-reference/basics/public-api-read.png)
+![Public API Read Permissions](/images/api-reference/basics/public-api-read.png)
 
-[Learn more about working with the Public API](/docs/api-reference/basics/authorization).
+[Learn more about working with the Public API](/api-reference/basics/authorization).
 
 ## Permanent auth tokens (with specific models)
 
-A [Permanent Auth Token (PAT)](/docs/api-reference/basics/authorization#permanent-auth-tokens) can also be used to access content. The permission system allows to setup granular permissions for these tokens as well.
+A [Permanent Auth Token (PAT)](/api-reference/basics/authorization#permanent-auth-tokens) can also be used to access content. The permission system allows to setup granular permissions for these tokens as well.
 
 Let's assume that we would like to configure a PAT that allows to read and mutate only documents of a particular model type, the Post model from the Blog Starter template.
 
@@ -76,9 +76,9 @@ Note that with these basic settings it will not be possible to retrieve content 
 
 To create posts and connect them to these other model types, specific permissions for those will need to be setup accordingly.
 
-![PAT Post Permissions](/images/docs/api-reference/basics/pat-post-permissions.png)
+![PAT Post Permissions](/images/api-reference/basics/pat-post-permissions.png)
 
-[Learn more about authenticating with a PAT](/docs/api-reference/basics/authorization).
+[Learn more about authenticating with a PAT](/api-reference/basics/authorization).
 
 ## Conditions
 
@@ -98,7 +98,7 @@ Extend previous setting to also include posts that have no tags setup:
 { "OR": [{ "tags_contains_some": ["GraphQL", "SEO"] }, { "tags": null }] }
 ```
 
-![PAT Post Tag Conditions](/images/docs/api-reference/basics/pat-post-tag-conditions.png)
+![PAT Post Tag Conditions](/images/api-reference/basics/pat-post-tag-conditions.png)
 
 Setup access so that only the token can only manage `Post` documents that are related to a particular `Author`:
 
@@ -112,7 +112,7 @@ Note that for this setup to work, read access on the `Author` model is required 
 { "id": "ckadqgca800ix011230ailipe" }
 ```
 
-![PAT Post Author Conditions](/images/docs/api-reference/basics/pat-post-author-conditions.png)
+![PAT Post Author Conditions](/images/api-reference/basics/pat-post-author-conditions.png)
 
 ## Limits and considerations
 
@@ -122,7 +122,7 @@ At the moment, for the initial release of the feature, up to `50` custom permiss
 
 The user may choose to use these as needed by distributing them across Public API, PATs and Custom Roles if applicable.
 
-[Learn more about working with Environments](/docs/api-reference/basics/environments).
+[Learn more about working with Environments](/api-reference/basics/environments).
 
 ### User system model & user attribution
 
@@ -130,7 +130,7 @@ Depending on what information needs to be exposed, the permissions might need to
 
 This is specially important when setting up custom roles that will be interacting with the project's content via the UI, as User Attribution fields (`createdBy`, `updatedBy` and `publishedBy`) will not display this information if permissions are not granted. Another side effect of these permissions missing can translate into `not allowed` errors while trying to mutate content from the content view form.
 
-[Learn more about the system User model](/docs/api-reference/schema/system-fields#user-fields)
+[Learn more about the system User model](/api-reference/schema/system-fields#user-fields)
 
 ### Custom roles
 
@@ -148,7 +148,7 @@ When setting up permissions on models with relations, a special consideration mu
 
 For example, in a simple schema consisting of two models like the `Post` and `Author`, an update connecting a given `Post` with an `Author` will require also an update permissions on the `Author` model given that an `Author` can refer to many `Post` documents.
 
-[Learn more about relations](/docs/api-reference/schema/field-types#reference).
+[Learn more about relations](/api-reference/schema/field-types#reference).
 
 ### Locales
 
@@ -158,6 +158,6 @@ Permissions allow for a granular locale configuration. There are some important 
 
 You might find the following documents useful:
 
-- [Authorization:](/docs/api-reference/basics/authorization) This document contains information on public API permissions, permanent auth tokens, and API endpoints.
-- [Roles and permissions:](/docs/guides/overview/roles-and-permissions) This document contains information on how to work with roles and permissions in the Hygraph app.
-- [API access:](/docs/guides/overview/api-access) This document covers the API access section of the Hygraph app as well as its subsections: Endpoints, Public content API, and Permanent auth tokens.
+- [Authorization:](/api-reference/basics/authorization) This document contains information on public API permissions, permanent auth tokens, and API endpoints.
+- [Roles and permissions:](/guides/overview/roles-and-permissions) This document contains information on how to work with roles and permissions in the Hygraph app.
+- [API access:](/guides/overview/api-access) This document covers the API access section of the Hygraph app as well as its subsections: Endpoints, Public content API, and Permanent auth tokens.

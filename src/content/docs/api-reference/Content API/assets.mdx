@@ -4,11 +4,11 @@ meta_description: With inbuilt Digital Asset Management (DAM), the Asset model i
 ---
 import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
 
-The Asset model is included with every project, can be modified with custom [Field Types](/docs/api-reference/schema/field-types), and are [localized](/docs/api-reference/content-api/localization) by default, but cannot be deleted.
+The Asset model is included with every project, can be modified with custom [Field Types](/api-reference/schema/field-types), and are [localized](/api-reference/content-api/localization) by default, but cannot be deleted.
 
 While most commonly used for photos, can support any file type including audio files, zip files, and more.
 
-The Asset type extends the [system fields](/docs/api-reference/schema/system-fields).
+The Asset type extends the [system fields](/api-reference/schema/system-fields).
 
 ## Fetching assets
 
@@ -19,15 +19,15 @@ Hygraph automatically generates 4 query types for assets. These are:
 - `assetVersion`
 - `assetsConnection`
 
-These queries work just like regular [queries](/docs/api-reference/content-api/queries), and can be [filtered](/docs/api-reference/content-api/filtering) by their [fields](/docs/api-reference/schema/field-types#asset).
+These queries work just like regular [queries](/api-reference/content-api/queries), and can be [filtered](/api-reference/content-api/filtering) by their [fields](/api-reference/schema/field-types#asset).
 
 ## Referencing assets
 
 While you can query for individuals assets, or fetch all and filter, order, and paginate, assets are best used when related to another model.
 
-When extending the Hygraph schema with your own models, the [Asset](/docs/api-reference/schema/field-types#asset) field type exposes all of the available transformations below.
+When extending the Hygraph schema with your own models, the [Asset](/api-reference/schema/field-types#asset) field type exposes all of the available transformations below.
 
-For example, imagine you have a `Product` model with a [one to many](/docs/api-reference/schema/field-types#one-to-many) reference to assets, as `images`, you can query any of the [system fields](/docs/api-reference/schema/system-fields#asset-fields) here also.
+For example, imagine you have a `Product` model with a [one to many](/api-reference/schema/field-types#one-to-many) reference to assets, as `images`, you can query any of the [system fields](/api-reference/schema/system-fields#asset-fields) here also.
 
 ```graphql
 {
@@ -155,7 +155,7 @@ It is possible to combine both transformation arguments:
 
 ### Alias transforms
 
-[GraphQL aliases](/docs/api-reference/content-api/queries#graphql-aliases) are great for querying the same asset url with multiple transformations.
+[GraphQL aliases](/api-reference/content-api/queries#graphql-aliases) are great for querying the same asset url with multiple transformations.
 
 For example, you could transform product images to include a `thumbnail`.
 
@@ -177,14 +177,14 @@ For example, you could transform product images to include a `thumbnail`.
 
 ## Uploading assets
 
-Hygraph supports uploading assets via HTTP. You'll need a [Permanement Auth Token](/docs/api-reference/basics/authorization#permanent-auth-tokens) with **Mutations** API access enabled to upload by file, or URL.
+Hygraph supports uploading assets via HTTP. You'll need a [Permanement Auth Token](/api-reference/basics/authorization#permanent-auth-tokens) with **Mutations** API access enabled to upload by file, or URL.
 
-Assets are treated just like any other content entry, so they are automatically bound to the [environment](/docs/api-reference/basics/environments), and [authorization](/docs/api-reference/basics/authorization) settings of your project.
+Assets are treated just like any other content entry, so they are automatically bound to the [environment](/api-reference/basics/environments), and [authorization](/api-reference/basics/authorization) settings of your project.
 
 <Card theme="warning">
 
 - You must append `/upload` to your project API endpoint when uploading assets. For example, `https://[region].hygraph.com/v2/[projectId]/[environment]/upload`.
-- You can upload assets to your project without the need of a [Permanement Auth Token](/docs/api-reference/basics/authorization#permanent-auth-tokens) by adding Read and Create permissions to the Public Content API. **This is however unsafe and not advised**, as exposing the endpoint anywhere - like your website - while having any write access on the Public API, would essentially allow anyone to modify your data.
+- You can upload assets to your project without the need of a [Permanement Auth Token](/api-reference/basics/authorization#permanent-auth-tokens) by adding Read and Create permissions to the Public Content API. **This is however unsafe and not advised**, as exposing the endpoint anywhere - like your website - while having any write access on the Public API, would essentially allow anyone to modify your data.
 
 </Card>
 
@@ -339,7 +339,7 @@ mutation {
 }
 ```
 
-Learn more about [Mutations](/docs/api-reference/content-api/mutations#update-entries).
+Learn more about [Mutations](/api-reference/content-api/mutations#update-entries).
 
 ## Deleting assets
 
@@ -355,20 +355,20 @@ mutation {
 }
 ```
 
-Learn more about [Mutations](/docs/api-reference/content-api/mutations#delete-entries).
+Learn more about [Mutations](/api-reference/content-api/mutations#delete-entries).
 
 ## Publishing assets
 
 Since Assets are a system model, they also come with publishing capabilities. You can use GraphQL mutations to publish or unpublish your assets, to and from content stages.
 
-Learn more about [publishing to content stages](/docs/api-reference/content-api/content-stages).
+Learn more about [publishing to content stages](/api-reference/content-api/content-stages).
 
 ## Localized assets
 
 Since assets are localized by default, you can upload a file for your project locales.
 
-Learn more about [mutating localized content](/docs/api-reference/content-api/localization#mutating-localized-content).
+Learn more about [mutating localized content](/api-reference/content-api/localization#mutating-localized-content).
 
 ## Embedded types
 
-Assets can be embedded into the [Rich Text Field Type](/docs/api-reference/schema/field-types#rich-text) via a configuration setting. On the API side, we create a union relation that references the selected model.
+Assets can be embedded into the [Rich Text Field Type](/api-reference/schema/field-types#rich-text) via a configuration setting. On the API side, we create a union relation that references the selected model.

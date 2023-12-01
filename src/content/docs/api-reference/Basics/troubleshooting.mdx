@@ -7,31 +7,31 @@ import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
 
 ## Can't access part of the functionality
 
-This might be a [permissions](/docs/api-reference/basics/permissions) issue.
+This might be a [permissions](/api-reference/basics/permissions) issue.
 
 Take into consideration that while Management API permissions are global, content permissions are environment specific.
 
-If you're getting a [401 error](/docs/api-reference/basics/errors#401-unauthorized), the endpoint you requested requires a valid [Permanent Auth Token](/docs/api-reference/basics/authorization#permanent-auth-tokens), or a environment may not exist for this project.
+If you're getting a [401 error](/api-reference/basics/errors#401-unauthorized), the endpoint you requested requires a valid [Permanent Auth Token](/api-reference/basics/authorization#permanent-auth-tokens), or a environment may not exist for this project.
 
 ## Queries not returning complete results
 
-This is a [pagination](/docs/api-reference/content-api/pagination) issue.
+This is a [pagination](/api-reference/content-api/pagination) issue.
 
 The default size of results returned by queries fetching multiple entries is 10. You can provide a maximum of 100 to the first, or last arguments.
 
 The limit of 10/100 applies to projects created after 14-06-2022. Projects created before that date have a limit of 100/1000.
 
-Our pagination document also contains information about [pagination limits](/docs/api-reference/content-api/pagination#pagination-limits), [nested pagination](/docs/api-reference/content-api/pagination#nested-pagination), and [relay cursor connections](/docs/api-reference/content-api/pagination#relay-cursor-connections).
+Our pagination document also contains information about [pagination limits](/api-reference/content-api/pagination#pagination-limits), [nested pagination](/api-reference/content-api/pagination#nested-pagination), and [relay cursor connections](/api-reference/content-api/pagination#relay-cursor-connections).
 
 ## My query is too slow
 
-This could be a [query complexity issue](/docs/api-reference/basics/query-complexity). Our document on [splitting GraphQL queries](/docs/api-reference/basics/query-complexity#splitting-gql-queries) in order to reduce their complexity, suggests three possible solutions:
+This could be a [query complexity issue](/api-reference/basics/query-complexity). Our document on [splitting GraphQL queries](/api-reference/basics/query-complexity#splitting-gql-queries) in order to reduce their complexity, suggests three possible solutions:
 
-- [Limiting query depth](/docs/api-reference/basics/query-complexity#example-1-limiting-query-depth)
-- [Fetching only necessary fields](/docs/api-reference/basics/query-complexity#example-2-fetching-only-necessary-fields)
-- [Using pagination](/docs/api-reference/basics/query-complexity#example-3-using-pagination)
+- [Limiting query depth](/api-reference/basics/query-complexity#example-1-limiting-query-depth)
+- [Fetching only necessary fields](/api-reference/basics/query-complexity#example-2-fetching-only-necessary-fields)
+- [Using pagination](/api-reference/basics/query-complexity#example-3-using-pagination)
 
-The document also contains information on [union query optimization](/docs/api-reference/basics/query-complexity#union-queries), and on [how to use the complexity tree JSON output to calculate the cost of your queries](/docs/api-reference/basics/query-complexity#complexity-tree-json-output).
+The document also contains information on [union query optimization](/api-reference/basics/query-complexity#union-queries), and on [how to use the complexity tree JSON output to calculate the cost of your queries](/api-reference/basics/query-complexity#complexity-tree-json-output).
 
 ## No invite found with this code
 
@@ -39,9 +39,9 @@ If when accepting an invitation to a project you get the error message `No invit
 
 ## Too many requests
 
-This is related to our [rate limits](/docs/api-reference/basics/rate-limits). When you exceed them, you get a [429 error](/docs/api-reference/basics/errors#429-too-many-requests).
+This is related to our [rate limits](/api-reference/basics/rate-limits). When you exceed them, you get a [429 error](/api-reference/basics/errors#429-too-many-requests).
 
-Our rate limits document contains information on how to tackle this using [Next.js](/docs/api-reference/basics/rate-limits#nextjs), [Gatsby](/docs/api-reference/basics/rate-limits#gatsby), and [Nuxt](/docs/api-reference/basics/rate-limits#nuxt).
+Our rate limits document contains information on how to tackle this using [Next.js](/api-reference/basics/rate-limits#nextjs), [Gatsby](/api-reference/basics/rate-limits#gatsby), and [Nuxt](/api-reference/basics/rate-limits#nuxt).
 
 <Card theme="info">
 

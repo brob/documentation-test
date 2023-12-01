@@ -31,7 +31,7 @@ While most headless web content management solutions are frontend agnostic, Hygr
 
 You can connect any web service or API to your Hygraph content model to query and join data across multiple sources with a single GraphQL query.
 
-With our [Remote Sources](https://hygraph.com/docs/guides/schema/remote-sources) feature, you can access remote content & data through the Hygraph GraphQL API, allowing you to create a single content endpoint without having to migrate everything to a single platform.
+With our [Remote Sources](https://hygraph.com/guides/schema/remote-sources) feature, you can access remote content & data through the Hygraph GraphQL API, allowing you to create a single content endpoint without having to migrate everything to a single platform.
 
 With [Content Federation](https://hygraph.com/blog/introducing-content-federation), you can unify your stack into a single API, reduce the complexity of your architecture, remove redundant copies of your data and get rid of expensive custom middleware code that glues your services together.
 
@@ -51,7 +51,7 @@ We can integrate with your processes (CI/CD), do the heavy lifting at the backen
 
 Build ultra-fast scalable digital products such as media, e-learning, digital event platforms, b2b publishing apps, and any other solution leveraging programmatic and API driven content.
 
-We offer industry leading Graph APIs for content delivery, mutations and content management, as well as a globally distributed infrastructure with [advanced caching](https://hygraph.com/docs/api-reference/basics/caching).
+We offer industry leading Graph APIs for content delivery, mutations and content management, as well as a globally distributed infrastructure with [advanced caching](https://hygraph.com/api-reference/basics/caching).
 
 With Hygraph, you can boost web performance, rank higher on Google, increase end-user satisfaction, and support large volumes of globally distributed visitors.
 
@@ -75,7 +75,7 @@ Once you're logged in you'll see a list of all projects you have access to. Clic
 
 You can navigate between the different sections of the project using the sidebar. These areas are:
 
-![Project Dashboard](/images/docs/user-guides/project-dashboard.png)
+![Project Dashboard](/images/user-guides/project-dashboard.png)
 
 | UI Section               | What you can do                                                                                                  |
 | ------------------------ | ---------------------------------------------------------------------------------------------------------------- |
@@ -100,51 +100,51 @@ This section offers a contents map to help you readily find what you're looking 
 
 | Document                                                                        | Contents                                                                                                                                                                                                |
 | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [About Hygraph](/docs/getting-started)                                          | Contains information about Hygraph, such as how it works, its advantages and use cases. It also offers information on how to navigate the CMS.                                                          |
-| [Quickstart](/docs/getting-started/fundamentals/quickstart)                     | Quickstart guide containing all basic mechanics involved in creating a project, a model, adding a basic field, creating a content entry, publishing/querying/mutating content, and enabling API access. |
-| [Content modeling](/docs/getting-started/fundamentals/content-modeling)         | Contains information about the basics of content modeling with Hygraph, and why it is important for all projects.                                                                                       |
-| [Content Federation](/docs/getting-started/fundamentals/content-federation)     | Contains information about what Content Federation is and its advantages.                                                                                                                               |
-| [Migrating to Hygraph](/docs/getting-started/fundamentals/migrating-to-hygraph) | Contains information about the process of migrating to Hygraph.                                                                                                                                         |
-| [Glossary](/docs/getting-started/fundamentals/glossary)                         | Contains lists of useful Hygraph related concepts and terms.                                                                                                                                            |
+| [About Hygraph](/getting-started)                                          | Contains information about Hygraph, such as how it works, its advantages and use cases. It also offers information on how to navigate the CMS.                                                          |
+| [Quickstart](/getting-started/fundamentals/quickstart)                     | Quickstart guide containing all basic mechanics involved in creating a project, a model, adding a basic field, creating a content entry, publishing/querying/mutating content, and enabling API access. |
+| [Content modeling](/getting-started/fundamentals/content-modeling)         | Contains information about the basics of content modeling with Hygraph, and why it is important for all projects.                                                                                       |
+| [Content Federation](/getting-started/fundamentals/content-federation)     | Contains information about what Content Federation is and its advantages.                                                                                                                               |
+| [Migrating to Hygraph](/getting-started/fundamentals/migrating-to-hygraph) | Contains information about the process of migrating to Hygraph.                                                                                                                                         |
+| [Glossary](/getting-started/fundamentals/glossary)                         | Contains lists of useful Hygraph related concepts and terms.                                                                                                                                            |
 
 ### Getting started
 
 | Document                                                                             | Contents                                                                                                                                                           |
 | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [1.1 Plan your content flow](/docs/getting-started/plan-content-flow)                | You'll learn how to plan your content flow before you start building a schema.                                                                                     |
-| [1.2 Design your content models](/docs/getting-started/design-content-models)        | You'll learn how to design your content models before you start building a schema.                                                                                 |
-| [1.3 Build your content models](/docs/getting-started/build-content-models)          | You'll learn how to build your base content models. You'll add complexity to them as you advance in this tutorial.                                                 |
-| [2.1 Configure reference fields](/docs/getting-started/configure-reference-fields)   | You'll learn how to configure different types of references and add them to your content models.                                                                   |
-| [2.2 Configure enumerations](/docs/getting-started/configure-enumerations)           | You'll learn how to configure enumerations that we will later use as parts of component fields.                                                                    |
-| [3.1 Build components](/docs/getting-started/build-components)                       | You'll learn how to build components that you will later add to your models as part of basic and modular component fields.                                         |
-| [3.2 Add components to your models](/docs/getting-started/add-components-to-models)  | You'll learn how to add the components we just created to the models in your schema, using basic and modular component fields.                                     |
-| [4.1 Add a Remote Source](/docs/getting-started/add-remote-source)                   | You'll learn how to add a Remote Source to your project in order to fetch information from external third-party web services.                                      |
-| [4.2 Remote Fields](/docs/getting-started/remote-fields)                             | You'll learn how to add Remote Fields to your models.                                                                                                              |
-| [4.3 Top-level Remote Fields](/docs/getting-started/top-level-remote-fields)         | You'll learn how to add Top-level Remote Fields to the Query system model.                                                                                         |
-| [5.1 Content creation](/docs/getting-started/content-creation)                       | You'll learn how to create and modify content in the content creator screen and in the Assets system model.                                                        |
-| [5.2 Content localization](/docs/getting-started/content-localization)               | You'll learn how to add a locale to your project and localize field in your content entries.                                                                       |
-| [5.3 Additional content features](/docs/getting-started/additional-content-features) | You'll learn how to work with content stages, content duplication, and content publishing.                                                                         |
-| [6.1 Exercises: Queries](/docs/getting-started/api-playground-queries)               | This document contains exercises to provide queries practice in our API Playground.                                                                                |
-| [6.2 Exercises: Mutations](/docs/getting-started/api-playground-mutations)           | This document contains exercises to provide mutations practice in our API Playground.                                                                              |
-| [7.1 Creating a frontend using Next](/docs/getting-started/frontend-creation)        | You will learn how to create your frontend for the getting started project using Next.                                                                             |
-| [7.2 Connecting our storefront](/docs/getting-started/connect-storefront)            | You will learn how to connect our e-commerce storefront to our existing Hygraph project.                                                                           |
-| [7.3 Preview URL](/docs/getting-started/preview-url-creation)                        | You will learn how to configure the Preview URL feature. We'll use it to add a Preview button to the sidebar of our content creation screen.                       |
-| [8.1 Configure webhooks](/docs/getting-started/configure-webhooks)                   | You will learn how to configure a webhook.                                                                                                                         |
-| [Wrap-up](/docs/getting-started/configure-webhooks)                                  | This document contains a recap on our learning objectives, a list of best practices for your Hygraph projects, and some useful links so you can continue learning. |
+| [1.1 Plan your content flow](/getting-started/plan-content-flow)                | You'll learn how to plan your content flow before you start building a schema.                                                                                     |
+| [1.2 Design your content models](/getting-started/design-content-models)        | You'll learn how to design your content models before you start building a schema.                                                                                 |
+| [1.3 Build your content models](/getting-started/build-content-models)          | You'll learn how to build your base content models. You'll add complexity to them as you advance in this tutorial.                                                 |
+| [2.1 Configure reference fields](/getting-started/configure-reference-fields)   | You'll learn how to configure different types of references and add them to your content models.                                                                   |
+| [2.2 Configure enumerations](/getting-started/configure-enumerations)           | You'll learn how to configure enumerations that we will later use as parts of component fields.                                                                    |
+| [3.1 Build components](/getting-started/build-components)                       | You'll learn how to build components that you will later add to your models as part of basic and modular component fields.                                         |
+| [3.2 Add components to your models](/getting-started/add-components-to-models)  | You'll learn how to add the components we just created to the models in your schema, using basic and modular component fields.                                     |
+| [4.1 Add a Remote Source](/getting-started/add-remote-source)                   | You'll learn how to add a Remote Source to your project in order to fetch information from external third-party web services.                                      |
+| [4.2 Remote Fields](/getting-started/remote-fields)                             | You'll learn how to add Remote Fields to your models.                                                                                                              |
+| [4.3 Top-level Remote Fields](/getting-started/top-level-remote-fields)         | You'll learn how to add Top-level Remote Fields to the Query system model.                                                                                         |
+| [5.1 Content creation](/getting-started/content-creation)                       | You'll learn how to create and modify content in the content creator screen and in the Assets system model.                                                        |
+| [5.2 Content localization](/getting-started/content-localization)               | You'll learn how to add a locale to your project and localize field in your content entries.                                                                       |
+| [5.3 Additional content features](/getting-started/additional-content-features) | You'll learn how to work with content stages, content duplication, and content publishing.                                                                         |
+| [6.1 Exercises: Queries](/getting-started/api-playground-queries)               | This document contains exercises to provide queries practice in our API Playground.                                                                                |
+| [6.2 Exercises: Mutations](/getting-started/api-playground-mutations)           | This document contains exercises to provide mutations practice in our API Playground.                                                                              |
+| [7.1 Creating a frontend using Next](/getting-started/frontend-creation)        | You will learn how to create your frontend for the getting started project using Next.                                                                             |
+| [7.2 Connecting our storefront](/getting-started/connect-storefront)            | You will learn how to connect our e-commerce storefront to our existing Hygraph project.                                                                           |
+| [7.3 Preview URL](/getting-started/preview-url-creation)                        | You will learn how to configure the Preview URL feature. We'll use it to add a Preview button to the sidebar of our content creation screen.                       |
+| [8.1 Configure webhooks](/getting-started/configure-webhooks)                   | You will learn how to configure a webhook.                                                                                                                         |
+| [Wrap-up](/getting-started/configure-webhooks)                                  | This document contains a recap on our learning objectives, a list of best practices for your Hygraph projects, and some useful links so you can continue learning. |
 
 ### App walkthrough
 
 | Document                                                                           | Contents                                                                                                                                                                         |
 | ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Onboarding checklist](/docs/getting-started/app-walkthrough/onboarding-checklist) | Contains information on the in-app onboarding checklist that walks you though your first steps in Hygraph                                                                        |
-| [Schema editor](/docs/getting-started/app-walkthrough/schema-editor)               | Contains information about the schema editor and how to set up content models in your project.                                                                                   |
-| [Content editor](/docs/getting-started/app-walkthrough/content-editor)             | Contains information on accessing existing content, creating custom content views, creating/editing/reviewing and publishing content.                                            |
-| [Assets](/docs/getting-started/app-walkthrough/digital-asset-manager)              | Contains information about how to manage and upload your assets.                                                                                                                 |
-| [API Playground](/docs/getting-started/app-walkthrough/api-playground)             | Contains information about Hygraph's API Playground, which you can use to test out API calls, by experimenting with querying and mutating data.                                  |
-| [Notifications](/docs/getting-started/app-walkthrough/notifications)               | Contains information about Hygraph's notifications feature, which informs you of comments assigned or related to you in content entries.                                         |
-| [Apps](/docs/getting-started/app-walkthrough/apps)                                 | Contains information about our Apps section, where you can manage Hygraph integrations with other apps. You can configure or uninstall apps from your project from this section. |
-| [Webhooks](/docs/getting-started/app-walkthrough/webhooks)                         | Contains information about how to add webhooks to your project's deployment according to triggers you can configure.                                                             |
-| [Project settings](/docs/getting-started/app-walkthrough/project-settings)         | Contains information about your project's global information, and about managing its settings.                                                                                   |
+| [Onboarding checklist](/getting-started/app-walkthrough/onboarding-checklist) | Contains information on the in-app onboarding checklist that walks you though your first steps in Hygraph                                                                        |
+| [Schema editor](/getting-started/app-walkthrough/schema-editor)               | Contains information about the schema editor and how to set up content models in your project.                                                                                   |
+| [Content editor](/getting-started/app-walkthrough/content-editor)             | Contains information on accessing existing content, creating custom content views, creating/editing/reviewing and publishing content.                                            |
+| [Assets](/getting-started/app-walkthrough/digital-asset-manager)              | Contains information about how to manage and upload your assets.                                                                                                                 |
+| [API Playground](/getting-started/app-walkthrough/api-playground)             | Contains information about Hygraph's API Playground, which you can use to test out API calls, by experimenting with querying and mutating data.                                  |
+| [Notifications](/getting-started/app-walkthrough/notifications)               | Contains information about Hygraph's notifications feature, which informs you of comments assigned or related to you in content entries.                                         |
+| [Apps](/getting-started/app-walkthrough/apps)                                 | Contains information about our Apps section, where you can manage Hygraph integrations with other apps. You can configure or uninstall apps from your project from this section. |
+| [Webhooks](/getting-started/app-walkthrough/webhooks)                         | Contains information about how to add webhooks to your project's deployment according to triggers you can configure.                                                             |
+| [Project settings](/getting-started/app-walkthrough/project-settings)         | Contains information about your project's global information, and about managing its settings.                                                                                   |
 
 ## Resources
 

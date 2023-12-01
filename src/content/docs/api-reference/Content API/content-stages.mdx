@@ -8,7 +8,7 @@ You can create your own content stages inside the Hygraph UI, and query content 
 
 By default all content is served from the `DRAFT` stage, unless configured otherwise via a Permanent Auth Token, or by filtering.
 
-You can [create custom content stages](/docs/guides/content/content-stages#creating-custom-content-stages) to publish to from `DRAFT`. Each project comes with stages `DRAFT`, and `PUBLISHED`.
+You can [create custom content stages](/guides/content/content-stages#creating-custom-content-stages) to publish to from `DRAFT`. Each project comes with stages `DRAFT`, and `PUBLISHED`.
 
 <Card theme="warning">
 
@@ -67,7 +67,7 @@ For example, if we have a product model, the mutation `publishProduct` will exis
 
 | Argument            | Input Tpye                | Description                                                                                         |
 | ------------------- | ------------------------- | --------------------------------------------------------------------------------------------------- |
-| `where`             | `ProductWhereUniqueInput` | The content entry you want to publish, using a [filter](/docs/api-reference/content-api/filtering). |
+| `where`             | `ProductWhereUniqueInput` | The content entry you want to publish, using a [filter](/api-reference/content-api/filtering). |
 | `to`                | `[Stage!]! = [PUBLISHED]` | The target published content stage.                                                                 |
 | `locales`           | `[Locale!]`               | Optional locales to publish.                                                                        |
 | `publishBase`       | `Boolean = true`          | Whether to publish the base content entry.                                                          |
@@ -122,8 +122,8 @@ For example, if we have a product model, the mutation `unpublishProduct` will ex
 
 | Argument        | Input Tpye                | Description                                                                                           |
 | --------------- | ------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `where`         | `ProductWhereUniqueInput` | The content entry you want to unpublish, using a [filter](/docs/api-reference/content-api/filtering). |
-| `from`          | `[Stage!]! = [PUBLISHED]` | The target [content stage](/docs/api-reference/content-api/content-stages) to unpublish from.         |
+| `where`         | `ProductWhereUniqueInput` | The content entry you want to unpublish, using a [filter](/api-reference/content-api/filtering). |
+| `from`          | `[Stage!]! = [PUBLISHED]` | The target [content stage](/api-reference/content-api/content-stages) to unpublish from.         |
 | `locales`       | `[Locale!]`               | Optional locales to unpublish.                                                                        |
 | `unpublishBase` | `Boolean = true`          | Whether to unpublish the base content entry or not.                                                   |
 
@@ -171,7 +171,7 @@ Versions of documents are kept for a minimum of 30 days, for paid plans. [Upgrad
 
 ### Fetching version history
 
-You can fetch all of the history by `stage`. `history` is a [system field](/docs/api-reference/schema/system-fields#version-history-fields).
+You can fetch all of the history by `stage`. `history` is a [system field](/api-reference/schema/system-fields#version-history-fields).
 
 For example, let's get all of the `history` for `products`.
 

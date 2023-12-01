@@ -6,7 +6,7 @@ import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
 
 Hygraph automatically creates filters for types you add to your content models. These filters can be applied to a single, or multiple entries, and nested object fields.
 
-The best place to explore all available filters is by using the [API Playground](/docs/api-reference/basics/api-playground).
+The best place to explore all available filters is by using the [API Playground](/api-reference/basics/api-playground).
 
 ## Using filters
 
@@ -842,7 +842,7 @@ All Asset fields can be filtered using:
 | `[fieldName]_some`   | _Relation Type_ | Some references match    |
 | `[fieldName]_none`   | _Relation Type_ | No references match      |
 
-Asset fields come with their own [System Fields](/docs/api-reference/schema/system-fields#asset-fields) which you can apply these filters on, as well as any custom fields, or references you add.
+Asset fields come with their own [System Fields](/api-reference/schema/system-fields#asset-fields) which you can apply these filters on, as well as any custom fields, or references you add.
 
 You can filter the asset through the reference, or when querying all assets.
 
@@ -861,7 +861,7 @@ For example, we could fetch posts where the `coverImage` field meets the provide
 
 ## Combining filters
 
-Just like [combining query arguments](/docs/api-reference/content-api/queries#combining-arguments), it is also possible to combine filters.
+Just like [combining query arguments](/api-reference/content-api/queries#combining-arguments), it is also possible to combine filters.
 
 ```graphql
 {
@@ -972,7 +972,7 @@ When querying content entries, you can also filter by `locales`:
 }
 ```
 
-Learn more about [localization](/docs/api-reference/content-api/localization).
+Learn more about [localization](/api-reference/content-api/localization).
 
 ## Filter by stage argument
 
@@ -987,7 +987,7 @@ When querying content entries, you can also filter by `stage`. The stage argumen
 }
 ```
 
-Learn more about [content stages](/docs/api-reference/content-api/content-stages).
+Learn more about [content stages](/api-reference/content-api/content-stages).
 
 ## Filter by content stage
 
@@ -1165,7 +1165,7 @@ Using this filter, you can easily filter the content, even if you're not familia
 
 ### json_path_exists
 
-You can filter the data in your `JSON` fields by using `json_path_exists` syntax from [`PostgreSQL`](https://www.postgresql.org/docs/12/functions-json.html).
+You can filter the data in your `JSON` fields by using `json_path_exists` syntax from [`PostgreSQL`](https://www.postgresql.org/12/functions-json.html).
 
 To be able to query this content, you need to know the `JSON` structure to navigate through it.
 
@@ -1215,10 +1215,10 @@ Imagine we have the following content data in a `JSON` field which allows multip
 
 Using the above sample content data, here are some query examples:
 
-- [Query by quantity](/docs/api-reference/content-api/filtering#query-by-quantity)
-- [Query by string](/docs/api-reference/content-api/filtering#query-by-string)
-- [Query by `null`](/docs/api-reference/content-api/filtering#query-by-null)
-- [Query by range](/docs/api-reference/content-api/filtering#query-by-range)
+- [Query by quantity](/api-reference/content-api/filtering#query-by-quantity)
+- [Query by string](/api-reference/content-api/filtering#query-by-string)
+- [Query by `null`](/api-reference/content-api/filtering#query-by-null)
+- [Query by range](/api-reference/content-api/filtering#query-by-range)
 
 <Card theme="warning">
 

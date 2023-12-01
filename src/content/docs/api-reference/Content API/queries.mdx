@@ -6,7 +6,7 @@ import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
 
 Hygraph automatically generates queries for fetching single, and multiple entries for each defined content type belonging to your project.
 
-You will need a [Permanent Auth Token](/docs/api-reference/basics/authorization#permanent-auth-tokens), or your [Public API Permissions](/docs/api-reference/basics/authorization#public-api-permissions) configured to query any data from your project.
+You will need a [Permanent Auth Token](/api-reference/basics/authorization#permanent-auth-tokens), or your [Public API Permissions](/api-reference/basics/authorization#public-api-permissions) configured to query any data from your project.
 
 ## Auto-generated queries
 
@@ -54,7 +54,7 @@ The `posts` query is what you should use to fetch multiple entries from the CMS.
 
 ## Fetching relations
 
-Imagine `posts` have a [one to many](/docs/api-reference/schema/field-types#one-to-many) relation with comments. With GraphQL you can query the related `comments` in the same request.
+Imagine `posts` have a [one to many](/api-reference/schema/field-types#one-to-many) relation with comments. With GraphQL you can query the related `comments` in the same request.
 
 Here we will get all posts, and their comments.
 
@@ -70,7 +70,7 @@ Here we will get all posts, and their comments.
 }
 ```
 
-Learn more about [Relations](/docs/api-reference/schema/field-types#reference).
+Learn more about [Relations](/api-reference/schema/field-types#reference).
 
 ## Fetching localizations
 
@@ -88,7 +88,7 @@ When fetching one or more entry, you can also fetch the localized entries. The d
 }
 ```
 
-Learn more about [Localization](/docs/api-reference/content-api/localization).
+Learn more about [Localization](/api-reference/content-api/localization).
 
 ### Locales inside components
 
@@ -191,9 +191,9 @@ So, when you create an entry, only the components - children - have localization
 
 There are three workarounds to query locales inside components:
 
-- [Specify the locale for the component](/docs/api-reference/content-api/queries#specify-locale-for-the-component)
-- [Use localizations inside the component in your query](/docs/api-reference/content-api/queries#use-localizations-inside-the-component-in-your-query)
-- [Add a localized field to the parent entry](/docs/api-reference/content-api/queries#add-a-localized-field-to-the-parent-entry)
+- [Specify the locale for the component](/api-reference/content-api/queries#specify-locale-for-the-component)
+- [Use localizations inside the component in your query](/api-reference/content-api/queries#use-localizations-inside-the-component-in-your-query)
+- [Add a localized field to the parent entry](/api-reference/content-api/queries#add-a-localized-field-to-the-parent-entry)
 
 Here are some examples of these workarounds, following the German/Russian locales example we used before:
 
@@ -322,7 +322,7 @@ query MyQuery {
 
 The third and final workaround would be to add a localized field to the parent entry, as shown in the example below:
 
-![Add a localized field to the parent entry](/images/docs/api-reference/content-api/locales-in-components-3rdworkaround-a.png)
+![Add a localized field to the parent entry](/images/api-reference/content-api/locales-in-components-3rdworkaround-a.png)
 
 This makes it possible to request the locale at the beginning of the query.
 
@@ -410,7 +410,7 @@ The default content stage is set to `DRAFT`.
 }
 ```
 
-Learn more about [Content Stages](/docs/api-reference/content-api/content-stages).
+Learn more about [Content Stages](/api-reference/content-api/content-stages).
 
 ## Fetching versions
 
@@ -428,7 +428,7 @@ For example, using the `postVersion` query from above, we can make a request to 
 }
 ```
 
-Learn more about [Versioning](/docs/api-reference/content-api/content-stages#versioning).
+Learn more about [Versioning](/api-reference/content-api/content-stages#versioning).
 
 ## Combining arguments
 
@@ -451,10 +451,10 @@ For example, here we can get the first 3 posts, ordered by the created timestamp
 
 Learn more about these query arguments:
 
-- [Filtering](/docs/api-reference/content-api/filtering)
-- [Ordering](/docs/api-reference/content-api/ordering)
-- [Pagination](/docs/api-reference/content-api/pagination)
-- [Content Stage](/docs/api-reference/content-api/content-stages)
+- [Filtering](/api-reference/content-api/filtering)
+- [Ordering](/api-reference/content-api/ordering)
+- [Pagination](/api-reference/content-api/pagination)
+- [Content Stage](/api-reference/content-api/content-stages)
 
 ## Combining queries
 
@@ -527,7 +527,7 @@ You can use the generated Relay connection query for querying multiple entries.
 }
 ```
 
-Learn more about the [system fields](/docs/api-reference/schema/system-fields#connection-type-fields) for connection type queries.
+Learn more about the [system fields](/api-reference/schema/system-fields#connection-type-fields) for connection type queries.
 
 ## Directives
 

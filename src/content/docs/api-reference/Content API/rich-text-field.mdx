@@ -179,13 +179,13 @@ For example, we can query all of those on our `RichText` field type `content`:
 
 ### Embed assets
 
-You can also embed [Assets](/docs/api-reference/content-api/assets) and other models inside Rich Text as **block, inline or link embeds**.
+You can also embed [Assets](/api-reference/content-api/assets) and other models inside Rich Text as **block, inline or link embeds**.
 
-![Rich Text Asset Embeds UI](/images/docs/api-reference/schema/rich-text-embeds.png)
+![Rich Text Asset Embeds UI](/images/api-reference/schema/rich-text-embeds.png)
 
 <Card theme="info">
 
-You can find out how to enable Rich Text embeds in our [field configuration](/docs/api-reference/schema/field-configuration#embeds-options) docs.
+You can find out how to enable Rich Text embeds in our [field configuration](/api-reference/schema/field-configuration#embeds-options) docs.
 
 </Card>
 
@@ -209,7 +209,7 @@ type RichText {
 
 The `references` field will be a union relation to the types you embedded, for example `Asset`.
 
-You should use the `references` field when querying `JSON` to get the `URL` (with any [transformations](/docs/api-reference/content-api/assets#transformations), `handle`, or any of the [Asset fields](/docs/api-reference/schema/system-fields#asset-fields).
+You should use the `references` field when querying `JSON` to get the `URL` (with any [transformations](/api-reference/content-api/assets#transformations), `handle`, or any of the [Asset fields](/api-reference/schema/system-fields#asset-fields).
 
 <Tabs panelHeight={420}>
   <TabItem label="Query">
@@ -513,4 +513,4 @@ By styling your Rich Text fields, you can either customize how your Rich Text wi
 - [Hygraph's Rich Text editor:](/features/edit#rich-text-editor) Hygraph's UI Rich Text field feature walkthrough.
 - [Styling Rich Text with TailwindCSS:](https://hygraph.com/blog/styling-rich-text-tailwindcss) Detailed tutorial on how to use the `JSON` representation from the RTE to create custom elements for each text-based element of Rich Text.
 - [Introducing the Hygraph React Rich Text Renderer:](https://hygraph.com/blog/hygraph-react-rich-text-renderer) Blog post on how to render Hygraph documents using Rich Text in your application easily using our available packages.
-- [Rich Text editor UI guide:](/docs/guides/content/rich-text-editor) Guide on how to use Hygraph's Rich Text editor in the content editor of your project.
+- [Rich Text editor UI guide:](/guides/content/rich-text-editor) Guide on how to use Hygraph's Rich Text editor in the content editor of your project.

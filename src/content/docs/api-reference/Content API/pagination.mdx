@@ -91,7 +91,7 @@ The limit of 10/100 applies to projects created after 14-06-2022. Projects creat
 
 ## Pagination limits
 
-To fetch the pagination limits of your projects, you need to access the [API Playground](/docs/api-reference/basics/api-playground) section of your Hygraph project, select `Management API` from the `Environment` dropdown located at the top of the screen, and run the following query:
+To fetch the pagination limits of your projects, you need to access the [API Playground](/api-reference/basics/api-playground) section of your Hygraph project, select `Management API` from the `Environment` dropdown located at the top of the screen, and run the following query:
 
 ```graphql
 {
@@ -126,7 +126,7 @@ Hygraph follows the Relay cursor connection specification. Each of your project 
 
 The example below shows us how we can query for the first `3` posts, `after` the `cursor` (ID) `abc`. We can also query `pageInfo` to check whether there are more pages using `hasNextPage`.
 
-The [`PageInfo`](/docs/api-reference/schema/system-fields#pageinfo) is useful when paginating.
+The [`PageInfo`](/api-reference/schema/system-fields#pageinfo) is useful when paginating.
 
 ```graphql
 {
@@ -149,4 +149,4 @@ The [`PageInfo`](/docs/api-reference/schema/system-fields#pageinfo) is useful wh
 }
 ```
 
-Learn more about [fetching with Relay](/docs/api-reference/content-api/queries#fetching-with-relay).
+Learn more about [fetching with Relay](/api-reference/content-api/queries#fetching-with-relay).

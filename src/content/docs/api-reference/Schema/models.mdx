@@ -4,7 +4,7 @@ meta_description: Your schema is defined by the models you create.
 ---
 import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
 
-Your schema is defined by the models you create, and [fields](/docs/api-reference/schema/field-types) you add. Inside the schema editor, you can add fields, create relationships between models, and much more.
+Your schema is defined by the models you create, and [fields](/api-reference/schema/field-types) you add. Inside the schema editor, you can add fields, create relationships between models, and much more.
 
 <Card theme="info">
 
@@ -44,7 +44,7 @@ For example, let's imagine we have the model `Post`. The following queries, and 
 - `publishManyPostsConnection`
 - `unpublishManyPostsConnection`
 
-Learn more about [queries](/docs/api-reference/content-api/queries), and [mutations](/docs/api-reference/content-api/mutations).
+Learn more about [queries](/api-reference/content-api/queries), and [mutations](/api-reference/content-api/mutations).
 
 ## Edit a model
 
@@ -58,13 +58,13 @@ Deleting a model will also delete all of the content entries.
 
 ## Adding fields
 
-You can add fields to all custom models, and the system Asset model by selecting the [field type](/docs/api-reference/schema/field-types) from the fields list when viewing a model.
+You can add fields to all custom models, and the system Asset model by selecting the [field type](/api-reference/schema/field-types) from the fields list when viewing a model.
 
 ## System fields
 
 All models have system fields. You don't need to add an ID, created, or updated timestamp. These are managed by Hygraph automatically.
 
-Learn more about [system fields](/docs/api-reference/schema/system-fields).
+Learn more about [system fields](/api-reference/schema/system-fields).
 
 ## Preview URLs
 
@@ -80,4 +80,4 @@ The fields on your model are available to use within the URL template. For examp
 
 ## Embedded types
 
-All models can be embedded into the [Rich Text Field Type](/docs/api-reference/schema/field-types#rich-text) via a configuration setting. On the API side, we create a union relation that references the selected model.
+All models can be embedded into the [Rich Text Field Type](/api-reference/schema/field-types#rich-text) via a configuration setting. On the API side, we create a union relation that references the selected model.

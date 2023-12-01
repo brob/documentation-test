@@ -9,7 +9,7 @@ Your project endpoint exposes GraphQL mutations you can use to modify the conten
 
 <Card theme="warning">
 
-It's not recommended you enable Public API Permissions for mutations, but instead use a [Permanent Auth Token](/docs/api-reference/basics/authorization#permanent-auth-tokens) for mutating data.
+It's not recommended you enable Public API Permissions for mutations, but instead use a [Permanent Auth Token](/api-reference/basics/authorization#permanent-auth-tokens) for mutating data.
 
 </Card>
 
@@ -75,7 +75,7 @@ mutation {
   </TabItem>
 </Tabs>
 
-The `id` is a [default system field](/docs/api-reference/schema/system-fields#default-fields) that is automatically generated for all new entries.
+The `id` is a [default system field](/api-reference/schema/system-fields#default-fields) that is automatically generated for all new entries.
 
 ## Update entries
 
@@ -495,7 +495,7 @@ mutation {
 
 ## Insert at position
 
-When inserting related entries, you can `connect` entries at a given position. The position of entries reflects that [fetching relations](/docs/api-reference/content-api/queries#fetching-relations).
+When inserting related entries, you can `connect` entries at a given position. The position of entries reflects that [fetching relations](/api-reference/content-api/queries#fetching-relations).
 
 The `position` input accepts the following values:
 
@@ -568,21 +568,21 @@ mutation {
 
 Hygraph automatically generates publish, and unpublish mutations for each of your content models, including the asset model.
 
-Learn more about [publishing and unpublishing content](/docs/api-reference/content-api/content-stages).
+Learn more about [publishing and unpublishing content](/api-reference/content-api/content-stages).
 
 ## Batch mutations
 
 Hygraph supports batch mutations that can be applied to "many" entries at once. You may wish to update, or delete many entries at once that fit given criteria.
 
-Batch mutations comply with the [Relay connection type](/docs/api-reference/content-api/queries#fetching-with-relay) specification.
+Batch mutations comply with the [Relay connection type](/api-reference/content-api/queries#fetching-with-relay) specification.
 
 ### Update many
 
-To update many entries at once, you must use the `updateMany[Model]Connection` mutation. You can use [where](/docs/api-reference/content-api/filtering), or [pagination](/docs/api-reference/content-api/pagination) filters to set the criteria you wish to update.
+To update many entries at once, you must use the `updateMany[Model]Connection` mutation. You can use [where](/api-reference/content-api/filtering), or [pagination](/api-reference/content-api/pagination) filters to set the criteria you wish to update.
 
 | Argument | Input Type              | Description                                                                                     |
 | -------- | ----------------------- | ----------------------------------------------------------------------------------------------- |
-| `where`  | `ProductManyWhereInput` | [Filtering](/docs/api-reference/content-api/filtering) criteria for entries you want to update. |
+| `where`  | `ProductManyWhereInput` | [Filtering](/api-reference/content-api/filtering) criteria for entries you want to update. |
 | `data`   | `CreateInput!`          | An object that specifies the data you'd like to update matching entries with.                   |
 | `first`  | `Int`                   | Seek forwards from end of result set.                                                           |
 | `last`   | `Int`                   | Seek backwards from start of result set.                                                        |
@@ -592,7 +592,7 @@ To update many entries at once, you must use the `updateMany[Model]Connection` m
 
 <Card theme="warning">
 
-If you do not pass any filters, then the first 10 entries will be updated. See [Pagination](/docs/api-reference/content-api/pagination) for updating pages.
+If you do not pass any filters, then the first 10 entries will be updated. See [Pagination](/api-reference/content-api/pagination) for updating pages.
 
 </Card>
 
@@ -650,11 +650,11 @@ mutation {
 
 ### Delete many
 
-To delete many entries at once, you must use the `deleteMany[Model]Connection` mutation. You can use [where](/docs/api-reference/content-api/filtering), or [pagination](/docs/api-reference/content-api/pagination) filters to set the criteria you wish to delete.
+To delete many entries at once, you must use the `deleteMany[Model]Connection` mutation. You can use [where](/api-reference/content-api/filtering), or [pagination](/api-reference/content-api/pagination) filters to set the criteria you wish to delete.
 
 | Argument | Input Type              | Description                                                                                     |
 | -------- | ----------------------- | ----------------------------------------------------------------------------------------------- |
-| `where`  | `ProductManyWhereInput` | [Filtering](/docs/api-reference/content-api/filtering) criteria for entries you want to delete. |
+| `where`  | `ProductManyWhereInput` | [Filtering](/api-reference/content-api/filtering) criteria for entries you want to delete. |
 | `first`  | `Int`                   | Seek forwards from end of result set.                                                           |
 | `last`   | `Int`                   | Seek backwards from start of result set.                                                        |
 | `skip`   | `Int`                   | Skip result set by given amount.                                                                |
@@ -663,7 +663,7 @@ To delete many entries at once, you must use the `deleteMany[Model]Connection` m
 
 <Card theme="warning">
 
-If you do not pass any filters, then the first 10 entries will be deleted. See [Pagination](/docs/api-reference/content-api/pagination) for updating pages.
+If you do not pass any filters, then the first 10 entries will be deleted. See [Pagination](/api-reference/content-api/pagination) for updating pages.
 
 </Card>
 
@@ -720,9 +720,9 @@ Just like you can [publish content](#publishing-content-mutations), you can also
 
 | Argument | Input Type                | Description                                                                               |
 | -------- | ------------------------- | ----------------------------------------------------------------------------------------- |
-| `where`  | `ProductManyWhereInput`   | [Filtering](/docs/api-reference/content-api/filtering) criteria finding entries.          |
-| `from`   | `Stage = DRAFT`           | The [content stage](/docs/api-reference/content-api/content-stages) to find entries from. |
-| `to`     | `[Stage!]! = [PUBLISHED]` | The target published [content stage](/docs/api-reference/content-api/content-stages).     |
+| `where`  | `ProductManyWhereInput`   | [Filtering](/api-reference/content-api/filtering) criteria finding entries.          |
+| `from`   | `Stage = DRAFT`           | The [content stage](/api-reference/content-api/content-stages) to find entries from. |
+| `to`     | `[Stage!]! = [PUBLISHED]` | The target published [content stage](/api-reference/content-api/content-stages).     |
 | `first`  | `Int`                     | Seek forwards from end of result set.                                                     |
 | `last`   | `Int`                     | Seek backwards from start of result set.                                                  |
 | `skip`   | `Int`                     | Skip result set by given amount.                                                          |
@@ -784,9 +784,9 @@ Just like you can batch publish, you can also batch unpublish.
 
 | Argument | Input Type                | Description                                                                                   |
 | -------- | ------------------------- | --------------------------------------------------------------------------------------------- |
-| `where`  | `ProductManyWhereInput`   | [Filtering](/docs/api-reference/content-api/filtering) criteria for entries you want to find. |
-| `stage`  | `Stage = DRAFT`           | The [content stage](/docs/api-reference/content-api/content-stages) to find entries in.       |
-| `to`     | `[Stage!]! = [PUBLISHED]` | The target published [content stage](/docs/api-reference/content-api/content-stages).         |
+| `where`  | `ProductManyWhereInput`   | [Filtering](/api-reference/content-api/filtering) criteria for entries you want to find. |
+| `stage`  | `Stage = DRAFT`           | The [content stage](/api-reference/content-api/content-stages) to find entries in.       |
+| `to`     | `[Stage!]! = [PUBLISHED]` | The target published [content stage](/api-reference/content-api/content-stages).         |
 | `first`  | `Int`                     | Seek forwards from end of result set.                                                         |
 | `last`   | `Int`                     | Seek backwards from start of result set.                                                      |
 | `skip`   | `Int`                     | Skip result set by given amount.                                                              |
@@ -844,4 +844,4 @@ mutation {
 
 Depending on whether or not you have localized fields in your schema, you will be able to mutate each of the localized content entries.
 
-Learn more about [mutating localized content](/docs/api-reference/content-api/localization#mutating-localized-content).
+Learn more about [mutating localized content](/api-reference/content-api/localization#mutating-localized-content).

@@ -8,7 +8,7 @@ Your schema is built up of GraphQL types. If you’re familiar working with Grap
 
 You may also be interested in how input types work for filtering, ordering, paginating, and mutating data.
 
-Here you will discover the core field types available when building your Hygraph schema. Since your schema is automatically [generated](/docs/api-reference/content-api/queries#auto-generated-queries), it is recommended you browse the [API Playground](/docs/api-reference/basics/api-playground) to get inspect all available field type definitions.
+Here you will discover the core field types available when building your Hygraph schema. Since your schema is automatically [generated](/api-reference/content-api/queries#auto-generated-queries), it is recommended you browse the [API Playground](/api-reference/basics/api-playground) to get inspect all available field type definitions.
 
 ## String
 
@@ -83,7 +83,7 @@ If Rich Text Embeds are enabled, `RichText` will include the field `json` in add
 
 </Card>
 
-Please read our dedicated document on [Rich Text](/docs/api-reference/content-api/rich-text-field) for further information.
+Please read our dedicated document on [Rich Text](/api-reference/content-api/rich-text-field) for further information.
 
 ## Integer
 
@@ -308,7 +308,7 @@ For example, here we have products with a JSON field for `metadata`:
 
 Assets are connected to models through a [reference](#reference) field. Assets can be any file type, not just images.
 
-The Asset model comes its own default [asset fields](/docs/api-reference/schema/system-fields#asset-fields).
+The Asset model comes its own default [asset fields](/api-reference/schema/system-fields#asset-fields).
 
 For example, here we have posts with a the Asset field for `coverImage`, querying those asset fields:
 
@@ -380,11 +380,11 @@ For example, here we have posts with a the Asset field for `coverImage`, queryin
   </TabItem>
 </Tabs>
 
-Learn more about [Assets](/docs/api-reference/content-api/assets).
+Learn more about [Assets](/api-reference/content-api/assets).
 
 ## Color
 
-The Color field is made up of HEX, [RGBA](<https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#rgb()_and_rgba()>) and css color values.
+The Color field is made up of HEX, [RGBA](<https://developer.mozilla.org/en-US/Web/CSS/color_value#rgb()_and_rgba()>) and css color values.
 
 ```graphql
 type Color {
@@ -512,7 +512,7 @@ For example, here we have all shop locations, with distance from the provided la
 
 ## Enumerations
 
-[Enumerations](/docs/api-reference/schema/enumerations), or enum for short, are predefined list of values. They are defined inside your GraphQL schema, and can be referenced by any of your content models.
+[Enumerations](/api-reference/schema/enumerations), or enum for short, are predefined list of values. They are defined inside your GraphQL schema, and can be referenced by any of your content models.
 
 For example, here is are products with its commodity type:
 
@@ -680,15 +680,15 @@ Remote fields connect specific remote data to an entry of that model. Remote fie
 
 ### GraphQL remote field
 
-The GraphQL remote field requies a GraphQL Remote Source to be configured on your project. You can find out how to create a Remote Source [here](/docs/guides/schema/remote-sources#adding-a-remote-source-to-your-project).
+The GraphQL remote field requies a GraphQL Remote Source to be configured on your project. You can find out how to create a Remote Source [here](/guides/schema/remote-sources#adding-a-remote-source-to-your-project).
 
 The Field allows you to make a request (HTTP GET or POST) to a remote GraphQL API and to specify the query entrypoint.
 
-[Learn more about adding a remote field to your model](/docs/guides/schema/remote-sources#adding-a-remote-field-to-your-model)
+[Learn more about adding a remote field to your model](/guides/schema/remote-sources#adding-a-remote-field-to-your-model)
 
 #### Existing field variable in non-string arguments
 
-![Existing field variable in non-string arguments](/images/docs/api-reference/schema/field-types-cast-int.png)
+![Existing field variable in non-string arguments](/images/api-reference/schema/field-types-cast-int.png)
 
 In order to support existing field variables in non-string arguments, the `{{!cast=<type>}}` syntax can be used to indicate that the resulting data should be forwarded as is.
 
@@ -748,11 +748,11 @@ We mentioned before that our remote API accepts an `int` for the last argument, 
 
 ### REST remote field
 
-In order to use a REST remote field, a REST Remote Source has to be present on the project. You can find out how to create a Remote Source [here](/docs/guides/schema/remote-sources#adding-a-remote-source-to-your-project).
+In order to use a REST remote field, a REST Remote Source has to be present on the project. You can find out how to create a Remote Source [here](/guides/schema/remote-sources#adding-a-remote-source-to-your-project).
 
 The REST remote field allows to specify the API path to which a request (GET or POST) should be sent to.
 
-[Learn more about adding a remote field to your model](/docs/guides/schema/remote-sources#adding-a-remote-field-to-your-model)
+[Learn more about adding a remote field to your model](/guides/schema/remote-sources#adding-a-remote-field-to-your-model)
 
 ## Field visibility
 
@@ -762,10 +762,10 @@ Hygraph field types allow for different visibility options via the `Advanced` ta
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Read / Write | Default option, the field will be accessible for read/write purposes.                                                                                                                 |
 | Read Only    | Field is shown but cannot be edited in the UI, updates can only be done via API.                                                                                                      |
-| Hidden       | The field is not shown in the UI, but can be referenced by other fields such as [Slugs](/docs/api-reference/schema/field-types#string) or from a [UI Extension](/docs/ui-extensions). |
+| Hidden       | The field is not shown in the UI, but can be referenced by other fields such as [Slugs](/api-reference/schema/field-types#string) or from a [UI Extension](/ui-extensions). |
 | API Only     | Field is not shown in the UI, can be read and updated exclusively from the API.                                                                                                       |
 
-Note that these options are available for all field types except for [References](/docs/api-reference/schema/field-types#reference).
+Note that these options are available for all field types except for [References](/api-reference/schema/field-types#reference).
 
 <Card theme="info">
 

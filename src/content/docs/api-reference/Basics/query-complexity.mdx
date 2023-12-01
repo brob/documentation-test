@@ -18,9 +18,9 @@ For example, if a query retrieves a list of posts and each post has multiple com
 
 This guide will help you with the following:
 
-- [How to split up your GQL queries to manage complexity](/docs/api-reference/basics/query-complexity#splitting-gql-queries)
-- [How to optimize union queries](/docs/api-reference/basics/query-complexity#union-queries)
-- [How to use the complexity tree JSON output to calculate the cost of your queries](/docs/api-reference/basics/query-complexity#complexity-tree-json-output)
+- [How to split up your GQL queries to manage complexity](/api-reference/basics/query-complexity#splitting-gql-queries)
+- [How to optimize union queries](/api-reference/basics/query-complexity#union-queries)
+- [How to use the complexity tree JSON output to calculate the cost of your queries](/api-reference/basics/query-complexity#complexity-tree-json-output)
 
 ## Splitting GQL queries
 
@@ -28,9 +28,9 @@ To manage query complexity, you can split your GQL queries into smaller, more ma
 
 | Suggestion                                                                                                          | Description                                                                                                                                                                             |
 | ------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Limit the depth of your queries](/docs/api-reference/basics/query-complexity#example-1-limiting-query-depth)       | Avoid deeply nested queries. Instead, break them up into multiple smaller queries. This can help reduce the complexity and make your queries more efficient.                            |
-| [Fetch only necessary fields](/docs/api-reference/basics/query-complexity#example-2-fetching-only-necessary-fields) | Minimize the number of fields you're retrieving in each query. Only fetch the fields that are necessary for your current operation.                                                     |
-| [Use pagination](/docs/api-reference/basics/query-complexity#example-3-using-pagination)                            | Hygraph supports various arguments for paginating content entries. By using these features, you can manage the amount of data retrieved in each query, thereby reducing the complexity. |
+| [Limit the depth of your queries](/api-reference/basics/query-complexity#example-1-limiting-query-depth)       | Avoid deeply nested queries. Instead, break them up into multiple smaller queries. This can help reduce the complexity and make your queries more efficient.                            |
+| [Fetch only necessary fields](/api-reference/basics/query-complexity#example-2-fetching-only-necessary-fields) | Minimize the number of fields you're retrieving in each query. Only fetch the fields that are necessary for your current operation.                                                     |
+| [Use pagination](/api-reference/basics/query-complexity#example-3-using-pagination)                            | Hygraph supports various arguments for paginating content entries. By using these features, you can manage the amount of data retrieved in each query, thereby reducing the complexity. |
 
 Remember that the goal is to **reduce the complexity of your queries to ensure efficient and effective data retrieval**. By limiting the depth of your queries, fetching only necessary fields, and using pagination, you can manage the complexity of your GQL queries effectively.
 
@@ -147,7 +147,7 @@ The default result size of results returned by queries fetching multiple entries
 
 - The limit of 10/100 applies to projects created after 14-06-2022.
 - Projects created before that date have a limit of 100/1000.
-- To learn more about this, check out our document on [Pagination](/docs/api-reference/content-api/pagination).
+- To learn more about this, check out our document on [Pagination](/api-reference/content-api/pagination).
 
 </Card>
 
@@ -167,7 +167,7 @@ You can use **`first`**, **`last`**, **`skip`**, **`before`**, and **`after`** a
 
 ## Union queries
 
-[Union types](/docs/api-reference/schema/field-types#union) allow to setup relational fields that point to different model types, while this feature allows for very flexible modelling of content, it can also open the door to queries that might not perform as well and could use some optimizations. Below we document means to optimize querying for content that is backed by a Union relation.
+[Union types](/api-reference/schema/field-types#union) allow to setup relational fields that point to different model types, while this feature allows for very flexible modelling of content, it can also open the door to queries that might not perform as well and could use some optimizations. Below we document means to optimize querying for content that is backed by a Union relation.
 
 Unions are typically queried like so:
 

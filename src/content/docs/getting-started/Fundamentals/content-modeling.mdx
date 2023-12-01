@@ -11,7 +11,7 @@ The content model defines the schema of your content. It describes what kind of 
 
 Based on the content model, Hygraph will provide an elegant and easy to use content management interface as well as a highly versatile GraphQL API. You will use the API to integrate the content into your application.
 
-![Content modeling with Hygraph](/images/docs/user-guides/content-modeling-with-hygraph.png)
+![Content modeling with Hygraph](/images/user-guides/content-modeling-with-hygraph.png)
 
 The generated API and the user interface are only as good as your content model. If you set up a clean structure that works for both developers and content creators, implementation success is much more likely.
 
@@ -29,7 +29,7 @@ Before starting to build your initial content model, you should already have ske
 
 Let's say you are building a streaming application for TV shows and you have an idea of what the frontend should look like. You will be able to identify that you will need to set up models for Series, Episodes and Actors and also how those models will relate to each other.
 
-![Movie content model](/images/docs/user-guides/movie-content-model.png)
+![Movie content model](/images/user-guides/movie-content-model.png)
 
 In this example, a Series is related to multiple Episodes, while an Episode may be related to multiple Authors and so on. We can identify that a Series will need to store different fields of information, such as a poster in the background, the name or logo of the show, the genre and release information etc.
 
@@ -37,7 +37,7 @@ In this example, a Series is related to multiple Episodes, while an Episode may 
 
 The content model can be adjusted at any time and Hygraph supports working with environments which will help you evolve your content model safely. However, the later a change is introduced, the harder it will get. In some cases you will need to consider migrating content that was already created from an old model to an updated model. By investing more time in setting up a potentially future-proof content model, you will be able to prevent future mundane work such as content migrations.
 
-![Environments flow](/images/docs/getting-started/environments-flow.png)
+![Environments flow](/images/getting-started/environments-flow.png)
 
 <Card theme="info">
 
@@ -53,7 +53,7 @@ For example: You can set up specific roles for content creators that can only ed
 
 <Card theme="info">
 
-We recommend reading the documentation on [how to work with content permissions](/docs/guides/overview/roles-and-permissions).
+We recommend reading the documentation on [how to work with content permissions](/guides/overview/roles-and-permissions).
 
 </Card>
 
@@ -83,7 +83,7 @@ Hygraph automatically generates an API for the models you create, and all of the
 
 You will need to add fields to models to store content. Hygraph provides content editors different input UI depending on the fields used. You can think of a field as a “column” inside of a database table. These fields can be of many different types, and in GraphQL we call those types “Scalars”.
 
-Hygraph provides many different scalar types for things like Strings, Integers, Dates, Booleans, and even for things like Colors, and Geo coordinates. You can learn about the supported [field types](/docs/api-reference/schema/field-types) inside of the API Reference.
+Hygraph provides many different scalar types for things like Strings, Integers, Dates, Booleans, and even for things like Colors, and Geo coordinates. You can learn about the supported [field types](/api-reference/schema/field-types) inside of the API Reference.
 
 #### Field modifiers
 
@@ -91,7 +91,7 @@ All fields added to your content models provide ways to modify how they're used.
 
 <Card theme="info">
 
-We recommend reading the API Reference for [Field Configuration](/docs/api-reference/schema/field-configuration#validations) to see which field modifiers are available, and how they are used.
+We recommend reading the API Reference for [Field Configuration](/api-reference/schema/field-configuration#validations) to see which field modifiers are available, and how they are used.
 
 </Card>
 

@@ -6,7 +6,7 @@ import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
 
 All Content APIs are served via our globally distributed edge cache. Whenever a query is sent to the content API, its response is cached in multiple [POP](https://www.fastly.com/network-map/) (data centers) around the globe.
 
-![Hygraph CDN Map](/images/docs/api-reference/basics/cdn-map.svg)
+![Hygraph CDN Map](/images/api-reference/basics/cdn-map.svg)
 
 <Card theme="info">
 
@@ -57,7 +57,7 @@ This endpoint is ideal for delivering content around the globe with low latency 
 
 <Card theme="success">
 
-This endpoint has **model + stage based invalidation**. This means that instead of invalidating the complete cache for content and schema changes, we only invalidate the models that were changed based on the mutations used. The rest will stay cached and, therefore, fast. Click [here](/docs/api-reference/basics/caching#model-stage-based-invalidation) to learn more.
+This endpoint has **model + stage based invalidation**. This means that instead of invalidating the complete cache for content and schema changes, we only invalidate the models that were changed based on the mutations used. The rest will stay cached and, therefore, fast. Click [here](/api-reference/basics/caching#model-stage-based-invalidation) to learn more.
 
 </Card>
 
@@ -75,7 +75,7 @@ In contrast, [read-after-write consistency](https://avikdas.com/2020/04/13/scala
 
 ## Model + stage based invalidation
 
-**Model + stage based invalidation**, which is only available for our [High performance endpoint](/docs/api-reference/basics/caching#smart-cache-invalidation), allows invalidating only the models that were changed based on the mutations used for content and schema changes, rather than invalidate the complete cache.
+**Model + stage based invalidation**, which is only available for our [High performance endpoint](/api-reference/basics/caching#smart-cache-invalidation), allows invalidating only the models that were changed based on the mutations used for content and schema changes, rather than invalidate the complete cache.
 
 Regarding queries that fetch related content that needs to be invalidated: We analyze query responses and invalidate only the cached queries that contain the changed model.
 

@@ -23,17 +23,17 @@ You can configure custom permissions, or initialize the defaults.
 
 For example, here you can see how to configure the Public API to allow access to READ the `Post` model on stages `Published` and `QA` with the locale `en`.
 
-![Create API permission](/images/docs/api-reference/basics/create-permission.png)
+![Create API permission](/images/api-reference/basics/create-permission.png)
 
 You can also specify an optional condition that restricts access even further. For example, you could specify the condition `{ "id": "ckoimwlu80ck20a88z6i754cw" }`. This would then only allow you to fetch the `Post` with `id` `ckoimwlu80ck20a88z6i754cw`.
 
-[Learn more about Public API permissions](/docs/api-reference/basics/permissions#public-api-read-only)
+[Learn more about Public API permissions](/api-reference/basics/permissions#public-api-read-only)
 
 ### Default public stage
 
 If no stage parameter is set on the GraphQL query, or via a HTTP header, the content from the default set content stage will be served.
 
-![Default Content Stage](/images/docs/api-reference/basics/default-content-stage.png)
+![Default Content Stage](/images/api-reference/basics/default-content-stage.png)
 
 The default public stage is set to `PUBLISHED` for all new projects.
 
@@ -53,11 +53,11 @@ The Permanent Auth Token must be passed via the `Authorization` header on HTTP r
 Authorization: Bearer PERMANENT_AUTH_TOKEN
 ```
 
-[Learn more about PAT permissions](/docs/api-reference/basics/permissions#permanent-auth-tokens-with-specific-models)
+[Learn more about PAT permissions](/api-reference/basics/permissions#permanent-auth-tokens-with-specific-models)
 
 ## API endpoints
 
-![API Endpoints](/images/docs/api-reference/basics/api-endpoints.png)
+![API Endpoints](/images/api-reference/basics/api-endpoints.png)
 
 ### Regular read & write endpoint
 
@@ -65,7 +65,7 @@ Each Hygraph project you create, or are invited to, has a unique GraphQL API end
 
 GraphQL introspection is enabled by default, so anybody with access to your endpoint can traverse the graph to see your content types, as well as all queries and mutations.
 
-This API endpoint also contains the current schema [environment](/docs/api-reference/basics/environments), by default this will be `master`.
+This API endpoint also contains the current schema [environment](/api-reference/basics/environments), by default this will be `master`.
 
 The API endpoint has the following composition:
 
@@ -73,7 +73,7 @@ The API endpoint has the following composition:
 https://[region].hygraph.com/v2/[projectId]/[environment]
 ```
 
-Click [here](/docs/api-reference/basics/caching#regular-read-and-write-endpoint) to learn more about this endpoint.
+Click [here](/api-reference/basics/caching#regular-read-and-write-endpoint) to learn more about this endpoint.
 
 ### High performance endpoint
 
@@ -85,15 +85,15 @@ The API endpoint has the following composition:
 https://[region].cdn.hygraph.com/content/[projectId]/[environment]
 ```
 
-Click [here](/docs/api-reference/basics/caching#high-performance-endpoint) to learn more about this endpoint.
+Click [here](/api-reference/basics/caching#high-performance-endpoint) to learn more about this endpoint.
 
 ## Resources
 
 You might find the following documents useful:
 
-- [Permissions:](/docs/api-reference/basics/permissions) This document contains information on permissions, how they work, and their limits.
-- [Roles and permissions:](/docs/guides/overview/roles-and-permissions) This document contains information on how to work with roles and permissions in the Hygraph app.
-- [API access:](/docs/guides/overview/api-access) This document covers the API access section of the Hygraph app as well as its subsections: Endpoints, Public content API, and Permanent auth tokens.
+- [Permissions:](/api-reference/basics/permissions) This document contains information on permissions, how they work, and their limits.
+- [Roles and permissions:](/guides/overview/roles-and-permissions) This document contains information on how to work with roles and permissions in the Hygraph app.
+- [API access:](/guides/overview/api-access) This document covers the API access section of the Hygraph app as well as its subsections: Endpoints, Public content API, and Permanent auth tokens.
 
 &nbsp;
 

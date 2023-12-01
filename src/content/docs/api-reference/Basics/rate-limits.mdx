@@ -6,7 +6,7 @@ import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
 
 To ensure delivery of optimal experiences to all customers, a **rate limit** is enforced on all GraphQL queries for the shared regions. This means there are limits to the number of uncached requests you can make to your content API.
 
-When you exceed the rate limits, you'll get a [`429 error`](/docs/api-reference/basics/errors#429-too-many-requests).
+When you exceed the rate limits, you'll get a [`429 error`](/api-reference/basics/errors#429-too-many-requests).
 
 <Card theme="warning">
 
@@ -148,7 +148,7 @@ const link = createHttpLink({ uri: "/graphql" fetch: throttledFetch });
 
 ### Nuxt thread limiting
 
-You can add the following to your `nuxt.config.js` to avoid getting a [429 error](/docs/api-reference/basics/errors#429-too-many-requests). It will stop GraphQL requests from overloading Hygraph's API limits when building.
+You can add the following to your `nuxt.config.js` to avoid getting a [429 error](/api-reference/basics/errors#429-too-many-requests). It will stop GraphQL requests from overloading Hygraph's API limits when building.
 
 ```js
 // Your Nuxt config file (nuxt.config.js)

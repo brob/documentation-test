@@ -37,8 +37,8 @@ The User model is part of "user attribution", and is connected with content entr
 | `updatedAt`   | `DateTime!` | The last updated at date and time of the user          |
 | `publishedAt` | `DateTime`  | The last published at date and time of the user        |
 
-- If content is mutated with a [Permanent Auth Token](/docs/api-reference/basics/authorization#permanent-auth-tokens) then `kind` will return `PAT`.
-- If [Public API Permissions](/docs/api-reference/basics/authorization#public-api-permissions) are enabled, and content is mutated, `kind` will return `PUBLIC`.
+- If content is mutated with a [Permanent Auth Token](/api-reference/basics/authorization#permanent-auth-tokens) then `kind` will return `PAT`.
+- If [Public API Permissions](/api-reference/basics/authorization#public-api-permissions) are enabled, and content is mutated, `kind` will return `PUBLIC`.
 
 <Card theme="warning">
 
@@ -105,7 +105,7 @@ The Asset field type has all of the [default model fields](#default-model-fields
 
 | Field           | Type        | Description                                                                                               |
 | --------------- | ----------- | --------------------------------------------------------------------------------------------------------- |
-| `url`           | `String!`   | The URL of the asset, with any [transformations](/docs/api-reference/content-api/assets#transformations). |
+| `url`           | `String!`   | The URL of the asset, with any [transformations](/api-reference/content-api/assets#transformations). |
 | `handle`        | `String!`   | The file handle.                                                                                          |
 | `fileName`      | `String!`   | The document file name that was uploaded.                                                                 |
 | `height`        | `Float`     | The height of the file (for images only).                                                                 |
@@ -121,7 +121,7 @@ Asset fields are localized by default, and always include the localization field
 
 While the Assets model is a system model that comes with every project by default and contains some predefined fields, you can still edit it to add fields for things like **alt text** and **captions** to your image assets.
 
-Click [here](/docs/getting-started/add-fields) to learn more about adding fields to a model.
+Click [here](/getting-started/add-fields) to learn more about adding fields to a model.
 
 </Card>
 
@@ -134,11 +134,11 @@ When you localize fields within Hygraph, the model will be updated to contain th
 | `locale`        | `Locale!`       | The system locale enumeration for your projects locales. E.g. `en`, `de`. |
 | `localizations` | `[modelName!]!` | An array of localized entries for the model you are querying.             |
 
-Learn more about working with [Localization](/docs/api-reference/content-api/localization).
+Learn more about working with [Localization](/api-reference/content-api/localization).
 
 ## Version history fields
 
-One of the [auto-generated queries](/docs/api-reference/content-api/queries#auto-generated-queries) Hygraph will create is around versioning. Each time you publish content to a stage, a version is saved.
+One of the [auto-generated queries](/api-reference/content-api/queries#auto-generated-queries) Hygraph will create is around versioning. Each time you publish content to a stage, a version is saved.
 
 You can fetch the version history of a content entry by using the `history` field on a model. This field is managed automatically by Hygraph.
 
@@ -172,7 +172,7 @@ You can fetch the version history of a content entry by using the `history` fiel
 
 ## Connection type fields
 
-Since Hygraph implements the Relay specification, when [fetching with Relay](/docs/api-reference/content-api/queries#fetching-with-relay) you will have some fields made available to you automatically.
+Since Hygraph implements the Relay specification, when [fetching with Relay](/api-reference/content-api/queries#fetching-with-relay) you will have some fields made available to you automatically.
 
 For example, let's imagine we have the model `Post`. The `postsConnection` would look a little something like:
 
@@ -241,7 +241,7 @@ Hygraph exposes the `PageInfo` type on the field `pageInfo` for connection queri
   </TabItem>
 </Tabs>
 
-Learn more about [Relay cursor pagination](/docs/api-reference/content-api/pagination#relay-cursor-connections).
+Learn more about [Relay cursor pagination](/api-reference/content-api/pagination#relay-cursor-connections).
 
 ### Aggregate!
 

@@ -7,7 +7,7 @@ import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
 
 Hygraph uses conventional HTTP responses codes when returning API requests.
 
-Codes in the 2xx range refer to a successful request, whereas responses in the 4xx range indicate there was an error due to the information you provided, such as invalid [query arguments](/docs/api-reference/content-api/queries#combining-arguments), or [auth](/docs/api-reference/basics/authorization) token.
+Codes in the 2xx range refer to a successful request, whereas responses in the 4xx range indicate there was an error due to the information you provided, such as invalid [query arguments](/api-reference/content-api/queries#combining-arguments), or [auth](/api-reference/basics/authorization) token.
 
 | Code  | Description                                                                                                |
 | ----- | ---------------------------------------------------------------------------------------------------------- |
@@ -56,14 +56,14 @@ If your Permanent Auth Token is not a valid JWT, you will receive a 400 error.
 
 ## `401: Unauthorized`
 
-The endpoint you requested requires a valid [Permanent Auth Token](/docs/api-reference/basics/authorization), or a environment may not exist for this project.
+The endpoint you requested requires a valid [Permanent Auth Token](/api-reference/basics/authorization), or a environment may not exist for this project.
 
 <Card title="Pro Tip" theme="info">
 
 You might find the following documents useful for this:
 
-- [Authorization](/docs/api-reference/basics/authorization)
-- [Permanent auth tokens with specific models](/docs/api-reference/basics/permissions#permanent-auth-tokens-with-specific-models)
+- [Authorization](/api-reference/basics/authorization)
+- [Permanent auth tokens with specific models](/api-reference/basics/permissions#permanent-auth-tokens-with-specific-models)
 
 </Card>
 
@@ -85,8 +85,8 @@ The user needs more permissions for either the Content API or the Management API
 
 You might find the following documents useful for this:
 
-- [Roles and permissions](/docs/guides/overview/roles-and-permissions)
-- [Permissions](/docs/api-reference/basics/permissions)
+- [Roles and permissions](/guides/overview/roles-and-permissions)
+- [Permissions](/api-reference/basics/permissions)
 
 </Card>
 
@@ -115,7 +115,7 @@ You'll get a `429` when you exceed the rate limit, and you will get a response w
 
 <Card title="Pro Tip" theme="info">
 
-Our document on [API rate limits](/docs/api-reference/basics/rate-limits) shares information on limits according to subscription plan, as well as ways of handling API rate limits with [Next.js](/docs/api-reference/basics/rate-limits#nextjs), [Gatsby](/docs/api-reference/basics/rate-limits#gatsby), and [Nuxt](/docs/api-reference/basics/rate-limits#nuxt).
+Our document on [API rate limits](/api-reference/basics/rate-limits) shares information on limits according to subscription plan, as well as ways of handling API rate limits with [Next.js](/api-reference/basics/rate-limits#nextjs), [Gatsby](/api-reference/basics/rate-limits#gatsby), and [Nuxt](/api-reference/basics/rate-limits#nuxt).
 
 </Card>
 

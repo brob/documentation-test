@@ -13,7 +13,7 @@ import Button from "@components/Button.astro"
 
 In this step of the tutorial you will learn how to connect our e-commerce storefront to our existing Hygraph project.
 
-[Check out the complete lessons list for this tutorial here](/docs/getting-started/onboarding-overview#what-you-will-learn)
+[Check out the complete lessons list for this tutorial here](/getting-started/onboarding-overview#what-you-will-learn)
 
 </Card>
 
@@ -23,7 +23,7 @@ In this lesson, we'll connect Hygraph to the Next e-commerce starter that we clo
 
 ## Tokens & permissions
 
-In the previous lesson, we cloned the starter for local development and deployed our clone to Netlify. We need to make Hygraph accessible to our Next app. First, let's allow read permissions on the [Content API](/docs/api-reference#content-api). Head over to your project's settings and click on API Access.
+In the previous lesson, we cloned the starter for local development and deployed our clone to Netlify. We need to make Hygraph accessible to our Next app. First, let's allow read permissions on the [Content API](/api-reference#content-api). Head over to your project's settings and click on API Access.
 
 We'll start by setting the **Public Content API** to its default, which will give us access to all the content in our models, including the remote reviews from the Hygraph Demo API remote source. From this same screen, copy the Content API endpoint URL.
 
@@ -44,13 +44,13 @@ There is a Content Permissions box that reads **Would you like us to initialize 
 
 The content permissions box now looks like this:
 
-![Content permissions](/images/docs/getting-started/public-content-api-permissions.png)
+![Content permissions](/images/getting-started/public-content-api-permissions.png)
 
 If no stage parameter is set on the GraphQL query or additional HTTP header, then content from the selected default stage will be served.
 
 <Card theme="info" title="Would you like to know more?">
 
-[Check out our Public API permissions documentation](/docs/api-reference/basics/authorization#public-api-permissions)
+[Check out our Public API permissions documentation](/api-reference/basics/authorization#public-api-permissions)
 
 </Card>
 
@@ -66,14 +66,14 @@ We'll scroll down to the **Content API** section, and we'll click `Yes, initiali
 
 The content permissions box now looks like this:
 
-![Initialized permissions](/images/docs/getting-started/content-api-permissions.png)
+![Initialized permissions](/images/getting-started/content-api-permissions.png)
 
 If no stage parameter is set on the GraphQL query or additional HTTP header, then content from the selected default stage will be served.
 
 
 <Card theme="info" title="Would you like to know more?">
 
-[Check out our Authorization documentation](/docs/api-reference/basics/authorization)
+[Check out our Authorization documentation](/api-reference/basics/authorization)
 
 </Card>
 
@@ -95,9 +95,9 @@ Once, we initialize the app, our storefront will be available in the browser at 
 
 ## Copy the "Draft content" token
 
-![Copy the DRAFT content token](/images/docs/getting-started/permanent-auth-tokens.png)
+![Copy the DRAFT content token](/images/getting-started/permanent-auth-tokens.png)
 
-Copy the "Draft content" token [we created earlier](/docs/getting-started/connect-storefront#permanent-auth-token) and add it to your `.env.local` file as `HYGRAPH_DEV_AUTH_TOKEN`. This token will allow us to gain access to saved content, so that we can preview it before we publish.
+Copy the "Draft content" token [we created earlier](/getting-started/connect-storefront#permanent-auth-token) and add it to your `.env.local` file as `HYGRAPH_DEV_AUTH_TOKEN`. This token will allow us to gain access to saved content, so that we can preview it before we publish.
 
 Your `.env.local` file should look like this:
 
@@ -114,18 +114,18 @@ The e-commerce starter contains frontend components to create landing pages, pro
 
 The GraphQL queries we created in the API Playground are used by `Next.js 13`'s app directory to create dynamic routes such as product and landing pages for our store front.
 
-![Starter homepage](/images/docs/getting-started/starter-homepage.png)
+![Starter homepage](/images/getting-started/starter-homepage.png)
 
 Great work! We have a Hygraph project that is not connected to a storefront built with Next 13 and Tailwind CSS. Next, we will configure a preview URL so that we can preview Product pages before they are published.
 
-![Product page](/images/docs/getting-started/product-page.png)
+![Product page](/images/getting-started/product-page.png)
 
 <Card theme="info" title="Next step">
 
 Once you've connected your storefront to your Hygraph project, move on to our next lesson:
 
 <Button
-  href="/docs/getting-started/preview-url-creation"
+  href="/getting-started/preview-url-creation"
   size="md"
   variant="outlined"
   theme="primary"

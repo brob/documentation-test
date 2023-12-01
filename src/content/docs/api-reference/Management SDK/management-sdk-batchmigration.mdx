@@ -30,7 +30,7 @@ const diff = client.getEnvironmentDiff("development");
 
 <Card theme="warning">
 
-This example considers that you are passing the token of your master environment, and that you are generating a diff comparing it to your development environment. Our [Quickstart](/docs/api-reference/management-sdk/management-sdk-quickstart) shows how tokens are passed.
+This example considers that you are passing the token of your master environment, and that you are generating a diff comparing it to your development environment. Our [Quickstart](/api-reference/management-sdk/management-sdk-quickstart) shows how tokens are passed.
 
 </Card>
 
@@ -68,7 +68,7 @@ Please take into account the following limitations when using the Management SDK
 
 ### Schema changes to your master environment
 
-Using the **Management SDK Method** is not the same as merging in that it's not additive. Instead, it first [gets a diff](/docs/api-reference/management-sdk/management-sdk-batchmigration#get-the-diff) to list all the necessary operations to turn the target environment (master) into the source environment (development). Then schema changes are applied, replacing / overwriting one schema with another. It is important that you are aware of this at the time of applying changes to your target environment to avoid content loss.
+Using the **Management SDK Method** is not the same as merging in that it's not additive. Instead, it first [gets a diff](/api-reference/management-sdk/management-sdk-batchmigration#get-the-diff) to list all the necessary operations to turn the target environment (master) into the source environment (development). Then schema changes are applied, replacing / overwriting one schema with another. It is important that you are aware of this at the time of applying changes to your target environment to avoid content loss.
 
 Because of this, when you change something in the master environment that causes it not to be coherent with what is in development, the changes will always suggest deleting the piece of information it does not recognize to then create a new one.
 

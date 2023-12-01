@@ -16,17 +16,17 @@ import Video from "@components/Video.astro"
 
 In this lesson you'll learn how to create and modify content in the content creator screen and in the Assets system model.
 
-[Check out the complete lessons list for this tutorial here](/docs/getting-started/onboarding-overview#what-you-will-learn)
+[Check out the complete lessons list for this tutorial here](/getting-started/onboarding-overview#what-you-will-learn)
 
 </Card>
 
 ## Assets
 
-During schema building, we modified our **Assets** system model so the images would have alternative text and a caption. If we go to the **Assets** tab of our Hygraph project, we'll notice that already contains images. We've provided these images from the get go so you would't have to upload them yourself. If you're interested in learning more about asset upload, check out [this document](/docs/guides/assets/upload-asset).
+During schema building, we modified our **Assets** system model so the images would have alternative text and a caption. If we go to the **Assets** tab of our Hygraph project, we'll notice that already contains images. We've provided these images from the get go so you would't have to upload them yourself. If you're interested in learning more about asset upload, check out [this document](/guides/assets/upload-asset).
 
 Our assets table should look like this:
 
-![Assets table with images](/images/docs/getting-started/assets-table-with-images.png)
+![Assets table with images](/images/getting-started/assets-table-with-images.png)
 
 We need to manually add the `Alt text` and `Caption` for each image. Let's do the first one together: We'll write “colorful socks” in the search filter to find the images we're looking for, and we'll click on the pencil icon of the first result on the list to access the edit mode.
 
@@ -50,7 +50,7 @@ After you're done with this set of three images, you can click on the `X` next t
 
 <Card theme="warning" title="Would you like some more practice?">
 
-[Here's the information you can use on the rest of the assets](/docs/getting-started/content-creation-additional-practice#assets)
+[Here's the information you can use on the rest of the assets](/getting-started/content-creation-additional-practice#assets)
 
 This will not affect your frontend connection.
 
@@ -62,7 +62,7 @@ In previous lessons, we created the **Product category** model and a reference t
 
 To be able to establish relations between content entries, we need to have content entries. At this point, however, our **Product Category** model has none. This is what the model we created looks like in the Content editor:
 
-![Product categories in the content editor](/images/docs/getting-started/product-category-table-empty.png)
+![Product categories in the content editor](/images/getting-started/product-category-table-empty.png)
 
 Each entry we create here will become a category we can then relate our products to. Because it's a `two-way reference` that connects `many-to-many`, this screen lets us add existing products.
 
@@ -120,7 +120,7 @@ We've purposely created some overlapping categories - i.e. a product can be both
 
 Now that we've created our categories, our **Product Categories** view in the Content editor should look like this:
 
-![Product categories in the content editor - with entries](/images/docs/getting-started/product-category-table-full.png)
+![Product categories in the content editor - with entries](/images/getting-started/product-category-table-full.png)
 
 ## Seller information
 
@@ -137,7 +137,7 @@ Click on `Save & publish`
 
 Our **Seller information** view in the Content editor should look like this:
 
-![Seller information content editor view with entry](/images/docs/getting-started/seller-information-table.png)
+![Seller information content editor view with entry](/images/getting-started/seller-information-table.png)
 
 ## Products
 
@@ -145,7 +145,7 @@ Next, we're going to work on our product entries. These will be the product list
 
 We'll navigate to the **Product** content model in the content editor and click on `+ Add entry`.
 
-![Add product content entry](/images/docs/getting-started/add-product-content-entry.png)
+![Add product content entry](/images/getting-started/add-product-content-entry.png)
 
 We'll write “black leather shoes” under `Product name` and “black-leather-shoes” Under `Product slug`.
 
@@ -161,7 +161,7 @@ In the **Product price** field, we'll write "170".
 
 At this point, because we have no other products published to relate, we'll just go ahead and click on `Save & publish` at the top right corner of the screen. We'll come back to our entries later to add relations.
 
-![Product content entry](/images/docs/getting-started/product-content-entry.png)
+![Product content entry](/images/getting-started/product-content-entry.png)
 
 Now it's time to practice. We'll create some additional content so we can query it later when we work with the API Playground. You'll create three more content entries, following the same process we just went through together, using the following information:
 
@@ -207,7 +207,7 @@ Now it's time to practice. We'll create some additional content so we can query 
 
 <Card theme="warning" title="Would you like some more practice?">
 
-[Here's the information you can use on the rest of the products](/docs/getting-started/content-creation-additional-practice#products)
+[Here's the information you can use on the rest of the products](/getting-started/content-creation-additional-practice#products)
 
 This will not affect your frontend connection.
 
@@ -225,7 +225,7 @@ Remember that when we configured this component, we wanted the title section to 
 
 Next, we have the products section, which says “Add 4 related products here”. This is exactly what we'll do. We'll click on `Add existing products` and use the checkboxes to select the black leather shoes, necklace, blue running shoes, and plaid shirt. We'll click on `Add selected products`, and that's it. We can now see the 4 products that we related to our content entry listed in our component:
 
-![Component with related products](/images/docs/getting-started/related-products-component.png)
+![Component with related products](/images/getting-started/related-products-component.png)
 
 We'll click `Save & Publish` at the top right corner of the screen to save the updated entry.
 
@@ -238,7 +238,7 @@ Now, please follow the same steps for our other product entries. Here's a list o
 
 <Card theme="warning" title="Would you like some more practice?">
 
-[Here's the information you can use on the rest of the products](/docs/getting-started/content-creation-additional-practice#related-products)
+[Here's the information you can use on the rest of the products](/getting-started/content-creation-additional-practice#related-products)
 
 This will not affect your frontend connection.
 
@@ -258,7 +258,7 @@ A screen will pop up, showing us all the product entries that we created previou
 
 Our entry should look like this:
 
-![Blog post complete entry](/images/docs/getting-started/blog-post-entry.png)
+![Blog post complete entry](/images/getting-started/blog-post-entry.png)
 
 Let's click `Save & publish` to finish.
 
@@ -292,7 +292,7 @@ Now that we're done, let's click `Save & publish`.
 
 Our entry should look like this:
 
-![Homepage complete entry](/images/docs/getting-started/full-homepage-entry.gif)
+![Homepage complete entry](/images/getting-started/full-homepage-entry.gif)
 
 ### Summer campaign
 
@@ -362,7 +362,7 @@ Now our Navigation content entry has all the links the frontend needs to show. W
 Once you've created some content for your project, move on to our next lesson:
 
 <Button
-  href="/docs/getting-started/content-localization"
+  href="/getting-started/content-localization"
   size="md"
   variant="outlined"
   theme="primary"

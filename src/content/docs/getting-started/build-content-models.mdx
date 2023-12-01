@@ -15,7 +15,7 @@ import Video from "@components/Video.astro"
 
 In this lesson you'll learn how to create the base content models that we'll develop during this tutorial.
 
-[Check out the complete lessons list for this tutorial here](/docs/getting-started/onboarding-overview#what-you-will-learn)
+[Check out the complete lessons list for this tutorial here](/getting-started/onboarding-overview#what-you-will-learn)
 
 </Card>
 
@@ -60,7 +60,7 @@ Select the Localize field checkbox, and then click Add to save.
 
 Your Asset model should look like this:
 
-![Your Asset model](/images/docs/getting-started/asset-model.png)
+![Your Asset model](/images/getting-started/asset-model.png)
 
 #### Would you like to know more?
 
@@ -130,7 +130,7 @@ Finally, we'll add a `Float` field for the product price. We'll add “Product p
 
 The result should look like this:
 
-![Your Product model so far](/images/docs/getting-started/product-model-initial-fields.png)
+![Your Product model so far](/images/getting-started/product-model-initial-fields.png)
 
 We still have some work to do on this model, but we must create other things first, so we'll come back to this later.
 
@@ -138,7 +138,7 @@ We still have some work to do on this model, but we must create other things fir
 
 We will create a **Product category** model so we can then relate our products to different categories later on. We'll repeat steps we followed for the **Product** model, using this information:
 
-![Product category model details](/images/docs/getting-started/product-category-model-details.png)
+![Product category model details](/images/getting-started/product-category-model-details.png)
 
 - **Display Name:** Product category
 - **API ID:** ProductCategory
@@ -161,17 +161,17 @@ Let's also add a `Rich text` field. We'll use this one as our optional descripti
 
 The result should look like this:
 
-![Your Product category model so far](/images/docs/getting-started/product-category-model-fields.png)
+![Your Product category model so far](/images/getting-started/product-category-model-fields.png)
 
 There is one more thing we need to do here. Schema building is not necessarily a linear task, because schema elements are sometimes interconnected. We want to have our product descriptions to also allow embedding from this model, but since we created the **Product** model first, this model was not available to select. Now that we have a **Product category** model, we'll go into the Product model again, edit the `Rich text` field we added earlier as `Product description`, and select the **Product category** model from the dropdown. This will add it to the ones we initially selected.
 
-![Product category in Rich Text embeds](/images/docs/getting-started/product-category-rich-text.png)
+![Product category in Rich Text embeds](/images/getting-started/product-category-rich-text.png)
 
 ### Blog post
 
 We will create a **Blog Post** model so we can later create articles about products we want to promote. We'll use the following information to create the model:
 
-![Add model screen](/images/docs/getting-started/blog-post-model-details.png)
+![Add model screen](/images/getting-started/blog-post-model-details.png)
 
 - **Display Name:** Blog Post
 - **API ID:** BlogPost
@@ -194,13 +194,13 @@ Let's also add a `Rich text` field for our blog posts body. We'll use this one a
 
 The result should look like this:
 
-![Blog post model fields](/images/docs/getting-started/blog-post-model-fields.png)
+![Blog post model fields](/images/getting-started/blog-post-model-fields.png)
 
 ### Seller information
 
 We will create a **Seller Information** model, which we will later use to add our seller information to other models through relations. We'll use the following information to create the model:
 
-![Seller information model details](/images/docs/getting-started/seller-information-model-details.png)
+![Seller information model details](/images/getting-started/seller-information-model-details.png)
 
 - **Display Name:** Seller information
 - **API ID:** SellerInformation
@@ -257,7 +257,7 @@ As you can imagine, this model is unfinished, as it still needs to provide a way
 Once you've created you base content models, move on to our next lesson:
 
 <Button
-  href="/docs/getting-started/configure-reference-fields"
+  href="/getting-started/configure-reference-fields"
   size="md"
   variant="outlined"
   theme="primary"

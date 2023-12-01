@@ -25,14 +25,14 @@ For example, you could use webhooks for:
 ## Triggers
 
 Triggers can be configured to listen to one or more content model, stage, and action events.
-It is also possible to specify a trigger source, which allows triggering only when content is changed by the specified source: a [Permanent Auth Token (PAT)](/docs/api-reference/basics/authorization#permanent-auth-tokens), a project member editing content via the webapp or via public API.
+It is also possible to specify a trigger source, which allows triggering only when content is changed by the specified source: a [Permanent Auth Token (PAT)](/api-reference/basics/authorization#permanent-auth-tokens), a project member editing content via the webapp or via public API.
 
 | Trigger       |                                                                                                                    |
 | ------------- | ------------------------------------------------------------------------------------------------------------------ |
 | Content Model | All models, including `Asset`                                                                                      |
-| Stage         | Draft, Published, and [custom content stages](/docs/api-reference/content-api/content-stages)                      |
+| Stage         | Draft, Published, and [custom content stages](/api-reference/content-api/content-stages)                      |
 | Action        | Create, Update, Delete, Publish, and Unpublish                                                                     |
-| Source        | [Permanent Auth Token](/docs/api-reference/basics/authorization#permanent-auth-tokens), Project Member, Public API |
+| Source        | [Permanent Auth Token](/api-reference/basics/authorization#permanent-auth-tokens), Project Member, Public API |
 
 <Card theme="warning">
 
@@ -70,7 +70,7 @@ It is best to protect the endpoints which your webhooks invoke. This prevents un
 
 You should set a shared `secret key` on your webhook, which can be used to validate the request came from Hygraph.
 
-![Hygraph webhook secret key](/images/docs/api-reference/basics/webhook-secret-key.png)
+![Hygraph webhook secret key](/images/api-reference/basics/webhook-secret-key.png)
 
 Hygraph will send the header `gcms-signature` on webhooks with a shared secret key set.
 
@@ -324,15 +324,15 @@ Hygraph stores logs for all your webhooks, which can help you debugging webhook 
 
 In order to view the logs of a webhook, head into the webhooks view and click the "View Logs" button on the available webhooks.
 
-![Hygraph webhook logs button](/images/docs/api-reference/basics/webhook-logs-button.png)
+![Hygraph webhook logs button](/images/api-reference/basics/webhook-logs-button.png)
 
 You will see a list of webhooks being sent to your specified endpoint. The logs include a timestamp, HTTP status code, the content model, the performed action and the duration of the request.
 
-![Hygraph webhook logs overview](/images/docs/api-reference/basics/webhook-log-overview.png)
+![Hygraph webhook logs overview](/images/api-reference/basics/webhook-log-overview.png)
 
 Clicking on one of the items opens up a detail view, showing you both the request and response payload and the information from the overview. The request and response body is currently truncated at 500kb and 200kb respectively.
 
-![Hygraph webhook logs details](/images/docs/api-reference/basics/webhooks-log-details.png)
+![Hygraph webhook logs details](/images/api-reference/basics/webhooks-log-details.png)
 
 <Card theme="info">
 

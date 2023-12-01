@@ -9,7 +9,7 @@ import {Card} from "@astrojs/starlight/components"
 
 This quickstart guide shows the basic mechanics you need to create a Hygraph project with a schema.
 
-We also have a [Getting Started tutorial](/docs/getting-started/onboarding-overview) that covers these subjects - and more - in depth, where you can follow step-by-step lessons that will take you from project creation to frontend connection.
+We also have a [Getting Started tutorial](/getting-started/onboarding-overview) that covers these subjects - and more - in depth, where you can follow step-by-step lessons that will take you from project creation to frontend connection.
 
 <Card type="info" title="Pro Tip">
 
@@ -23,19 +23,19 @@ When you log into Hygraph, you will see a list of any projects you created or ha
 
 To create a project, scroll down to the **Create a new project** section of the screen, where you will have the option to create a **Blank Project** or use one of our **Starters**.
 
-![Add a new project](/images/docs/getting-started/fundamentals/add-new-project-screen.png)
+![Add a new project](/images/getting-started/fundamentals/add-new-project-screen.png)
 
 <Card theme="info">
 
 Content is distributed globally using our CDN. The region you pick is where content is stored, and the CDN is where content is served.
 
-You can learn more about this in our [Caching](/docs/api-reference/basics/caching) documentation.
+You can learn more about this in our [Caching](/api-reference/basics/caching) documentation.
 
 </Card>
 
 ### Blank project
 
-![Blank new project](/images/docs/getting-started/fundamentals/new-project-blank.png)
+![Blank new project](/images/getting-started/fundamentals/new-project-blank.png)
 
 If you select to create a blank project, a screen will display, where you need to give your project a `Name`, and optionally add a `Description`. You must also use the dropdown to pick a `Region` where you want your content to be stored.
 
@@ -43,7 +43,7 @@ After completing all necessary information, click `Add project` to finalize the 
 
 ### Starter
 
-![Starter new project](/images/docs/getting-started/fundamentals/new-project-starter.png)
+![Starter new project](/images/getting-started/fundamentals/new-project-starter.png)
 
 If you select one of our **Starters**, the screen will also show some information about the selected Starter, as well as the **Include template content** checkbox, which allows you to import existing template content into your project.
 
@@ -53,7 +53,7 @@ After completing all necessary information, click `Add project` to finalize the 
 
 Let's create a model for our products.
 
-![Creating a product model](/images/docs/getting-started/fundamentals/create-model.gif)
+![Creating a product model](/images/getting-started/fundamentals/create-model.gif)
 
 1. Navigate to the **Schema** builder.
 2. Use the **+ Add** button, create a new model called `Product`, keeping the default suggested values for `API ID` and `Plural API ID`.
@@ -72,15 +72,15 @@ Once the model is created, you can start adding fields to it, which we will do i
 
 We will now add some fields to our **Product** model for a product `Name`, `Price` and `Image`.
 
-Every time we need to add a field, we will select one of the [field types](/docs/api-reference/schema/field-types) from the right sidebar of the schema builder.
+Every time we need to add a field, we will select one of the [field types](/api-reference/schema/field-types) from the right sidebar of the schema builder.
 
 Different field types may require for us to fill in different information.
 
-In this Quickstart, we will add three fields to our **Product** model: One for product name, one for product price and one for product images. Check out our document on [field types](/docs/api-reference/schema/field-types) to learn more about all the types of fields you can add to your schema.
+In this Quickstart, we will add three fields to our **Product** model: One for product name, one for product price and one for product images. Check out our document on [field types](/api-reference/schema/field-types) to learn more about all the types of fields you can add to your schema.
 
 ### Create a name field
 
-![Creating a name field](/images/docs/getting-started/fundamentals/create-name-field.gif)
+![Creating a name field](/images/getting-started/fundamentals/create-name-field.gif)
 
 1. Select `Single line text` field from the right sidebar.
 2. Set the `Display name` to **Name**.
@@ -89,7 +89,7 @@ In this Quickstart, we will add three fields to our **Product** model: One for p
 
 ### Create a price field
 
-![Creating a price field](/images/docs/getting-started/fundamentals/create-price-field.gif)
+![Creating a price field](/images/getting-started/fundamentals/create-price-field.gif)
 
 1. Select the `Number` field from the right sidebar. You'll find it in the `Integer` section.
 2. Set the `Display name` to **Price**.
@@ -98,7 +98,7 @@ In this Quickstart, we will add three fields to our **Product** model: One for p
 
 ### Create an image field
 
-![Creating an image field](/images/docs/getting-started/fundamentals/create-image-field.gif)
+![Creating an image field](/images/getting-started/fundamentals/create-image-field.gif)
 
 1. Select the `Asset picker` field from the right sidebar. You'll find it in the `Asset` section.
 2. Set the `Display name` to **Image**.
@@ -111,23 +111,23 @@ Assets are a core feature in Hygraph, and the **Assets** model is added to every
 
 The `Asset` model allows us to store images and other files.
 
-Would you like to know more? Check out our documentation on [working with assets](/docs/guides/assets/work-with-assets).
+Would you like to know more? Check out our documentation on [working with assets](/guides/assets/work-with-assets).
 
 </Card>
 
 ### Explore system fields
 
-By default, Hygraph handles system fields for things such as the `id`, `createdAt`, `publishedAt`, [and more](/docs/api-reference/schema/system-fields).
+By default, Hygraph handles system fields for things such as the `id`, `createdAt`, `publishedAt`, [and more](/api-reference/schema/system-fields).
 
 You can see all of the system fields for your selected model by clicking on `Show system fields`.
 
-![Show system fields](/images/docs/getting-started/fundamentals/show-system-fields-toggle.png)
+![Show system fields](/images/getting-started/fundamentals/show-system-fields-toggle.png)
 
 ## Create a content entry
 
 We will now add some content for our newly created `Product` model.
 
-![Add entry](/images/docs/getting-started/fundamentals/add-entry-button.png)
+![Add entry](/images/getting-started/fundamentals/add-entry-button.png)
 
 1. Navigate to the **Content** editor in your Hygraph dashboard.
 2. Select the `Product` view from the `Default views` list. If your project only has the **Product** model so far, this view will display automatically when you access the content editor.
@@ -137,7 +137,7 @@ We will now add some content for our newly created `Product` model.
 6. To upload one or more images for your product. You can do this by clicking `Add existing Images`, and choosing a file from your computer to upload.
 7. Click on `Save` in the top-right corner of the screen. This action saves without publishing, meaning the content will be in the DRAFT state. You can continue to make changes to your content entry, and then save it again as many times as you want.
 
-![Entry in DRAFT stage](/images/docs/getting-started/fundamentals/entry-draft-stage.png)
+![Entry in DRAFT stage](/images/getting-started/fundamentals/entry-draft-stage.png)
 
 <Card theme="info" title="Pro Tip">
 
@@ -145,7 +145,7 @@ We will now add some content for our newly created `Product` model.
 
 `Image` allows multiple images to be uploaded since we allowed **multiple values** in the schema.
 
-[Click here to learn more about field validations](/docs/api-reference/schema/field-configuration#validations)
+[Click here to learn more about field validations](/api-reference/schema/field-configuration#validations)
 
 </Card>
 
@@ -153,7 +153,7 @@ We will now add some content for our newly created `Product` model.
 
 You can publish your first content entry by clicking `Publish` at the top-right corner of the screen while editing your content entry.
 
-![Publish your content](/images/docs/getting-started/fundamentals/publish-content-entry.png)
+![Publish your content](/images/getting-started/fundamentals/publish-content-entry.png)
 
 By default, all projects come with a `DRAFT` and `PUBLISHED` content stages. In this context, publishing an entry means to promote it to the `PUBLISHED` stage, so the content is live and others can consume it.
 
@@ -161,7 +161,7 @@ By default, all projects come with a `DRAFT` and `PUBLISHED` content stages. In 
 
 Most often Editors will use the `DRAFT` content stage to keep content local, or in a staging/preview environment. Meanwhile `PUBLISHED` is often used to represent what is in production/live on your app, or website.
 
-Check out our document on [content stages](/docs/guides/content/content-stages) to learn more.
+Check out our document on [content stages](/guides/content/content-stages) to learn more.
 
 </Card>
 
@@ -169,21 +169,21 @@ Once you click on `Publish`, a confirmation modal displays. This modal will also
 
 The following image shows how Hygraph asks if you would like to also publish the assets related to your entry that are in the `DRAFT` stage:
 
-![Publish your entry & assets](/images/docs/getting-started/fundamentals/publish-entry-with-assets.gif)
+![Publish your entry & assets](/images/getting-started/fundamentals/publish-entry-with-assets.gif)
 
 You should use the checkbox to `Select all`, and then click `Publish`.
 
 You can continue to make changes to your content entry, and then save it again as many times as you want without publishing. When you save but don't publish, you'll see inside of the stages list that the entry is now **outdated**, meaning that the published verion live on your website is different from the latest version in our Hygraph project.
 
-![Outdated content entry](/images/docs/getting-started/fundamentals/outdated-content-entry.png)
+![Outdated content entry](/images/getting-started/fundamentals/outdated-content-entry.png)
 
 <Card type="info" title="Pro Tip">
 
-You can repeat publishing outdated entries either by clicking the `Publish` button again, or by [scheduling for later](/docs/guides/content/scheduled-publishing#how-to-schedule).
+You can repeat publishing outdated entries either by clicking the `Publish` button again, or by [scheduling for later](/guides/content/scheduled-publishing#how-to-schedule).
 
 Before saving changes you made to a content entry, the `Publish` button will read `Save & Publish` instead. Clicking on `Save & Publish` saves and publishes the content at once, so make sure you only use it when the content is ready to go live.
 
-Check out out document on [content publishing](/docs/guides/content/publishing-content) for more information. 
+Check out out document on [content publishing](/guides/content/publishing-content) for more information. 
 
 </Card>
 
@@ -191,13 +191,13 @@ Check out out document on [content publishing](/docs/guides/content/publishing-c
 
 For any content model you create, Hygraph will automatically generate queries to fetch content entries, as well as mutations to create, update, delete, publish, and unpublish them.
 
-You can try out all of the queries, and mutations your project has inside of the [API Playground](/docs/api-reference/basics/api-playground).
+You can try out all of the queries, and mutations your project has inside of the [API Playground](/api-reference/basics/api-playground).
 
 You can visit the API Playground by navigating to it from the sidebar:
 
-![The API Playground](/images/docs/getting-started/fundamentals/api-playground.png)
+![The API Playground](/images/getting-started/fundamentals/api-playground.png)
 
-If you begin to type inside of the API Playground `product` you will see autosuggest recommend some queries. We'll get the query to fetch a single product entry, multiple, an individual product version, and the [connection query](/docs/api-reference/content-api/queries#fetching-with-relay) to fetch edges/nodes.
+If you begin to type inside of the API Playground `product` you will see autosuggest recommend some queries. We'll get the query to fetch a single product entry, multiple, an individual product version, and the [connection query](/api-reference/content-api/queries#fetching-with-relay) to fetch edges/nodes.
 
 Let's use the `products` query to fetch all of our product content entries, as well as the fields for `name`, `price`, and the `image`:
 
@@ -218,9 +218,9 @@ If you execute this query using the "Play icon" you'll get the results of the co
 
 <Card type="info" title="Would you like to know more?">
 
-You can explore our [API Reference](/docs/api-reference) to learn more about the API functionlity. This includes filtering, pagination, ordering, transforming image assets, and more.
+You can explore our [API Reference](/api-reference) to learn more about the API functionlity. This includes filtering, pagination, ordering, transforming image assets, and more.
 
-Our [Getting Started tutorial](/docs/getting-started/onboarding-overview) offers the option to clone a project that you can use to practice queries.
+Our [Getting Started tutorial](/getting-started/onboarding-overview) offers the option to clone a project that you can use to practice queries.
 
 </Card>
 
@@ -228,7 +228,7 @@ Our [Getting Started tutorial](/docs/getting-started/onboarding-overview) offers
 
 For any content model you create, Hygraph will automatically generate GraphQL mutations so you can create, update, delete, publish, and unpublish content entries.
 
-You can try out all of the queries, and mutations your project has inside of the [API Playground](/docs/api-reference/basics/api-playground).
+You can try out all of the queries, and mutations your project has inside of the [API Playground](/api-reference/basics/api-playground).
 
 Just like we saw in the queries section, you can visit the API Playground by navigating to it from the sidebar.
 
@@ -252,7 +252,7 @@ You'll need an `id` of the product you created previously to continue. To get it
 
 If you explore the API Docs, you'll see the typed arguments the `updateProduct` mutation accepts. Just hover over the mutation, and a dialog will show you some information about it, which is clickable and displays documentation on the `Docs` tab of the API Playground:
 
-![updateProduct mutation](/images/docs/getting-started/fundamentals/update-product-mutation.png)
+![updateProduct mutation](/images/getting-started/fundamentals/update-product-mutation.png)
 
 You can click-through to the individual types to see what fields are necessary. For example, `ProductUpdateInput` will contain all of the fields that match your content model.
 
@@ -274,33 +274,33 @@ You should then see once you execute the operation that the product entry has be
 
 <Card type="info" title="Are you new to GraphQL?">
 
-Our [Getting Started tutorial](/docs/getting-started/onboarding-overview) offers the option to clone a project that you can use to practice mutations.
+Our [Getting Started tutorial](/getting-started/onboarding-overview) offers the option to clone a project that you can use to practice mutations.
 
 </Card>
 
 ## API Access
 
-The last step, is to navigate to your `Project settings` panel to enable access to your API. You can either enable full public access to your API or [protect your API with permanent auth tokens.](/docs/api-reference/basics/authorization)
+The last step, is to navigate to your `Project settings` panel to enable access to your API. You can either enable full public access to your API or [protect your API with permanent auth tokens.](/api-reference/basics/authorization)
 
 The default stage for the Public Content API is set to `Published`. To create the new permissions click `Yes, initialize defaults` in the **Content API Permissions** section.
 
-![Public content API permissions](/images/docs/getting-started/fundamentals/public-content-api-permissions.png)
+![Public content API permissions](/images/getting-started/fundamentals/public-content-api-permissions.png)
 
 This will set `Read` permission on all models on stage `Published`.
 
 Now that the API is public, let's test it. Copy your project's Content API endpoint and paste it in your URL bar for your browser. You'll find the **Content API** URL in **Project settings > Access > Endpoints**.
 
-![Content API URL](/images/docs/getting-started/fundamentals/content-api-url.png)
+![Content API URL](/images/getting-started/fundamentals/content-api-url.png)
 
-Run the query we used in the [Query content](/docs/getting-started/fundamentals/quickstart#query-content) section of this document once more. This is now publicly accessible on the web!
+Run the query we used in the [Query content](/getting-started/fundamentals/quickstart#query-content) section of this document once more. This is now publicly accessible on the web!
 
-![Content publicly available](/images/docs/getting-started/fundamentals/content-publicly-available.png)
+![Content publicly available](/images/getting-started/fundamentals/content-publicly-available.png)
 
 ## Additional resources
 
 | Document                                                             | About                                                                                                                                   |
 | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| [Getting Started](/docs/getting-started/onboarding-overview)         | Comprehensive project-based tutorial on how to create a Hygraph project from A to Z.                                                    |
-| [API access](/docs/guides/overview/api-access)                       | Information on enabling API access.                                                                                                     |
-| [Roles and permissions](/docs/guides/overview/roles-and-permissions) | Information on roles and permissions including system roles, custom roles, how to work with roles & permissions, and detailed examples. |
+| [Getting Started](/getting-started/onboarding-overview)         | Comprehensive project-based tutorial on how to create a Hygraph project from A to Z.                                                    |
+| [API access](/guides/overview/api-access)                       | Information on enabling API access.                                                                                                     |
+| [Roles and permissions](/guides/overview/roles-and-permissions) | Information on roles and permissions including system roles, custom roles, how to work with roles & permissions, and detailed examples. |
 

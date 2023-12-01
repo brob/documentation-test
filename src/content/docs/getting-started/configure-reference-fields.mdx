@@ -14,7 +14,7 @@ import Video from "@components/Video.astro"
 
 In this lesson you'll learn how to configure different types of references and add them to your content models.
 
-[Check out the complete lessons list for this tutorial here](/docs/getting-started/onboarding-overview#what-you-will-learn)
+[Check out the complete lessons list for this tutorial here](/getting-started/onboarding-overview#what-you-will-learn)
 
 </Card>
 
@@ -24,7 +24,7 @@ This step of our Getting Started tutorial covers Reference type fields.
 
 References are relations between two or more content entries that exist in your project. With references, you can reuse content entries by connecting them to one another. For instance, in our project, a product content entry could be both a standalone product that a potential customer can browse, but also a reference linked to a different product content entry, as part of a related products section.
 
-![References](/images/docs/getting-started/references-graphic.png)
+![References](/images/getting-started/references-graphic.png)
 
 References have a type, direction, and cardinality that define the relationship:
 
@@ -35,17 +35,17 @@ References have a type, direction, and cardinality that define the relationship:
 The way you configure a reference will result in one of four possibilities:
 
 - **One-to-one reference:** It allows adding a reference to one content entry from one model configured as referenceable. For example, you could use this to link a blog post to an author.
-  ![One-to-one reference](/images/docs/getting-started/references-one-to-one.png)
+  ![One-to-one reference](/images/getting-started/references-one-to-one.png)
 - **One-to-many reference:** It allows adding references to multiple content entries from one model configured as referenceable. For example, you could use this to link a blog post to its multiple authors.
-  ![One-to-many reference](/images/docs/getting-started/references-one-to-many.png)
+  ![One-to-many reference](/images/getting-started/references-one-to-many.png)
 - **Many-to-many reference:** It allows adding references to multiple content entries from the different models configured as referenceable. For example, you could use this to link your products to the categories they belong to. In this case, a product can have multiple categories, and category can have multiple products.
-  ![Many-to-many reference](/images/docs/getting-started/references-many-to-many.png)
+  ![Many-to-many reference](/images/getting-started/references-many-to-many.png)
 - **Many-to-one reference:** It allows adding references to multiple content entries of the parent model to one model configured as referenceable. For example, you could use this to link an author to all their related blog posts.
-  ![Many-to-one reference](/images/docs/getting-started/references-many-to-one.png)
+  ![Many-to-one reference](/images/getting-started/references-many-to-one.png)
 
 We'll learn how to configure some of them in the context of our e-commerce project, so we can later use them in the content editor.
 
-To be able to establish relations in the content, we first need to configure the relations in our schema. Our project will use different types of references to connect models in different ways, but we won't be covering all possibilities in this tutorial. You can learn about all of them [here](/docs/guides/schema/references).
+To be able to establish relations in the content, we first need to configure the relations in our schema. Our project will use different types of references to connect models in different ways, but we won't be covering all possibilities in this tutorial. You can learn about all of them [here](/guides/schema/references).
 
 ## Products and categories
 
@@ -53,7 +53,7 @@ In a previous step, we created models for **Product** & **Product category**. We
 
 To link these two models, let's click on the **Product** model to open it and select the `Reference` field from the right sidebar. You'll find it under **Relation**.
 
-![Adding a reference field](/images/docs/getting-started/add_reference_field_to_model.gif)
+![Adding a reference field](/images/getting-started/add_reference_field_to_model.gif)
 
 The first step is to define the relationship. We only want to be able to add product categories in this relation, so we'll select the `Allow only one model to be referenced` radio button and select `ProductCategory` under **Model to reference**.
 
@@ -118,14 +118,14 @@ Just like with our previous references, the **Configure reference** section has 
 
 Your Landing page model should look like this:
 
-![Your Landing page model so far](/images/docs/getting-started/landing-page-model-with-references.png)
+![Your Landing page model so far](/images/getting-started/landing-page-model-with-references.png)
 
 <Card theme="info" title="Next step">
 
 Once you've added the reference fields to your content models, move on to our next lesson:
 
 <Button
-  href="/docs/getting-started/configure-enumerations"
+  href="/getting-started/configure-enumerations"
   size="md"
   variant="outlined"
   theme="primary"

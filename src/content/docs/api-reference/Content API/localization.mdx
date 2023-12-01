@@ -19,13 +19,13 @@ Localized content can be managed through the Hygraph UI, or via GraphQL mutation
 
 When adding a field that can be localized inside the schema editor, such as a string, mark the field as can be localized, and you will be able to perform all of the localization queries, and mutations outlined below.
 
-![Hygraph Localize Fields](/images/docs/api-reference/content-api/localize-field.png)
+![Hygraph Localize Fields](/images/api-reference/content-api/localize-field.png)
 
-The model will be updated to contain additional [localized system fields](/docs/api-reference/schema/system-fields#localization-fields) that you can use to fetch localized content.
+The model will be updated to contain additional [localized system fields](/api-reference/schema/system-fields#localization-fields) that you can use to fetch localized content.
 
 ## Fetching localized content
 
-Fetching localized content is done by [fetching content](/docs/api-reference/content-api/queries) the same way you are used to. For example, a product model containing localized fields can be queried like so:
+Fetching localized content is done by [fetching content](/api-reference/content-api/queries) the same way you are used to. For example, a product model containing localized fields can be queried like so:
 
 ```graphql
 {
@@ -46,7 +46,7 @@ As shown as above, queried content will always return the default locale, unless
 
 You can set the default locale inside `Settings > Locales`.
 
-![Hygraph default locale](/images/docs/api-reference/content-api/default-locale.png)
+![Hygraph default locale](/images/api-reference/content-api/default-locale.png)
 
 ### Fallback locale(s)
 
@@ -127,7 +127,7 @@ You can also pass an array of locales to `gcms-locales` to define your fallback 
 
 ### All localizations
 
-Whether you're fetching a [single content entry](/docs/api-reference/content-api/queries#fetching-a-single-entry), or [multiple](/docs/api-reference/content-api/queries#fetching-multiple-entries), you can fetch all `localizations` of that entry.
+Whether you're fetching a [single content entry](/api-reference/content-api/queries#fetching-a-single-entry), or [multiple](/api-reference/content-api/queries#fetching-multiple-entries), you can fetch all `localizations` of that entry.
 
 <Tabs panelHeight={280}>
   <TabItem label="Request">
@@ -313,9 +313,9 @@ This will return all locales where values present. If nothing is found, the defa
 
 ## Mutating localized content
 
-Just like you can query localized content, you can also create, update, upsert, and delete localized content using the [Mutations API](/docs/api-reference/content-api/mutations).
+Just like you can query localized content, you can also create, update, upsert, and delete localized content using the [Mutations API](/api-reference/content-api/mutations).
 
-Let's continue with the products model in our examples below. We can use the [auto-generated mutations](/docs/api-reference/content-api/mutations#auto-generated-mutations) for modifying the locales for each entry.
+Let's continue with the products model in our examples below. We can use the [auto-generated mutations](/api-reference/content-api/mutations#auto-generated-mutations) for modifying the locales for each entry.
 
 ### Create a localization
 

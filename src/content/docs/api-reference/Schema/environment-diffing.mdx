@@ -10,7 +10,7 @@ Environment diffing is a functionality on the Management API that allows you to 
 
 Please note that this guide and the examples offered in it will consider the master environment as the **target environment**, and the development environment as the **source**.
 
-You can alternatively use the [Management SDK method](/docs/api-reference/management-sdk/management-sdk-batchmigration) to get the diff and apply schema changes.
+You can alternatively use the [Management SDK method](/api-reference/management-sdk/management-sdk-batchmigration) to get the diff and apply schema changes.
 
 </Card>
 
@@ -89,7 +89,7 @@ Your target environment ID can be found using the first example query shown in t
 
 In the above example, `$changes` is the environment variable with value equal to the changes object in the diff. This can be supplied like so:
 
-![$changes example in API Playground](/images/docs/api-reference/schema/env-diffing-changes.png)
+![$changes example in API Playground](/images/api-reference/schema/env-diffing-changes.png)
 
 ## Supported schema elements
 
@@ -153,7 +153,7 @@ It is important that you go over the diff changes one by one before you apply th
 
 Another thing to consider is the scenario where, after a clone, you make a field **Required** in your development environment, when content has already been created for the model that the field is a part of. In this case, you need to provide a **migration value**. This migration value will replace `null` in the previously created content. You will find this in the **Validations** section of your field details in the **Schema editor**:
 
-![Migration value in field validations](/images/docs/api-reference/schema/env-diffing-migrationvalue.png)
+![Migration value in field validations](/images/api-reference/schema/env-diffing-migrationvalue.png)
 
 In this case, environment diffing would suggest updating the field to `required`, but would not provide a migration value. Applying this change would fail because of the missing migration value. **Since migration values are not stored, you will need to manually add the migration value to your change before applying it**.
 

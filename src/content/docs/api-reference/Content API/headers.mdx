@@ -8,7 +8,7 @@ You can use headers as a global way to send more specific requests to our API.
 
 ## `gcms-locales`
 
-This header works in the same way as [using the query input for locales](/docs/api-reference/content-api/localization#fallback-locales).
+This header works in the same way as [using the query input for locales](/api-reference/content-api/localization#fallback-locales).
 
 You can pass the `gcms-locales` header for localized content with your required locales. It is just another way besides the query param to decide which locales a query should return. Basically, the placement is different - header vs. query - but the result is the same. Using one or the other mostly comes down to the developer's preference.
 
@@ -41,7 +41,7 @@ You can also pass an array of locales to `gcms-locales` to define your fallback 
 
 ## `gcms-stage`
 
-This header works in the same way as [using the stage input on a query](/docs/api-reference/content-api/queries#fetching-stages).
+This header works in the same way as [using the stage input on a query](/api-reference/content-api/queries#fetching-stages).
 
 You can pass the `gcms-stage` header to specify the stage of your content. It is just another way besides the query param to decide which stage a query should return. Basically, the placement is different - header vs. query - but the result is the same. Using one or the other mostly comes down to the developer's preference.
 
@@ -72,7 +72,7 @@ const { products } = await fetch('<your-hygraph-endpoint>', {
 
 ## `hyg-stale-if-error` 
 
-This header for the [High performance endpoint](/docs/api-reference/basics/caching#stale-if-error) lets you set `stale-if-error` on a per query basis.
+This header for the [High performance endpoint](/api-reference/basics/caching#stale-if-error) lets you set `stale-if-error` on a per query basis.
 
 This cache header can be used to fine-tune our default caching behavior. For instance, we could use it to make sure we return stale data on errors for much longer.
 
@@ -109,7 +109,7 @@ The default `Stale-if-error` for all shared clusters is 86400s (1 day).
 
 ## `hyg-stale-while-revalidate`
 
-This header for the [High performance endpoint](/docs/api-reference/basics/caching#stale-while-revalidate) lets you set `stale-while-revalidate` on a per query basis.
+This header for the [High performance endpoint](/api-reference/basics/caching#stale-while-revalidate) lets you set `stale-while-revalidate` on a per query basis.
 
 This cache header can be used to fine-tune our default caching behavior. For instance, we could use it to make sure we return stale data while the cache is revalidating.
 
